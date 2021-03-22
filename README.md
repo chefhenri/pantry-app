@@ -29,7 +29,7 @@ npx react-native run-ios
 ### Contributing
 In development by: 
 [Rachael Daly](https://github.com/RachaelDaly),
-[Kelley Lam](#),
+[Kelley Lam](https://github.com/kxl1360),
 and [Henry Larson](https://github.com/hxl1116)
 
 Add an issue to the project 
