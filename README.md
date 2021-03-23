@@ -10,6 +10,23 @@ with the GitHub CLI:
 gh repo clone swen-514-614-spring2021/term-project--team-5
 ```
 
+### Setup
+Make sure that Node and Watchman are installed with
+```bash
+brew install node
+brew install watchman
+```
+
+Make sure that Xcode's Command Line Tools are enabled in "Preferences..." from the Xcode menu. This option is found in
+the "Locations" panel
+
+Make sure CocoaPods is installed with
+```bash
+sudo gem install cocoapods
+```
+
+Finally, in the `ios` directory, run `pod install`
+
 ### Usage
 Running the React Native application
 #### Start Metro
