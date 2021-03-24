@@ -1,5 +1,5 @@
 ## Pantry App
-Pantry App is a hybrid mobile app for virtual consolidation of your cookbooks, pantry items, and grocery list.
+Pantry App is a hybrid mobile app for virtual consolidation of your cookbooks, pantry items, and grocery list. Pantry App is hosted on AWS Amplify.
 
 ### Installation
 Clone the repository [here](https://github.com/swen-514-614-spring2021/term-project--team-5.git) or,
