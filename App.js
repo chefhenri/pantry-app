@@ -4,6 +4,15 @@ import {Buffer} from 'buffer';
 import Permissions from 'react-native-permissions';
 import Sound from 'react-native-sound';
 import AudioRecord from 'react-native-audio-record';
+import {
+  TranscribeStreamingClient,
+  StartStreamTranscriptionCommand,
+} from '@aws-sdk/client-transcribe-streaming';
+import {
+  AWS_ACCESS_KEY_ID,
+  AWS_SECRET_ACCESS_KEY,
+  AWS_SESSION_TOKEN,
+} from '@env';
 
 export default class App extends Component {
   sound = null;
@@ -57,6 +66,35 @@ export default class App extends Component {
     let audioFile = await AudioRecord.stop();
     console.log('audioFile', audioFile);
     this.setState({audioFile, recording: false});
+
+    const client = new TranscribeStreamingClient({region: 'us-east-1'});
+    var params = {
+      Credentail: {
+        AWS_ACCESS_KEY_ID,
+        AWS_SECRET_ACCESS_KEY,
+        AWS_SESSION_TOKEN,
+      },
+      Media: {
+        MediaFileUri: audioFile,
+      },
+      TranscriptionJobName: 'TRANSCRIBE_TEXT',
+      ContentRedaction: {
+        RedactionOutput: 'redacted',
+        RedactionType: 'PII',
+      },
+      LanguageCode: 'en - US',
+      LanguageOptions: ['en - US'],
+      MediaFormat: 'wav',
+    };
+    const command = new StartStreamTranscriptionCommand(params);
+    try {
+      const data = await client.send(command);
+      // process data.
+    } catch (error) {
+      console.log(error);
+    } finally {
+      console.log('DONE');
+    }
   };
 
   load = () => {

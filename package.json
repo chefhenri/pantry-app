@@ -10,10 +10,13 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@aws-sdk/client-transcribe-streaming": "^3.10.0",
     "buffer": "^6.0.3",
+    "path": "^0.12.7",
     "react": "17.0.1",
     "react-native": "0.64.0",
     "react-native-audio-record": "^0.2.2",
+    "react-native-dotenv": "^2.5.3",
     "react-native-permissions": "^3.0.1",
     "react-native-sound": "^0.11.0"
   },
