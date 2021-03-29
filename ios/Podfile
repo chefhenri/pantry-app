@@ -12,6 +12,7 @@ target 'PantryApp' do
     :hermes_enabled => false
   )
 
+  # allows for the device microphone to be utilized by the application
   permissions_path = '../node_modules/react-native-permissions/ios'
   pod 'Permission-Microphone', :path => "#{permissions_path}/Microphone/Permission-Microphone.podspec"
 
