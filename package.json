@@ -11,6 +11,10 @@
   },
   "dependencies": {
     "@aws-sdk/client-transcribe-streaming": "^3.10.0",
+    "@react-native-community/netinfo": "^6.0.0",
+    "amazon-cognito-identity-js": "^4.6.0",
+    "aws-amplify": "^3.3.26",
+    "aws-amplify-react-native": "^4.3.2",
     "buffer": "^6.0.3",
     "path": "^0.12.7",
     "react": "17.0.1",

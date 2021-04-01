@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {StyleSheet, View, Button} from 'react-native';
+import {withAuthenticator} from 'aws-amplify-react-native';
 import {Buffer} from 'buffer';
 import Permissions from 'react-native-permissions';
 import Sound from 'react-native-sound';
@@ -8,157 +9,166 @@ import {
   TranscribeStreamingClient,
   StartStreamTranscriptionCommand,
 } from '@aws-sdk/client-transcribe-streaming';
-import {
-  AWS_ACCESS_KEY_ID,
-  AWS_SECRET_ACCESS_KEY,
-  AWS_SESSION_TOKEN,
-} from '@env';
+import {AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY} from '@env';
+import Amplify from 'aws-amplify';
+import config from './aws-exports';
+Amplify.configure({
+  ...config,
+  Analytics: {
+    disabled: true,
+  },
+});
 
-export default class App extends Component {
-  sound = null;
-  state = {
-    audioFile: '',
-    recording: false,
-    loaded: false,
-    paused: true,
-  };
-
-  async componentDidMount() {
-    await this.checkPermission();
-
-    const options = {
-      sampleRate: 16000,
-      channels: 1,
-      bitsPerSample: 16,
-      wavFile: 'test.wav',
+export default withAuthenticator(
+  class App extends Component {
+    sound = null;
+    state = {
+      audioFile: '',
+      recording: false,
+      loaded: false,
+      paused: true,
     };
 
-    AudioRecord.init(options);
+    async componentDidMount() {
+      await this.checkPermission();
 
-    AudioRecord.on('data', data => {
-      const chunk = Buffer.from(data, 'base64');
-      console.log('chunk size', chunk.byteLength);
-      // do something with audio chunk
-    });
-  }
+      const options = {
+        sampleRate: 16000,
+        channels: 1,
+        bitsPerSample: 16,
+        wavFile: 'test.wav',
+      };
 
-  checkPermission = async () => {
-    const p = await Permissions.check('microphone');
-    console.log('permission check', p);
-    if (p === 'authorized') return;
-    return this.requestPermission();
-  };
+      AudioRecord.init(options);
 
-  requestPermission = async () => {
-    const p = await Permissions.request('microphone');
-    console.log('permission request', p);
-  };
-
-  start = () => {
-    console.log('start record');
-    this.setState({audioFile: '', recording: true, loaded: false});
-    AudioRecord.start();
-  };
-
-  stop = async () => {
-    if (!this.state.recording) return;
-    console.log('stop record');
-    let audioFile = await AudioRecord.stop();
-    console.log('audioFile', audioFile);
-    this.setState({audioFile, recording: false});
-
-    const client = new TranscribeStreamingClient({region: 'us-east-1'});
-    var params = {
-      Credentail: {
-        AWS_ACCESS_KEY_ID,
-        AWS_SECRET_ACCESS_KEY,
-        AWS_SESSION_TOKEN,
-      },
-      Media: {
-        MediaFileUri: audioFile,
-      },
-      TranscriptionJobName: 'TRANSCRIBE_TEXT',
-      ContentRedaction: {
-        RedactionOutput: 'redacted',
-        RedactionType: 'PII',
-      },
-      LanguageCode: 'en - US',
-      LanguageOptions: ['en - US'],
-      MediaFormat: 'wav',
-    };
-    const command = new StartStreamTranscriptionCommand(params);
-    try {
-      const data = await client.send(command);
-      // process data.
-    } catch (error) {
-      console.log(error);
-    } finally {
-      console.log('DONE');
-    }
-  };
-
-  load = () => {
-    return new Promise((resolve, reject) => {
-      if (!this.state.audioFile) {
-        return reject('file path is empty');
-      }
-
-      this.sound = new Sound(this.state.audioFile, '', error => {
-        if (error) {
-          console.log('failed to load the file', error);
-          return reject(error);
-        }
-        this.setState({loaded: true});
-        return resolve();
+      AudioRecord.on('data', data => {
+        const chunk = Buffer.from(data, 'base64');
+        console.log('chunk size', chunk.byteLength);
+        // do something with audio chunk
       });
-    });
-  };
+    }
 
-  play = async () => {
-    if (!this.state.loaded) {
+    checkPermission = async () => {
+      const p = await Permissions.check('microphone');
+      console.log('permission check', p);
+      if (p === 'authorized') return;
+      return this.requestPermission();
+    };
+
+    requestPermission = async () => {
+      const p = await Permissions.request('microphone');
+      console.log('permission request', p);
+    };
+
+    start = () => {
+      console.log('start record');
+      this.setState({audioFile: '', recording: true, loaded: false});
+      AudioRecord.start();
+    };
+
+    stop = async () => {
+      if (!this.state.recording) return;
+      console.log('stop record');
+      let audioFile = await AudioRecord.stop();
+      console.log('audioFile', audioFile);
+      this.setState({audioFile, recording: false});
+
+      const client = new TranscribeStreamingClient({region: 'us-east-1'});
+      var params = {
+        credentials: {
+          accessKeyId: AWS_ACCESS_KEY_ID,
+          secretAccessKey: AWS_SECRET_ACCESS_KEY,
+        },
+        Media: {
+          MediaFileUri: audioFile,
+        },
+        TranscriptionJobName: 'TRANSCRIBE_TEXT',
+        ContentRedaction: {
+          RedactionOutput: 'redacted',
+          RedactionType: 'PII',
+        },
+        LanguageCode: 'en - US',
+        LanguageOptions: ['en - US'],
+        MediaFormat: 'wav',
+      };
+      const command = new StartStreamTranscriptionCommand(params);
       try {
-        await this.load();
+        const data = await client.send(command);
+        // process data.
       } catch (error) {
         console.log(error);
+      } finally {
+        console.log('DONE');
       }
-    }
+    };
 
-    this.setState({paused: false});
-    Sound.setCategory('Playback');
+    load = () => {
+      return new Promise((resolve, reject) => {
+        if (!this.state.audioFile) {
+          return reject('file path is empty');
+        }
 
-    this.sound.play(success => {
-      if (success) {
-        console.log('successfully finished playing');
-      } else {
-        console.log('playback failed due to audio decoding errors');
+        this.sound = new Sound(this.state.audioFile, '', error => {
+          if (error) {
+            console.log('failed to load the file', error);
+            return reject(error);
+          }
+          this.setState({loaded: true});
+          return resolve();
+        });
+      });
+    };
+
+    play = async () => {
+      if (!this.state.loaded) {
+        try {
+          await this.load();
+        } catch (error) {
+          console.log(error);
+        }
       }
+
+      this.setState({paused: false});
+      Sound.setCategory('Playback');
+
+      this.sound.play(success => {
+        if (success) {
+          console.log('successfully finished playing');
+        } else {
+          console.log('playback failed due to audio decoding errors');
+        }
+        this.setState({paused: true});
+        // this.sound.release();
+      });
+    };
+
+    pause = () => {
+      this.sound.pause();
       this.setState({paused: true});
-      // this.sound.release();
-    });
-  };
+    };
 
-  pause = () => {
-    this.sound.pause();
-    this.setState({paused: true});
-  };
-
-  render() {
-    const {recording, paused, audioFile} = this.state;
-    return (
-      <View style={styles.container}>
-        <View style={styles.row}>
-          <Button onPress={this.start} title="Record" disabled={recording} />
-          <Button onPress={this.stop} title="Stop" disabled={!recording} />
-          {paused ? (
-            <Button onPress={this.play} title="Play" disabled={!audioFile} />
-          ) : (
-            <Button onPress={this.pause} title="Pause" disabled={!audioFile} />
-          )}
+    render() {
+      const {recording, paused, audioFile} = this.state;
+      return (
+        <View style={styles.container}>
+          <View style={styles.row}>
+            <Button onPress={this.start} title="Record" disabled={recording} />
+            <Button onPress={this.stop} title="Stop" disabled={!recording} />
+            {paused ? (
+              <Button onPress={this.play} title="Play" disabled={!audioFile} />
+            ) : (
+              <Button
+                onPress={this.pause}
+                title="Pause"
+                disabled={!audioFile}
+              />
+            )}
+          </View>
         </View>
-      </View>
-    );
-  }
-}
+      );
+    }
+  },
+);
 
 const styles = StyleSheet.create({
   container: {
