@@ -70,7 +70,7 @@ In the project directory type:
 amplify add auth
 ```
 
-Choose the default configuration. Once done run:
+Choose the default configuration, but specify username = email. Once done run:
 
 ```bash
 amplify push

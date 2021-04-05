@@ -11,7 +11,7 @@ import {
 } from '@aws-sdk/client-transcribe-streaming';
 import {AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY} from '@env';
 import Amplify from 'aws-amplify';
-import config from './aws-exports';
+import config from './src/aws-exports';
 Amplify.configure({
   ...config,
   Analytics: {
