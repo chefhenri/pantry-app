@@ -5,19 +5,19 @@ import {Buffer} from 'buffer';
 import Permissions from 'react-native-permissions';
 import Sound from 'react-native-sound';
 import AudioRecord from 'react-native-audio-record';
-import {
-  TranscribeStreamingClient,
-  StartStreamTranscriptionCommand,
-} from '@aws-sdk/client-transcribe-streaming';
-import {AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY} from '@env';
+import {AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_SESSION_TOKEN} from '@env';
 import Amplify from 'aws-amplify';
+import Predictions, { AmazonAIPredictionsProvider } from '@aws-amplify/predictions';
 import config from './src/aws-exports';
+
 Amplify.configure({
   ...config,
   Analytics: {
     disabled: true,
   },
 });
+
+Amplify.addPluggable(new AmazonAIPredictionsProvider());
 
 export default withAuthenticator(
   class App extends Component {
@@ -43,7 +43,7 @@ export default withAuthenticator(
 
       AudioRecord.on('data', data => {
         const chunk = Buffer.from(data, 'base64');
-        console.log('chunk size', chunk.byteLength);
+        //console.log('chunk size', chunk.byteLength);
         // do something with audio chunk
       });
     }
@@ -72,34 +72,16 @@ export default withAuthenticator(
       let audioFile = await AudioRecord.stop();
       console.log('audioFile', audioFile);
       this.setState({audioFile, recording: false});
-
-      const client = new TranscribeStreamingClient({region: 'us-east-1'});
-      var params = {
-        credentials: {
-          accessKeyId: AWS_ACCESS_KEY_ID,
-          secretAccessKey: AWS_SECRET_ACCESS_KEY,
-        },
-        Media: {
-          MediaFileUri: audioFile,
-        },
-        TranscriptionJobName: 'TRANSCRIBE_TEXT',
-        ContentRedaction: {
-          RedactionOutput: 'redacted',
-          RedactionType: 'PII',
-        },
-        LanguageCode: 'en - US',
-        LanguageOptions: ['en - US'],
-        MediaFormat: 'wav',
-      };
-      const command = new StartStreamTranscriptionCommand(params);
-      try {
-        const data = await client.send(command);
-        // process data.
-      } catch (error) {
-        console.log(error);
-      } finally {
-        console.log('DONE');
-      }
+      Predictions.convert({
+        transcription: {
+          source: {
+            bytes: audioFile
+          },
+          language: "en-US", 
+        }
+      })
+      .then(({ transcription: { fullText } }) => console.log({ fullText }))
+      .catch(err => console.log('Error:', { err }));
     };
 
     load = () => {
