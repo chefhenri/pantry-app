@@ -9,33 +9,15 @@ import AudioRecord from 'react-native-audio-record';
 import {AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_SESSION_TOKEN} from '@env';
 import Amplify from 'aws-amplify';
 import Predictions, { AmazonAIPredictionsProvider } from '@aws-amplify/predictions';
-import config from './src/aws-exports';
 
-Amplify.configure({
-  ...config,
-  Analytics: {
-    disabled: true,
-  },
-});
-
-Amplify.addPluggable(new AmazonAIPredictionsProvider());
-
-export default withAuthenticator(
-  class App extends Component {
+export default 
+  class Transcribe extends Component {
     sound = null;
     state = {
       audioFile: '',
       recording: false,
       loaded: false,
       paused: true,
-    };
-
-    const signOut = async () => {
-      try {
-        await Auth.signOut({ global: true });
-      } catch (error) {
-        console.log('error signing out: ', error);
-      }
     };
 
     async componentDidMount() {
@@ -141,7 +123,7 @@ export default withAuthenticator(
     render() {
       const {recording, paused, audioFile} = this.state;
       return (
-        <View style={styles.container}>
+        <View>
           <View style={styles.row}>
             <Button onPress={this.start} title="Record" disabled={recording} />
             <Button onPress={this.stop} title="Stop" disabled={!recording} />
@@ -158,8 +140,7 @@ export default withAuthenticator(
         </View>
       );
     }
-  },
-);
+  };
 
 const styles = StyleSheet.create({
   container: {
