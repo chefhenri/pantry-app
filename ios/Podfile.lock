@@ -400,9 +400,9 @@ SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   DoubleConversion: cf9b38bf0b2d048436d9a82ad2abe1404f11e7de
   FBLazyVector: 49cbe4b43e445b06bf29199b6ad2057649e4c8f5
-  FBReactNativeSpec: 2698aff6cd65600031917deed3e970d25af255ac
+  FBReactNativeSpec: dfdf4e94fbea39194d6e065f5711c054311fde47
   glog: 73c2498ac6884b13ede40eda8228cb1eee9d9d62
-  Permission-Microphone: 60319bf64f89a035f5bf8d00107fab31b904005c
+  Permission-Microphone: bcdaaa22af6217b86fad0843413a238b9413f2d6
   RCT-Folly: ec7a233ccc97cc556cf7237f0db1ff65b986f27c
   RCTRequired: 2f8cb5b7533219bf4218a045f92768129cf7050a
   RCTTypeSafety: 512728b73549e72ad7330b92f3d42936f2a4de5b
@@ -414,7 +414,7 @@ SPEC CHECKSUMS:
   React-jsi: 74341196d9547cbcbcfa4b3bbbf03af56431d5a1
   React-jsiexecutor: 06a9c77b56902ae7ffcdd7a4905f664adc5d237b
   React-jsinspector: 0ae35a37b20d5e031eb020a69cc5afdbd6406301
-  react-native-netinfo: 34f4d7a42f49157f3b45c14217d256bce7dc9682
+  react-native-netinfo: e849fc21ca2f4128a5726c801a82fc6f4a6db50d
   React-perflogger: 9c547d8f06b9bf00cb447f2b75e8d7f19b7e02af
   React-RCTActionSheet: 3080b6e12e0e1a5b313c8c0050699b5c794a1b11
   React-RCTAnimation: 3f96f21a497ae7dabf4d2f150ee43f906aaf516f
@@ -427,10 +427,10 @@ SPEC CHECKSUMS:
   React-RCTVibration: 0fd6b21751a33cb72fce1a4a33ab9678416d307a
   React-runtimeexecutor: cad74a1eaa53ee6e7a3620231939d8fe2c6afcf0
   ReactCommon: cfe2b7fd20e0dbd2d1185cd7d8f99633fbc5ff05
-  RNAudioRecord: f38c2caac4bbbc34f24563869745110970f1dfe3
+  RNAudioRecord: 162fee3b8fb628773ec704bf0333823125be2ed7
   RNAWSCognito: d0f3260e93c91bcde43c4ff4fc379f20661d123b
-  RNPermissions: eb94f9fdc0a8ecd02fcce0676d56ffb1395d41e1
-  RNSound: c980916b596cc15c8dcd2f6ecd3b13c4881dbe20
+  RNPermissions: 4c8a37b4dde50f1f152bf8cd08c4a43d2355829e
+  RNSound: da030221e6ac7e8290c6b43f2b5f2133a8e225b0
   Yoga: 8c8436d4171c87504c648ae23b1d81242bdf3bbf
 
 PODFILE CHECKSUM: 6f7b12b7808de41352fcd84880b53c8467043f42
