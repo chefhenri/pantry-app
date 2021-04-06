@@ -1,0 +1,10 @@
+{
+  "auth": {
+    "pantryappd588df48": {
+      "service": "Cognito",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "customAuth": false
+    }
+  }
+}
