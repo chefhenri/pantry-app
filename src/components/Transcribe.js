@@ -15,6 +15,7 @@ export default class Transcribe extends Component {
   sound = null;
   state = {
     audioFile: '',
+    mybuffer: null,
     recording: false,
     loaded: false,
     paused: true,
@@ -34,18 +35,18 @@ export default class Transcribe extends Component {
 
     AudioRecord.on('data', data => {
       const chunk = Buffer.from(data, 'base64');
-      //console.log('chunk size', chunk.byteLength);
+      //console.log('chunk size', chunk.length);
       // do something with chunk
-      Predictions.convert({
-        transcription: {
-          source: {
-            bytes: chunk,
-          },
-          language: 'en-US',
-        },
-      })
-        .then(({transcription: {fullText}}) => console.log({fullText}))
-        .catch(err => console.log('Error:', {err}));
+      if (this.state.mybuffer == null) {
+        this.setState({mybuffer: chunk});
+      } else {
+        this.setState({
+          mybuffer: Buffer.concat(
+            [this.state.mybuffer, chunk],
+            this.state.mybuffer.length + chunk.length,
+          ),
+        });
+      }
     });
   }
 
@@ -65,7 +66,12 @@ export default class Transcribe extends Component {
 
   start = () => {
     console.log('start record');
-    this.setState({audioFile: '', recording: true, loaded: false});
+    this.setState({
+      audioFile: '',
+      recording: true,
+      loaded: false,
+      mybuffer: null,
+    });
     AudioRecord.start();
   };
 
@@ -77,14 +83,15 @@ export default class Transcribe extends Component {
     let audioFile = await AudioRecord.stop();
     console.log('audioFile', audioFile);
     this.setState({audioFile, recording: false});
+    // attempts to take the audiobuffer and send it to predictions
     Predictions.convert({
       transcription: {
         source: {
-          bytes: audioFile,
+          bytes: this.state.mybuffer,
         },
         language: 'en-US',
       },
-    })
+    }) //sends back {"result": {"transcription": {"fullText": ""}}} format
       .then(({transcription: {fullText}}) => console.log({fullText}))
       .catch(err => console.log('Error:', {err}));
   };
