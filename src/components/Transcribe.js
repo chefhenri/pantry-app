@@ -36,7 +36,7 @@ export default class Transcribe extends Component {
     AudioRecord.on('data', data => {
       const chunk = Buffer.from(data, 'base64');
       //console.log('chunk size', chunk.length);
-      // do something with chunk
+      // if first chunk just set the chunk otherwise append
       if (this.state.mybuffer == null) {
         this.setState({mybuffer: chunk});
       } else {
