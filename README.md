@@ -58,15 +58,13 @@ In the root directory of the project run,
 ```bash
 amplify init
 ```
-Leave all defaults, but specify the source directory as `.`
-
-For the AWS profile, use "default".
+Leave all defaults and for the AWS profile, use "default".
 
 Now run, 
 ```bash
 amplify add auth
 ```
-Choose the default configuration, but specify "username" to "email".
+Choose the default configuration, but specify "Email" for the login method.
 Then run,
 ```bash
 amplify push
