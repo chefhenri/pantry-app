@@ -1,25 +1,20 @@
-import React, { Component } from "react";
-import { StyleSheet, View, Button } from "react-native";
-import { withAuthenticator } from "aws-amplify-react-native";
-import { Auth } from "aws-amplify";
-import { Buffer } from "buffer";
-import Permissions from "react-native-permissions";
-import Sound from "react-native-sound";
-import AudioRecord from "react-native-audio-record";
-import {
-  AWS_ACCESS_KEY_ID,
-  AWS_SECRET_ACCESS_KEY,
-  AWS_SESSION_TOKEN,
-} from "@env";
-import Amplify from "aws-amplify";
+import React, {Component} from 'react';
+import {StyleSheet, View, Button} from 'react-native';
+import {withAuthenticator} from 'aws-amplify-react-native';
+import {Auth} from 'aws-amplify';
+import {Buffer} from 'buffer';
+import Permissions from 'react-native-permissions';
+import Sound from 'react-native-sound';
+import AudioRecord from 'react-native-audio-record';
+import Amplify from 'aws-amplify';
 import Predictions, {
   AmazonAIPredictionsProvider,
-} from "@aws-amplify/predictions";
+} from '@aws-amplify/predictions';
 
 export default class Transcribe extends Component {
   sound = null;
   state = {
-    audioFile: "",
+    audioFile: '',
     recording: false,
     loaded: false,
     paused: true,
@@ -32,35 +27,35 @@ export default class Transcribe extends Component {
       sampleRate: 16000,
       channels: 1,
       bitsPerSample: 16,
-      wavFile: "test.wav",
+      wavFile: 'test.wav',
     };
 
     AudioRecord.init(options);
 
-    AudioRecord.on("data", data => {
-      const chunk = Buffer.from(data, "base64");
+    AudioRecord.on('data', data => {
+      const chunk = Buffer.from(data, 'base64');
       //console.log('chunk size', chunk.byteLength);
       // do something with audio chunk
     });
   }
 
   checkPermission = async () => {
-    const p = await Permissions.check("microphone");
-    console.log("permission check", p);
-    if (p === "authorized") {
+    const p = await Permissions.check('microphone');
+    console.log('permission check', p);
+    if (p === 'authorized') {
       return;
     }
     return this.requestPermission();
   };
 
   requestPermission = async () => {
-    const p = await Permissions.request("microphone");
-    console.log("permission request", p);
+    const p = await Permissions.request('microphone');
+    console.log('permission request', p);
   };
 
   start = () => {
-    console.log("start record");
-    this.setState({ audioFile: "", recording: true, loaded: false });
+    console.log('start record');
+    this.setState({audioFile: '', recording: true, loaded: false});
     AudioRecord.start();
   };
 
@@ -68,34 +63,34 @@ export default class Transcribe extends Component {
     if (!this.state.recording) {
       return;
     }
-    console.log("stop record");
+    console.log('stop record');
     let audioFile = await AudioRecord.stop();
-    console.log("audioFile", audioFile);
-    this.setState({ audioFile, recording: false });
+    console.log('audioFile', audioFile);
+    this.setState({audioFile, recording: false});
     Predictions.convert({
       transcription: {
         source: {
           bytes: audioFile,
         },
-        language: "en-US",
+        language: 'en-US',
       },
     })
-      .then(({ transcription: { fullText } }) => console.log({ fullText }))
-      .catch(err => console.log("Error:", { err }));
+      .then(({transcription: {fullText}}) => console.log({fullText}))
+      .catch(err => console.log('Error:', {err}));
   };
 
   load = () => {
     return new Promise((resolve, reject) => {
       if (!this.state.audioFile) {
-        return reject("file path is empty");
+        return reject('file path is empty');
       }
 
-      this.sound = new Sound(this.state.audioFile, "", error => {
+      this.sound = new Sound(this.state.audioFile, '', error => {
         if (error) {
-          console.log("failed to load the file", error);
+          console.log('failed to load the file', error);
           return reject(error);
         }
-        this.setState({ loaded: true });
+        this.setState({loaded: true});
         return resolve();
       });
     });
@@ -110,27 +105,27 @@ export default class Transcribe extends Component {
       }
     }
 
-    this.setState({ paused: false });
-    Sound.setCategory("Playback");
+    this.setState({paused: false});
+    Sound.setCategory('Playback');
 
     this.sound.play(success => {
       if (success) {
-        console.log("successfully finished playing");
+        console.log('successfully finished playing');
       } else {
-        console.log("playback failed due to audio decoding errors");
+        console.log('playback failed due to audio decoding errors');
       }
-      this.setState({ paused: true });
+      this.setState({paused: true});
       // this.sound.release();
     });
   };
 
   pause = () => {
     this.sound.pause();
-    this.setState({ paused: true });
+    this.setState({paused: true});
   };
 
   render() {
-    const { recording, paused, audioFile } = this.state;
+    const {recording, paused, audioFile} = this.state;
     return (
       <View>
         <View style={styles.row}>
@@ -150,10 +145,10 @@ export default class Transcribe extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
+    justifyContent: 'center',
   },
   row: {
-    flexDirection: "row",
-    justifyContent: "space-evenly",
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
   },
 });
