@@ -9,6 +9,8 @@ import Predictions, {
 import Home from './components/Home';
 import Transcribe from './components/Transcribe';
 
+global.Buffer = global.Buffer || require('buffer').Buffer;
+
 Amplify.configure({
   ...config,
   Analytics: {

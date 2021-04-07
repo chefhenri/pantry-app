@@ -24,7 +24,7 @@ export default class Transcribe extends Component {
     await this.checkPermission();
 
     const options = {
-      sampleRate: 16000,
+      sampleRate: 32000,
       channels: 1,
       bitsPerSample: 16,
       wavFile: 'test.wav',
@@ -35,7 +35,17 @@ export default class Transcribe extends Component {
     AudioRecord.on('data', data => {
       const chunk = Buffer.from(data, 'base64');
       //console.log('chunk size', chunk.byteLength);
-      // do something with audio chunk
+      // do something with chunk
+      Predictions.convert({
+        transcription: {
+          source: {
+            bytes: chunk,
+          },
+          language: 'en-US',
+        },
+      })
+        .then(({transcription: {fullText}}) => console.log({fullText}))
+        .catch(err => console.log('Error:', {err}));
     });
   }
 
