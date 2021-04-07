@@ -6,12 +6,5 @@
       "dependsOn": [],
       "customAuth": false
     }
-  },
-  "predictions": {
-    "transcribepantry": {
-      "providerPlugin": "awscloudformation",
-      "service": "Transcribe",
-      "convertType": "transcription"
-    }
   }
 }

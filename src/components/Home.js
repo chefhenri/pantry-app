@@ -1,13 +1,14 @@
-import React from 'react';
-import { StyleSheet, Text, View, Pressable, Dimensions } from 'react-native';
-import { Auth } from 'aws-amplify';
-const { width } = Dimensions.get('window');
+import React from "react";
+import { StyleSheet, Text, View, Pressable, Dimensions } from "react-native";
+import { Auth } from "aws-amplify";
+
+const { width } = Dimensions.get("window");
 const Home = () => {
   const signOut = async () => {
     try {
       await Auth.signOut({ global: true });
     } catch (error) {
-      console.log('error signing out: ', error);
+      console.log("error signing out: ", error);
     }
   };
   return (
@@ -23,31 +24,31 @@ const Home = () => {
 };
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
     width: width,
     paddingVertical: 20,
   },
   header: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
     padding: 20,
     width: width,
-    alignItems: 'center',
+    alignItems: "center",
   },
   headerText: {
     fontSize: 28,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   button: {
-    backgroundColor: '#ff9900',
+    backgroundColor: "#ff9900",
     padding: 10,
     borderRadius: 6,
   },
   buttonText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 18,
   },
 });

@@ -5,14 +5,19 @@ Pantry App is a hybrid mobile app for virtual consolidation of your cookbooks, p
 ### Installation
 
 Clone the repository [here](https://github.com/swen-514-614-spring2021/term-project--team-5.git) or,
-
 with the GitHub CLI:
 
 ```bash
 gh repo clone swen-514-614-spring2021/term-project--team-5
 ```
 
-### Setup
+Also, make sure you have these requirements:
+
+- Environment setup
+- Amplify setup
+- Authentication setup
+
+#### Environment Setup
 
 Make sure that Node and Watchman are installed with
 
@@ -30,53 +35,44 @@ Make sure CocoaPods is installed with
 sudo gem install cocoapods
 ```
 
-Finally, in the `ios` directory, run `pod install`
+In the `ios` directory, run `pod install`
 
-Make sure AWS CLI is installed
+Next, install and configure the AWS CLI and the AWS Amplify CLI
 
-```bash
-curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
-unzip awscli-bundle.zip
-sudo ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
-```
-
-Run
+Install the AWS CLI,
 
 ```bash
-aws configure
+curl "https://awscli.amazonaws.com/AWSCLIV2.pkg" -o "AWSCLIV2.pkg"
+sudo installer -pkg AWSCLIV2.pkg -target /
 ```
 
-Enter your information generated on your educate account when you hit account details. To verify this is correctly set up type aws s3 ls into your console.
+Make sure your credentials in `~/.aws/credentials` match your current account details.
 
-Make sure Amplify CLI is installed
+Install the Amplify CLI,
 
 ```bash
 npm install -g @aws-amplify/cli
 ```
 
-Once done navigate to the root directory of the project and run
-
+In the root directory of the project run, 
 ```bash
 amplify init
 ```
+Leave all defaults, but specify the source directory as `.`
 
-Name the environment and the project and use the default values for other information except: specify source directory path as '/' instead of src. For your AWS Profile use "default".
+For the AWS profile, use "default".
 
-Authentication Setup
-
-In the project directory type:
-
+Now run, 
 ```bash
 amplify add auth
 ```
-
-Choose the default configuration, but specify username = email. Once done run:
-
+Choose the default configuration, but specify "username" to "email".
+Then run,
 ```bash
 amplify push
 ```
 
-You should now have authentication set up with Amplify when you run your project.
+You are now configured with authentication through Amplify when you run the project.
 
 ### Usage
 
