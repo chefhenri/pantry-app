@@ -59,12 +59,13 @@ buck-out/
 
 # CocoaPods
 /ios/Pods/
+/ios/Podfile.lock
 
 # env variables
 .env
 
 # Amplify
-amplify/
+/amplify/
 amplify/\#current-cloud-backend
 amplify/.config/local-*
 amplify/logs
