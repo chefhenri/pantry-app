@@ -26,6 +26,10 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
+import {
+  getRecipe
+} from './api/root.api'
+
 const Section = ({children, title}): Node => {
   const isDarkMode = useColorScheme() === 'dark';
   return (
@@ -70,6 +74,10 @@ const App: () => Node = () => {
           style={{
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
+          <Section title="Request One Recipe">
+            Touch <Text style={styles.highlight} onPress={event => getRecipe}>here</Text>
+            to query a recipe
+          </Section>
           <Section title="Step One">
             Edit <Text style={styles.highlight}>App.js</Text> to change this
             screen and then come back to see your edits.
