@@ -1,29 +1,18 @@
 import axios from "axios";
-
-const BASE_URL = "https://api.edamam.com/search";
+import { BASE_URL, APP_ID, APP_KEY } from "@env";
 
 // Get the first recipe from the query results
-export const getRecipe = async (appId, appKey, query) => {
+export const getRecipe = async (query) => {
   return axios.get(BASE_URL, {
     params: {
-      "app_id": appId,
-      "app_key": appKey,
+      "app_id": APP_ID,
+      "app_key": APP_KEY,
       q: query,
       from: 0,
       to: 1,
     },
-  }).then(res => res.data);
-};
-
-// Get the first 10 results from the query results
-export const getRecipes = async (appId, appKey, query) => {
-  return axios.get(BASE_URL, {
-    params: {
-      "app_id": appId,
-      "app_key": appKey,
-      q: query,
-      from: 0,
-      to: 9,
-    },
-  }).then(res => res.data);
+  }).then(res => {
+    console.log(res.data['hits'][0]['recipe']['label']);
+    return res.data['hits'][0]['recipe']['label'];
+  });
 };
