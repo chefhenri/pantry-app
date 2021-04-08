@@ -13,7 +13,7 @@ import {
   ScrollView,
   StatusBar,
   StyleSheet,
-  Text, TextInput,
+  Text,
   useColorScheme,
   View,
 } from "react-native";
@@ -63,7 +63,7 @@ const App: () => Node = () => {
         style={backgroundStyle}>
         <Header />
         <View style={{ backgroundColor: isDarkMode ? Colors.black : Colors.white }}>
-          <Search title="Search for A Recipe"/>
+          <Search title="Search for A Recipe" />
           <Section title="Step One">
             Edit <Text style={styles.highlight}>App.js</Text> to change this
             screen and then come back to see your edits.

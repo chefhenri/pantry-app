@@ -7,6 +7,11 @@ const Search = ({ title }): Node => {
   const [text, setText] = useState("");
   const [data, setData] = useState();
 
+  const handleRecipe = () => {
+    getRecipe(text)
+      .then(data => setData(data));
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>
@@ -16,13 +21,9 @@ const Search = ({ title }): Node => {
                  placeholder={"Enter food"}
                  onChangeText={text => setText(text)} />
       <TouchableOpacity>
-        <Text style={styles.buttonText}
-              onPress={event => {
-                setData(getRecipe(text));
-                console.log(data);
-              }}>Search</Text>
+        <Text style={styles.buttonText} onPress={handleRecipe}>Search</Text>
       </TouchableOpacity>
-      {/*<Text>{data}</Text>*/}
+      <Text>{data}</Text>
     </View>
   );
 };

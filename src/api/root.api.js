@@ -12,7 +12,7 @@ export const getRecipe = async (query) => {
       to: 1,
     },
   }).then(res => {
-    console.log(res.data['hits'][0]['recipe']['label']);
+    console.log(res.data);
     return res.data['hits'][0]['recipe']['label'];
   });
 };
