@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Text, TextInput, StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { getRecipe } from "../api/root.api";
-import { Colors } from "react-native/Libraries/NewAppScreen";
 
 const Search = ({ title }): Node => {
   const [text, setText] = useState("");
