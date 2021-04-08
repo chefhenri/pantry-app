@@ -271,6 +271,7 @@ PODS:
     - React-cxxreact (= 0.64.0)
     - React-jsi (= 0.64.0)
     - React-perflogger (= 0.64.0)
+<<<<<<< HEAD
   - RNAudioRecord (0.2.2):
     - React
   - RNAWSCognito (4.6.0):
@@ -282,6 +283,8 @@ PODS:
     - RNSound/Core (= 0.11.0)
   - RNSound/Core (0.11.0):
     - React
+=======
+>>>>>>> f1a51754d3d70a66b16c2218c04fc585b59aa42e
   - Yoga (1.14.0)
 
 DEPENDENCIES:
@@ -359,8 +362,11 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsiexecutor"
   React-jsinspector:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
+<<<<<<< HEAD
   react-native-netinfo:
     :path: "../node_modules/@react-native-community/netinfo"
+=======
+>>>>>>> f1a51754d3d70a66b16c2218c04fc585b59aa42e
   React-perflogger:
     :path: "../node_modules/react-native/ReactCommon/reactperflogger"
   React-RCTActionSheet:
@@ -427,6 +433,7 @@ SPEC CHECKSUMS:
   React-RCTVibration: 0fd6b21751a33cb72fce1a4a33ab9678416d307a
   React-runtimeexecutor: cad74a1eaa53ee6e7a3620231939d8fe2c6afcf0
   ReactCommon: cfe2b7fd20e0dbd2d1185cd7d8f99633fbc5ff05
+<<<<<<< HEAD
   RNAudioRecord: f38c2caac4bbbc34f24563869745110970f1dfe3
   RNAWSCognito: d0f3260e93c91bcde43c4ff4fc379f20661d123b
   RNPermissions: eb94f9fdc0a8ecd02fcce0676d56ffb1395d41e1
