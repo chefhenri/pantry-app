@@ -59,3 +59,21 @@ buck-out/
 
 # CocoaPods
 /ios/Pods/
+
+# Environment variables
+.env
+
+# Distribution
+dist/
+
+# AWS
+awsconfiguration.json
+aws-exports.js
+.secret-*
+
+# Amplify
+amplify/**/*.*
+amplifyconfiguration.json
+amplify-build-config.json
+amplify-gradle-config.json
+amplifytools.xcconfig
