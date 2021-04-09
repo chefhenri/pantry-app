@@ -25,10 +25,12 @@ var params = {
   KeySchema: [
     {AttributeName: 'Name', KeyType: 'HASH'}, //Partition key
     {AttributeName: 'Email', KeyType: 'RANGE'}, //Sort key
+    {AttributeName: 'Password', KeyType: 'RANGE'},
   ],
   AttributeDefinitions: [
     {AttributeName: 'Name', AttributeType: 'S'},
     {AttributeName: 'Email', AttributeType: 'S'},
+    {AttributeName: 'Password', AttributeType: 'S'},
   ],
   ProvisionedThroughput: {
     ReadCapacityUnits: 10,
