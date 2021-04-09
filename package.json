@@ -13,10 +13,12 @@
     "preset": "react-native"
   },
   "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.11.0",
     "@react-native-community/netinfo": "^6.0.0",
     "amazon-cognito-identity-js": "^4.6.0",
     "aws-amplify": "^3.3.26",
     "aws-amplify-react-native": "^4.3.2",
+    "aws-sdk": "^2.883.0",
     "buffer": "^6.0.3",
     "graphql": "^15.5.0",
     "path": "^0.12.7",
@@ -25,7 +27,8 @@
     "react-native-audio-record": "^0.2.2",
     "react-native-dotenv": "^2.5.5",
     "react-native-permissions": "^3.0.1",
-    "react-native-sound": "^0.11.0"
+    "react-native-sound": "^0.11.0",
+    "yarn": "^1.22.10"
   },
   "devDependencies": {
     "@babel/core": "7.13.10",
