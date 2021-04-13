@@ -30,7 +30,6 @@ const s3 = new S3({
   bucket: S3_BUCKET_INPUT,
   signatureVersion: 'v4',
 });
-
 const chunkArray = [];
 
 export default class Transcribe extends Component {
@@ -166,9 +165,9 @@ export default class Transcribe extends Component {
       },
       function (err, data) {
         if (err) {
-          console.log(err);
+          console.log(err, err.stack);
         } else {
-          console.log('Successfully uploaded data.');
+          console.log('Upload to s3 successful.');
         }
       },
     );
@@ -200,7 +199,9 @@ export default class Transcribe extends Component {
     await transcribeService.startTranscriptionJob(params, function (err, data) {
       if (err) console.log(err, err.stack);
       // an error occurred
-      else console.log(data); // successful response
+      else {
+        console.log(data); // successful response
+      }
     });
   };
 
