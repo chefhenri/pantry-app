@@ -7,9 +7,31 @@ import Permissions from 'react-native-permissions';
 import Sound from 'react-native-sound';
 import AudioRecord from 'react-native-audio-record';
 import Amplify from 'aws-amplify';
-import Predictions, {
-  AmazonAIPredictionsProvider,
-} from '@aws-amplify/predictions';
+import {S3, Credentials} from 'aws-sdk';
+import TranscribeService from 'aws-sdk/clients/transcribeservice';
+import * as RNFS from 'react-native-fs';
+import {RNS3} from 'react-native-upload-aws-s3';
+import {
+  AWS_ACCESS_KEY_ID,
+  AWS_SECRET_ACCESS_KEY,
+  AWS_SESSION_TOKEN,
+  S3_BUCKET,
+} from '@env';
+
+const access = new Credentials({
+  accessKeyId: AWS_ACCESS_KEY_ID,
+  secretAccessKey: AWS_SECRET_ACCESS_KEY,
+  sessionToken: AWS_SESSION_TOKEN,
+});
+
+const s3 = new S3({
+  credentials: access,
+  region: 'us-east-1',
+  bucket: S3_BUCKET,
+  signatureVersion: 'v4',
+});
+
+const chunkArray = [];
 
 export default class Transcribe extends Component {
   sound = null;
@@ -36,6 +58,7 @@ export default class Transcribe extends Component {
     AudioRecord.on('data', data => {
       const chunk = Buffer.from(data, 'base64');
       //console.log('chunk size', chunk.length);
+      chunkArray.push(data);
       // if first chunk just set the chunk otherwise append
       if (this.state.mybuffer == null) {
         this.setState({mybuffer: chunk});
@@ -79,21 +102,56 @@ export default class Transcribe extends Component {
     if (!this.state.recording) {
       return;
     }
+    console.log(AWS_ACCESS_KEY_ID);
     console.log('stop record');
     let audioFile = await AudioRecord.stop();
     console.log('audioFile', audioFile);
     this.setState({audioFile, recording: false});
-    // attempts to take the audiobuffer and send it to predictions
-    Predictions.convert({
-      transcription: {
-        source: {
-          bytes: this.state.mybuffer,
-        },
-        language: 'en-US',
+    // uuid() not working on simulator known error with crypto not supported
+    const fileId =
+      'audioFile' + (Math.floor(Math.random() * 100000) + 1).toString();
+    console.log(fileId);
+    const url = await s3.getSignedUrlPromise('putObject', {
+      Bucket: S3_BUCKET,
+      Key: fileId + '.wav',
+      ContentType: 'audio/wav',
+      Expires: 60 * 15,
+    });
+    const data = RNFS.readFile(audioFile, 'base64'); // r is the path to the .wav file on the phone
+    await fetch(url, {
+      method: 'PUT',
+      body: data,
+      headers: {
+        'Content-Type': 'audio/wav',
       },
-    }) //sends back {"result": {"transcription": {"fullText": ""}}} format
-      .then(({transcription: {fullText}}) => console.log({fullText}))
-      .catch(err => console.log('Error:', {err}));
+    });
+
+    const transcribeService = new AWS.TranscribeService({
+      credentials: access,
+      region: 'us-east-1',
+    });
+    const params = {
+      TranscriptionJobName: fileId,
+      Media: {
+        MediaFileUri:
+          'https://s3.amazonaws.com/' + S3_BUCKET + '/' + fileId + '.wav',
+      },
+      MediaFormat: 'wav',
+      OutputBucketName: 'transcribe-output-swen514team5',
+      LanguageCode: 'en-US',
+    };
+    console.log('created client');
+    await new Promise((resolve, reject) => {
+      transcribeService.startTranscriptionJob(params, function (err, data) {
+        if (err) {
+          reject(err);
+        } // an error occurred
+        else {
+          console.log(data); // successful response
+          resolve(data);
+        }
+      });
+    });
   };
 
   load = () => {
