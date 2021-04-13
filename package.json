@@ -27,8 +27,7 @@
     "react-native-dotenv": "^2.5.5",
     "react-native-fs": "^2.17.0",
     "react-native-permissions": "^3.0.1",
-    "react-native-sound": "^0.11.0",
-    "react-native-upload-aws-s3": "^0.8.1"
+    "react-native-sound": "^0.11.0"
   },
   "devDependencies": {
     "@babel/core": "7.13.10",

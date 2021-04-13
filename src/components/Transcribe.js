@@ -10,12 +10,12 @@ import Amplify from 'aws-amplify';
 import {S3, Credentials} from 'aws-sdk';
 import TranscribeService from 'aws-sdk/clients/transcribeservice';
 import * as RNFS from 'react-native-fs';
-import {RNS3} from 'react-native-upload-aws-s3';
 import {
   AWS_ACCESS_KEY_ID,
   AWS_SECRET_ACCESS_KEY,
   AWS_SESSION_TOKEN,
-  S3_BUCKET,
+  S3_BUCKET_INPUT,
+  S3_BUCKET_OUTPUT,
 } from '@env';
 
 const access = new Credentials({
@@ -27,7 +27,7 @@ const access = new Credentials({
 const s3 = new S3({
   credentials: access,
   region: 'us-east-1',
-  bucket: S3_BUCKET,
+  bucket: S3_BUCKET_INPUT,
   signatureVersion: 'v4',
 });
 
@@ -58,7 +58,7 @@ export default class Transcribe extends Component {
     AudioRecord.on('data', data => {
       const chunk = Buffer.from(data, 'base64');
       //console.log('chunk size', chunk.length);
-      chunkArray.push(data);
+      chunkArray.push(chunk);
       // if first chunk just set the chunk otherwise append
       if (this.state.mybuffer == null) {
         this.setState({mybuffer: chunk});
@@ -107,24 +107,29 @@ export default class Transcribe extends Component {
     let audioFile = await AudioRecord.stop();
     console.log('audioFile', audioFile);
     this.setState({audioFile, recording: false});
+
     // uuid() not working on simulator known error with crypto not supported
     const fileId =
       'audioFile' + (Math.floor(Math.random() * 100000) + 1).toString();
     console.log(fileId);
-    const url = await s3.getSignedUrlPromise('putObject', {
-      Bucket: S3_BUCKET,
-      Key: fileId + '.wav',
-      ContentType: 'audio/wav',
-      Expires: 60 * 15,
-    });
-    const data = RNFS.readFile(audioFile, 'base64'); // r is the path to the .wav file on the phone
-    await fetch(url, {
-      method: 'PUT',
-      body: data,
-      headers: {
-        'Content-Type': 'audio/wav',
+    console.log(AWS_SESSION_TOKEN);
+    const content = await RNFS.readFile(audioFile, 'base64');
+    const buff = Buffer.from(content, 'base64');
+
+    s3.putObject(
+      {
+        Bucket: S3_BUCKET_INPUT,
+        Key: fileId + '.wav',
+        Body: buff,
       },
-    });
+      function (err, data) {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log('Successfully uploaded data to myBucket/myKey');
+        }
+      },
+    );
 
     const transcribeService = new AWS.TranscribeService({
       credentials: access,
@@ -134,10 +139,10 @@ export default class Transcribe extends Component {
       TranscriptionJobName: fileId,
       Media: {
         MediaFileUri:
-          'https://s3.amazonaws.com/' + S3_BUCKET + '/' + fileId + '.wav',
+          'https://s3.amazonaws.com/' + S3_BUCKET_INPUT + '/' + fileId + '.wav',
       },
       MediaFormat: 'wav',
-      OutputBucketName: 'transcribe-output-swen514team5',
+      OutputBucketName: S3_BUCKET_OUTPUT,
       LanguageCode: 'en-US',
     };
     console.log('created client');
