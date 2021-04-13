@@ -37,7 +37,7 @@ export default class Transcribe extends Component {
   sound = null;
   state = {
     audioFile: '',
-    mybuffer: null,
+    fileId: '',
     recording: false,
     loaded: false,
     paused: true,
@@ -60,16 +60,6 @@ export default class Transcribe extends Component {
       //console.log('chunk size', chunk.length);
       chunkArray.push(chunk);
       // if first chunk just set the chunk otherwise append
-      if (this.state.mybuffer == null) {
-        this.setState({mybuffer: chunk});
-      } else {
-        this.setState({
-          mybuffer: Buffer.concat(
-            [this.state.mybuffer, chunk],
-            this.state.mybuffer.length + chunk.length,
-          ),
-        });
-      }
     });
   }
 
@@ -93,7 +83,7 @@ export default class Transcribe extends Component {
       audioFile: '',
       recording: true,
       loaded: false,
-      mybuffer: null,
+      fileId: '',
     });
     AudioRecord.start();
   };
@@ -102,61 +92,15 @@ export default class Transcribe extends Component {
     if (!this.state.recording) {
       return;
     }
-    console.log(AWS_ACCESS_KEY_ID);
     console.log('stop record');
     let audioFile = await AudioRecord.stop();
     console.log('audioFile', audioFile);
     this.setState({audioFile, recording: false});
 
-    // uuid() not working on simulator known error with crypto not supported
-    const fileId =
-      'audioFile' + (Math.floor(Math.random() * 100000) + 1).toString();
-    console.log(fileId);
-    console.log(AWS_SESSION_TOKEN);
-    const content = await RNFS.readFile(audioFile, 'base64');
-    const buff = Buffer.from(content, 'base64');
-
-    s3.putObject(
-      {
-        Bucket: S3_BUCKET_INPUT,
-        Key: fileId + '.wav',
-        Body: buff,
-      },
-      function (err, data) {
-        if (err) {
-          console.log(err);
-        } else {
-          console.log('Successfully uploaded data to myBucket/myKey');
-        }
-      },
-    );
-
-    const transcribeService = new AWS.TranscribeService({
-      credentials: access,
-      region: 'us-east-1',
-    });
-    const params = {
-      TranscriptionJobName: fileId,
-      Media: {
-        MediaFileUri:
-          'https://s3.amazonaws.com/' + S3_BUCKET_INPUT + '/' + fileId + '.wav',
-      },
-      MediaFormat: 'wav',
-      OutputBucketName: S3_BUCKET_OUTPUT,
-      LanguageCode: 'en-US',
-    };
-    console.log('created client');
-    await new Promise((resolve, reject) => {
-      transcribeService.startTranscriptionJob(params, function (err, data) {
-        if (err) {
-          reject(err);
-        } // an error occurred
-        else {
-          console.log(data); // successful response
-          resolve(data);
-        }
-      });
-    });
+    await this.uploadFile();
+    // transcribe keeps trying to start before the file finishes uploading so this is a hack ayyy lmao
+    this.sleep(7000);
+    await this.transcribeFile();
   };
 
   load = () => {
@@ -202,6 +146,70 @@ export default class Transcribe extends Component {
   pause = () => {
     this.sound.pause();
     this.setState({paused: true});
+  };
+
+  uploadFile = async () => {
+    // uuid() not working on simulator known error with crypto not supported
+    const fileId =
+      'audioFile' + (Math.floor(Math.random() * 100000) + 1).toString();
+    this.setState({fileId: fileId});
+
+    // reads the file into memory and then converts it into binary buffer
+    const content = await RNFS.readFile(this.state.audioFile, 'base64');
+    const buff = Buffer.from(content, 'base64');
+    //uploads file to aws s3 instance
+    s3.putObject(
+      {
+        Bucket: S3_BUCKET_INPUT,
+        Key: fileId + '.wav',
+        Body: buff,
+      },
+      function (err, data) {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log('Successfully uploaded data.');
+        }
+      },
+    );
+  };
+
+  transcribeFile = async () => {
+    var uri =
+      's3://' +
+      S3_BUCKET_INPUT.toString() +
+      '/' +
+      this.state.fileId.toString() +
+      '.wav';
+    uri = uri.toString();
+    console.log(uri);
+    const transcribeService = new AWS.TranscribeService({
+      credentials: access,
+      region: 'us-east-1',
+    });
+    const params = {
+      TranscriptionJobName: this.state.fileId,
+      Media: {
+        MediaFileUri: uri,
+      },
+      MediaFormat: 'wav',
+      OutputBucketName: S3_BUCKET_OUTPUT,
+      LanguageCode: 'en-US',
+    };
+    console.log('created client');
+    await transcribeService.startTranscriptionJob(params, function (err, data) {
+      if (err) console.log(err, err.stack);
+      // an error occurred
+      else console.log(data); // successful response
+    });
+  };
+
+  sleep = milliseconds => {
+    const date = Date.now();
+    let currentDate = null;
+    do {
+      currentDate = Date.now();
+    } while (currentDate - date < milliseconds);
   };
 
   render() {
