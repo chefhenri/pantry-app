@@ -60,7 +60,7 @@ In the root directory of the project run,
 amplify init
 ```
 
-Leave all defaults and for the AWS profile, use "default".
+Leave all defaults except change 'src' to '/' to specify where the aws-exports.js file goes and for the AWS profile, use "default".
 
 Now run,
 
