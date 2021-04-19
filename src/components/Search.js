@@ -1,16 +1,10 @@
 import React, { useState } from "react";
 import { Text, TextInput, StyleSheet, TouchableOpacity, View } from "react-native";
 
-import { getRecipe } from "../api/root.api";
-
+// TODO: Refactor to use Relay
 const Search = ({ title }): Node => {
   const [text, setText] = useState("");
   const [data, setData] = useState();
-
-  const handleRecipe = () => {
-    getRecipe(text)
-      .then(data => setData(data));
-  };
 
   return (
     <View style={styles.container}>
@@ -21,7 +15,7 @@ const Search = ({ title }): Node => {
                  placeholder={"Enter food"}
                  onChangeText={text => setText(text)} />
       <TouchableOpacity>
-        <Text style={styles.buttonText} onPress={handleRecipe}>Search</Text>
+        <Text style={styles.buttonText} onPress={}>Search</Text>
       </TouchableOpacity>
       <Text>{data}</Text>
     </View>
