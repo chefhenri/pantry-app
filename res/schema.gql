@@ -1,0 +1,110 @@
+type Hit {
+  recipe: Recipe!
+  bookmarked: Boolean!
+  bought: Boolean!
+}
+
+type Hits {
+  q: String!
+  from: Int!
+  to: Int!
+  count: Int!
+  more: Boolean!
+  hits: [Hit!]!
+}
+
+type Ingredient {
+  foodId: String!
+  quantity: Float!
+  measure: Measure!
+  weight: Float!
+  food: Food!
+  foodCategory: String!
+}
+
+type NutrientInfo {
+  uri: String!
+  label: String!
+  quantity: Float!
+  unit: String!
+}
+
+type Measure {
+  uri: String!
+  label: String!
+}
+
+type Food {
+  foodId: String!
+  label: String!
+}
+
+type Recipe {
+  uri: String!
+  label: String!
+  image: String!
+  source: String!
+  url: String!
+  yield: Int!
+  calories: Float!
+  totalWeight: Float!
+  ingredients: [Ingredient!]!
+  totalNutrients: String!
+  totalDaily: String!
+  dietLabels: [DietLabel!]!
+  healthLabels: [HealthLabel!]!
+}
+
+enum DietLabel {
+  BALANCED
+  HIGH_PROTEIN
+  HIGH_FIBER
+  LOW_FAT
+  LOW_CARB
+  LOW_SODIUM
+}
+
+enum HealthLabel {
+  VEGAN
+  VEGETARIAN
+  PALEO
+  DAIRY_FREE
+  GLUTEN_FREE
+  WHEAT_FREE
+  FAT_FREE
+  LOW_SUGAR
+  EGG_FREE
+  PEANUT_FREE
+  TREE_NUT_FREE
+  SOY_FREE
+  FISH_FREE
+  SHELLFISH_FREE
+}
+
+type Query {
+  search(
+    q: String!
+    r: String
+    appId: String!
+    appKey: String!
+    from: Int
+    to: Int
+    ingr: Int
+    diet: HealthLabel
+    health: String
+    cuisineType: String
+    mealType: String
+    calories: String
+    time: String
+    excluded: String
+    callback: String
+    imageSize: ImageSize
+  ): Hits
+}
+
+enum ImageSize {
+  THUMBNAIL
+  SMALL
+  REGULAR
+  LARGE
+}
