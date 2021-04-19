@@ -7,15 +7,36 @@ import Permissions from 'react-native-permissions';
 import Sound from 'react-native-sound';
 import AudioRecord from 'react-native-audio-record';
 import Amplify from 'aws-amplify';
-import Predictions, {
-  AmazonAIPredictionsProvider,
-} from '@aws-amplify/predictions';
+import {S3, Credentials} from 'aws-sdk';
+import TranscribeService from 'aws-sdk/clients/transcribeservice';
+import * as RNFS from 'react-native-fs';
+import {
+  AWS_ACCESS_KEY_ID,
+  AWS_SECRET_ACCESS_KEY,
+  AWS_SESSION_TOKEN,
+  S3_BUCKET_INPUT,
+  S3_BUCKET_OUTPUT,
+} from '@env';
+
+const access = new Credentials({
+  accessKeyId: AWS_ACCESS_KEY_ID,
+  secretAccessKey: AWS_SECRET_ACCESS_KEY,
+  sessionToken: AWS_SESSION_TOKEN,
+});
+
+const s3 = new S3({
+  credentials: access,
+  region: 'us-east-1',
+  bucket: S3_BUCKET_INPUT,
+  signatureVersion: 'v4',
+});
+const chunkArray = [];
 
 export default class Transcribe extends Component {
   sound = null;
   state = {
     audioFile: '',
-    mybuffer: null,
+    fileId: '',
     recording: false,
     loaded: false,
     paused: true,
@@ -36,17 +57,8 @@ export default class Transcribe extends Component {
     AudioRecord.on('data', data => {
       const chunk = Buffer.from(data, 'base64');
       //console.log('chunk size', chunk.length);
+      chunkArray.push(chunk);
       // if first chunk just set the chunk otherwise append
-      if (this.state.mybuffer == null) {
-        this.setState({mybuffer: chunk});
-      } else {
-        this.setState({
-          mybuffer: Buffer.concat(
-            [this.state.mybuffer, chunk],
-            this.state.mybuffer.length + chunk.length,
-          ),
-        });
-      }
     });
   }
 
@@ -70,7 +82,7 @@ export default class Transcribe extends Component {
       audioFile: '',
       recording: true,
       loaded: false,
-      mybuffer: null,
+      fileId: '',
     });
     AudioRecord.start();
   };
@@ -83,17 +95,11 @@ export default class Transcribe extends Component {
     let audioFile = await AudioRecord.stop();
     console.log('audioFile', audioFile);
     this.setState({audioFile, recording: false});
-    // attempts to take the audiobuffer and send it to predictions
-    Predictions.convert({
-      transcription: {
-        source: {
-          bytes: this.state.mybuffer,
-        },
-        language: 'en-US',
-      },
-    }) //sends back {"result": {"transcription": {"fullText": ""}}} format
-      .then(({transcription: {fullText}}) => console.log({fullText}))
-      .catch(err => console.log('Error:', {err}));
+
+    await this.uploadFile();
+    // transcribe keeps trying to start before the file finishes uploading so this is a hack ayyy lmao
+    this.sleep(7000);
+    await this.transcribeFile();
   };
 
   load = () => {
@@ -139,6 +145,72 @@ export default class Transcribe extends Component {
   pause = () => {
     this.sound.pause();
     this.setState({paused: true});
+  };
+
+  uploadFile = async () => {
+    // uuid() not working on simulator known error with crypto not supported
+    const fileId =
+      'audioFile' + (Math.floor(Math.random() * 100000) + 1).toString();
+    this.setState({fileId: fileId});
+
+    // reads the file into memory and then converts it into binary buffer
+    const content = await RNFS.readFile(this.state.audioFile, 'base64');
+    const buff = Buffer.from(content, 'base64');
+    //uploads file to aws s3 instance
+    s3.putObject(
+      {
+        Bucket: S3_BUCKET_INPUT,
+        Key: fileId + '.wav',
+        Body: buff,
+      },
+      function (err, data) {
+        if (err) {
+          console.log(err, err.stack);
+        } else {
+          console.log('Upload to s3 successful.');
+        }
+      },
+    );
+  };
+
+  transcribeFile = async () => {
+    var uri =
+      's3://' +
+      S3_BUCKET_INPUT.toString() +
+      '/' +
+      this.state.fileId.toString() +
+      '.wav';
+    uri = uri.toString();
+    console.log(uri);
+    const transcribeService = new AWS.TranscribeService({
+      credentials: access,
+      region: 'us-east-1',
+    });
+    const params = {
+      TranscriptionJobName: this.state.fileId,
+      Media: {
+        MediaFileUri: uri,
+      },
+      MediaFormat: 'wav',
+      OutputBucketName: S3_BUCKET_OUTPUT,
+      LanguageCode: 'en-US',
+    };
+    console.log('created client');
+    await transcribeService.startTranscriptionJob(params, function (err, data) {
+      if (err) console.log(err, err.stack);
+      // an error occurred
+      else {
+        console.log(data); // successful response
+      }
+    });
+  };
+
+  sleep = milliseconds => {
+    const date = Date.now();
+    let currentDate = null;
+    do {
+      currentDate = Date.now();
+    } while (currentDate - date < milliseconds);
   };
 
   render() {

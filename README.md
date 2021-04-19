@@ -54,23 +54,50 @@ Install the Amplify CLI,
 npm install -g @aws-amplify/cli
 ```
 
-In the root directory of the project run, 
+In the root directory of the project run,
+
 ```bash
 amplify init
 ```
-Leave all defaults and for the AWS profile, use "default".
 
-Now run, 
+Leave all defaults except change 'src' to '/' to specify where the aws-exports.js file goes and for the AWS profile, use "default".
+
+Now run,
+
 ```bash
 amplify add auth
 ```
+
 Choose the default configuration, but specify "Email" for the login method.
 Then run,
+
 ```bash
 amplify push
 ```
 
 You are now configured with authentication through Amplify when you run the project.
+
+Set Up Transcription
+
+In order to set up transcription services you need to create a .env file at the root of your project with your aws educate account information. It should look like this:
+
+```bash
+AWS_ACCESS_KEY_ID=youraccesskey
+AWS_SECRET_ACCESS_KEY=yoursecretkey
+AWS_SESSION_TOKEN=yoursessiontoken
+```
+
+After you do this you then need to go to your aws console and create the stack for the cloudformation template found in `/CloudFormation/s3_cloudformation.yml`. You will have to name your two s3 instances, I recommend one with "input" and one with "output". Once the stack completes and you can verify your s3 buckets exist, add their names to your .env file, which should now look like this:
+
+```bash
+AWS_ACCESS_KEY_ID=youraccesskey
+AWS_SECRET_ACCESS_KEY=yoursecretkey
+AWS_SESSION_TOKEN=yoursessiontoken
+S3_BUCKET_INPUT=inputbucketname
+S3_BUCKET_OUTPUT=outputbucketname
+```
+
+Your transcription services should work properly from here!
 
 ### Usage
 
