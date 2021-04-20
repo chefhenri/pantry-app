@@ -13,7 +13,8 @@
     "preset": "react-native"
   },
   "dependencies": {
-    "@aws-sdk/client-dynamodb": "^3.11.0",
+    "@aws-amplify/cli": "^4.13.2",
+    "@aws-sdk/client-dynamodb": "^3.13.0",
     "@react-native-community/netinfo": "^6.0.0",
     "amazon-cognito-identity-js": "^4.6.0",
     "aws-amplify": "^3.3.26",
