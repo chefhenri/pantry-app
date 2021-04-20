@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, Button} from 'react-native';
+import {StyleSheet, View, Button, Text} from 'react-native';
 import {withAuthenticator} from 'aws-amplify-react-native';
 import {Auth} from 'aws-amplify';
 import {Buffer} from 'buffer';
@@ -40,6 +40,7 @@ export default class Transcribe extends Component {
     recording: false,
     loaded: false,
     paused: true,
+    transcript: '',
   };
 
   async componentDidMount() {
@@ -93,13 +94,14 @@ export default class Transcribe extends Component {
     }
     console.log('stop record');
     let audioFile = await AudioRecord.stop();
-    console.log('audioFile', audioFile);
     this.setState({audioFile, recording: false});
 
     await this.uploadFile();
     // transcribe keeps trying to start before the file finishes uploading so this is a hack ayyy lmao
     this.sleep(7000);
     await this.transcribeFile();
+    this.sleep(1000);
+    await this.waitForTranscription();
   };
 
   load = () => {
@@ -200,9 +202,59 @@ export default class Transcribe extends Component {
       if (err) console.log(err, err.stack);
       // an error occurred
       else {
-        console.log(data); // successful response
+        console.log('Started transcription.'); // successful response
       }
     });
+  };
+
+  waitForTranscription = async () => {
+    // waits for the transcription job to finish and the object to exist
+    s3.waitFor(
+      'objectExists',
+      {
+        Bucket: S3_BUCKET_OUTPUT,
+        Key: this.state.fileId + '.json',
+      },
+      this.callbackDownload,
+    );
+  };
+
+  callbackDownload = (err, data) => {
+    if (err) {
+      console.log(err, err.stack);
+    } else {
+      console.log('Downloaded json.');
+      this.downloadTranscription();
+      return;
+    }
+  };
+
+  downloadTranscription = async () => {
+    s3.getObject(
+      {
+        Bucket: S3_BUCKET_OUTPUT,
+        Key: this.state.fileId + '.json',
+      },
+      this.callbackGetTranscript,
+    );
+  };
+
+  callbackGetTranscript = (err, data) => {
+    if (err) {
+      console.log(err, err.stack);
+      // an error occurred
+    } else {
+      var resp = JSON.parse(JSON.stringify(data['Body']));
+      //convert array to json
+      resp = JSON.parse(
+        String.fromCharCode.apply(null, new Uint8Array(resp['data'])),
+      );
+      var transcripts = resp['results']['transcripts'][0]['transcript']
+        .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, '')
+        .toLowerCase();
+      var transcript_array = transcripts.split(' ');
+      this.setState({transcript: transcripts});
+    }
   };
 
   sleep = milliseconds => {
@@ -225,6 +277,10 @@ export default class Transcribe extends Component {
           ) : (
             <Button onPress={this.pause} title="Pause" disabled={!audioFile} />
           )}
+        </View>
+        <View style={styles.column}>
+          <Text style={styles.baseText}>{this.state.transcript}</Text>
+          <Button title="Add To Pantry" />
         </View>
       </View>
     );
