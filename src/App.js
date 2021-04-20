@@ -26,8 +26,6 @@ import {
   ReloadInstructions,
 } from "react-native/Libraries/NewAppScreen";
 
-import Search from "./components/Search";
-
 const Section = ({ children, title }): Node => {
   const isDarkMode = useColorScheme() === "dark";
   return (
@@ -63,7 +61,6 @@ const App: () => Node = () => {
         style={backgroundStyle}>
         <Header />
         <View style={{ backgroundColor: isDarkMode ? Colors.black : Colors.white }}>
-          <Search title="Search for A Recipe" />
           <Section title="Step One">
             Edit <Text style={styles.highlight}>App.js</Text> to change this
             screen and then come back to see your edits.

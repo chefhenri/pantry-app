@@ -6,6 +6,6 @@ async function fetchGQL(text, vars) {
     vars,
   }).then(res => res.data)
     .catch(err => console.log(err));
-};
+}
 
 export default fetchGQL;
