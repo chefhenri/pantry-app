@@ -11,7 +11,7 @@ AppRegistry.registerComponent(appName, () => App);
 const { DynamoDBClient, ListTablesCommand } = require("@aws-sdk/client-dynamodb");
 
 (async () => {
-  const client = new DynamoDBClient({ region: "us-west-2" });
+  const client = new DynamoDBClient({ region: "us-east-1" });
   const command = new ListTablesCommand({});
   try {
     const results = await client.send(command);
