@@ -6,8 +6,8 @@ import { AppRegistry } from "react-native";
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 
 import App from "./src/App";
+import { GQL_URL } from "@env";
 import { name as appName } from "./app.json";
-import {GQL_URL} from '@env';
 
 const apolloClient = new ApolloClient({
   uri: GQL_URL,

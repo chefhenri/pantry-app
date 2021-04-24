@@ -1,11 +1,11 @@
 import React from "react";
 import {View, ActivityIndicator} from 'react-native';
 
-const PINK = '#ff5dc8'
+const BLACK = '#000'
 
 const Loading = () => (
   <View>
-    <ActivityIndicator size={"large"} color={PINK}/>
+    <ActivityIndicator size={"large"} color={BLACK}/>
   </View>
 )
 
