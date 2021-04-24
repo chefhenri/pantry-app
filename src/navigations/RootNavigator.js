@@ -2,7 +2,8 @@ import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 
 import HomeScreen from "../scenes/home/HomeScreen";
-import SearchScreen from "../components/SearchScreen";
+import SearchScreen from "../scenes/search/SearchScreen";
+import TranscribeScreen from "../scenes/transcribe/TranscribeScreen";
 
 const Stack = createStackNavigator();
 
@@ -18,6 +19,10 @@ const RootStack = () => (
     <Stack.Screen
       name="Search"
       component={SearchScreen}
+    />
+    <Stack.Screen
+      name="Transcribe"
+      component={TranscribeScreen}
     />
   </Stack.Navigator>
 );

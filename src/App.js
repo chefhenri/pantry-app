@@ -1,15 +1,15 @@
-import React from 'react';
-import {StyleSheet, View} from 'react-native';
-import Amplify from 'aws-amplify';
-import config from '../aws-exports';
-import {withAuthenticator} from 'aws-amplify-react-native';
-import Predictions, {
-  AmazonAIPredictionsProvider,
-} from '@aws-amplify/predictions';
-import Home from './components/Home';
-import Transcribe from './components/Transcribe';
+import React from "react";
+import { withAuthenticator } from "aws-amplify-react-native";
+import { NavigationContainer } from "@react-navigation/native";
 
-global.Buffer = global.Buffer || require('buffer').Buffer;
+import Amplify from "aws-amplify";
+import { AmazonAIPredictionsProvider } from "@aws-amplify/predictions";
+
+import config from "../aws-exports";
+
+import RootNavigator from "./navigations/RootNavigator";
+
+// global.Buffer = global.Buffer || require("buffer").Buffer;
 
 Amplify.configure({
   ...config,
@@ -20,20 +20,10 @@ Amplify.configure({
 
 Amplify.addPluggable(new AmazonAIPredictionsProvider());
 
-function App() {
-  return (
-    <View style={styles.container}>
-      <Home />
-      <Transcribe />
-    </View>
-  );
-}
+const App = () => (
+  <NavigationContainer>
+    <RootNavigator />
+  </NavigationContainer>
+);
 
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
 export default withAuthenticator(App);
