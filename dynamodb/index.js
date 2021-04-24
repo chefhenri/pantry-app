@@ -4,7 +4,7 @@ var uuid = require('node-uuid')
 // gets today's date YYYY-MM-DD
 let today = new Date().toISOString().slice(0, 10)
 // generates unique id for each food item
-const foodID = uuid();
+const id = uuid();
 
 const FOOD_TABLE_NAME = "Food"
 const RECIPE_TABLE_NAME = "Recipe"
@@ -15,18 +15,11 @@ const docClient = new AWS.DynamoDB.DocumentClient();
 var foodTableParams = {
   TableName: FOOD_TABLE_NAME,
   Item: {
-    "foodID": foodID,
-    "label": "",
+    "foodID": id,
+    "foodLabel": "",
     "addDate": today,
   }
 };
-
-var pantryTableParams = {
-  TableName: PANTRY_TABLE_NAME,
-  Item: {
-    "food": "",
-  }
-}
 
 docClient.put(foodTableParams, function(err, data) {
   if (err){
@@ -43,7 +36,7 @@ async function createFoodItem(foodData) {
     Item: foodData,
   }
   try {
-    await docClient.put(params).promise()
+    await docClient.put(params)
   } catch (err) {
     return err
   }
@@ -59,14 +52,29 @@ exports.handler = async (event, context) => {
   }
 }
 
+var pantryTableParams = {
+  TableName: PANTRY_TABLE_NAME,
+  Item: {
+    "foodLabel": "",
+  }
+}
+
+docClient.put(pantryTableParams, function(err, data) {
+  if (err){
+    console.log(err)
+  } else {
+    console.log(data)
+  }
+})
+
 // function to add food item into pantry
-function pantryAddFood(foodItem){
+async function pantryAddFood(foodItem){
   var params = {
     TableName: PANTRY_TABLE_NAME,
     Item: foodItem,
   }
   try {
-    docClient.put(params).promise()
+    await docClient.put(params)
   } catch (err) {
     return err
   }
@@ -76,8 +84,24 @@ exports.handler = async (event, context) => {
   try {
     const { data } = event.body
     await pantryAddFood(data)
-    return { body: 'Food item successfully created' }
+    return { body: 'Food item added to Pantry' }
   } catch (err) {
     return { error: err }
+  }
+}
+
+// Scan Pantry table and returns all the data in table
+console.log("Scanning Pantry...");
+docClient.scan(pantryTableParams, scanPantry);
+
+function scanPantry(err, data){
+  if (err) {
+    console.error("Unable to scan Pantry table")
+  } else {
+    console.log("Pantry: ");
+    data.Item.forEach(function(foodItem) {
+      console.log(
+        foodItem.foodID,  ": ", foodItem.foodLabel);
+    });
   }
 }
