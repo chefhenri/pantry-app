@@ -1,12 +1,39 @@
-import React from "react";
-import { NavigationContainer } from "@react-navigation/native";
+import React from 'react';
+import {StyleSheet, View} from 'react-native';
+import Amplify from 'aws-amplify';
+import config from '../aws-exports';
+import {withAuthenticator} from 'aws-amplify-react-native';
+import Predictions, {
+  AmazonAIPredictionsProvider,
+} from '@aws-amplify/predictions';
+import Home from './components/Home';
+import Transcribe from './components/Transcribe';
 
-import RootStack from "./navigations/RootNavigator";
+global.Buffer = global.Buffer || require('buffer').Buffer;
 
-const App = () => (
-  <NavigationContainer>
-    <RootStack />
-  </NavigationContainer>
-);
+Amplify.configure({
+  ...config,
+  Analytics: {
+    disabled: true,
+  },
+});
 
-export default App;
+Amplify.addPluggable(new AmazonAIPredictionsProvider());
+
+function App() {
+  return (
+    <View style={styles.container}>
+      <Home />
+      <Transcribe />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
+export default withAuthenticator(App);

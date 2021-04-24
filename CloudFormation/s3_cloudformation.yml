@@ -1,0 +1,22 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: 'AWS CloudFormation Template to create input and output buckets for Transcribe'
+Parameters:
+  BucketNameParameterInput:
+    Type: String
+    Description: Bucket Name Input
+  BucketNameParameterOutput:
+    Type: String
+    Description: Bucket Name Output
+Resources:
+  S3Bucket1:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref BucketNameParameterInput
+      AccessControl: Private
+    DeletionPolicy: Retain
+  S3Bucket2:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref BucketNameParameterOutput
+      AccessControl: Private
+    DeletionPolicy: Retain
