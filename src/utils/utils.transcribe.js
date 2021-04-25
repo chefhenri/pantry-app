@@ -1,8 +1,9 @@
 import { check, PERMISSIONS, request, RESULTS } from "react-native-permissions";
+import TranscribeService from "aws-sdk/clients/transcribeservice";
 import { readFile } from "react-native-fs";
 import { Credentials, S3 } from "aws-sdk";
-import { Buffer } from "buffer";
 
+import { Buffer } from "buffer";
 import {
   AWS_ACCESS_KEY_ID,
   AWS_SECRET_ACCESS_KEY,
@@ -10,27 +11,24 @@ import {
   S3_BUCKET_INPUT,
   S3_BUCKET_OUTPUT,
 } from "@env";
-import TranscribeService from "aws-sdk/clients/transcribeservice";
 
-export const access = new Credentials({
+const access = new Credentials({
   accessKeyId: AWS_ACCESS_KEY_ID,
   secretAccessKey: AWS_SECRET_ACCESS_KEY,
   sessionToken: AWS_SESSION_TOKEN,
 });
 
-export const s3 = new S3({
+const s3 = new S3({
   credentials: access,
   region: "us-east-1",
   bucket: S3_BUCKET_INPUT,
   signatureVersion: "v4",
 });
 
-export const buckets = {
+const buckets = {
   in: S3_BUCKET_INPUT,
   out: S3_BUCKET_OUTPUT,
 };
-
-export const chunkArray = [];
 
 export const checkPermission = async () => {
   let perm = await check(PERMISSIONS.IOS.MICROPHONE);
@@ -41,8 +39,6 @@ export const checkPermission = async () => {
 
 export const uploadFile = async (file) => {
   let fileId = `audioFile${Math.floor(Math.random() * 100000) + 1}`;
-
-  // setAudio(prev => ({ ...prev, fileId: fileId }));
 
   // Reads the file into memory and then converts it into binary buffer
   const content = await readFile(file, "base64");
@@ -55,15 +51,15 @@ export const uploadFile = async (file) => {
       Key: fileId + ".wav",
       Body: buff,
     }, (err) => {
-      console.log(err ? `${err}\n${err.stack}` : "Upload to s3 successful");
+      console.log(err ? `${err}\n${err.stack}` : "Upload to S3 successful");
     },
   );
 
   return fileId;
 };
 
-export const transcribeFile = async (file) => {
-  let uri = `s3://${buckets.in}/${file}.wav`;
+export const transcribeFile = async (fileId) => {
+  let uri = `s3://${buckets.in}/${fileId}.wav`;
   console.log(`S3 URI: ${uri}`);
 
   const transcribeService = new TranscribeService({
@@ -71,55 +67,60 @@ export const transcribeFile = async (file) => {
     region: "us-east-1",
   });
 
-  const params = {
-    TranscriptionJobName: file,
+  const transcribeParams = {
+    TranscriptionJobName: fileId,
     Media: { MediaFileUri: uri },
     MediaFormat: "wav",
     OutputBucketName: buckets.out,
     LanguageCode: "en-US",
   };
 
-  console.log("Client created");
-
-  await transcribeService.startTranscriptionJob(params,
-    (err) => {
-      console.log(err ? `${err}\n${err.stack}` : "Started transcription");
-    });
-};
-
-export const waitForTranscription = async (file) => {
-  // Wait for job to finish and object to exist
-  let params = { Bucket: buckets.out, Key: `${file}.json` };
-  s3.waitFor("objectExists", params, err => {
-
-  });
-
-  // s3.waitFor("objectExists", {
-  //   Bucket: buckets.out,
-  //   Key: file + ".json",
-  // }, (err) => callbackDownload(err, file));
-};
-
-const downloadTranscription = async (file) => {
-  let params = { Bucket: buckets.out, Key: `${file}.json` };
-  s3.getObject(params, (err, data) => {
+  // Wait for audio file to exist in bucket
+  s3.waitFor("objectExists", {
+    Bucket: buckets.in,
+    Key: `${fileId}.wav`,
+  }, async err => {
     if (err) console.log(err, err.stack);
     else {
-      let data = data["Body"]["data"];
+      await transcribeService.startTranscriptionJob(transcribeParams, err => {
+        console.log(err ? `${err}\n${err.stack}` : "Started transcription");
+      });
     }
   });
-
-  // s3.getObject({
-  //   Bucket: buckets.out,
-  //   Key: file + ".json",
-  // }, (err, data) => callbackGetTranscript(err, data));
 };
 
-// export const requestPermission = async () => {
-//   let perm = await request(PERMISSIONS.IOS.MICROPHONE);
-//   console.log(perm);
-// };
+export const downloadTranscription = async (fileId, callback) => {
+  s3.waitFor("objectExists", {
+    Bucket: buckets.out,
+    Key: `${fileId}.json`,
+  }, err => {
+    if (err) console.log(err, err.stack);
+    else {
+      s3.getObject({
+        Bucket: buckets.out,
+        Key: fileId + ".json",
+      }, (err, data) => extractTranscript(err, data, callback));
+    }
+  });
+};
 
-export const sleep = (ms) => {
-  return new Promise(resolve => setTimeout(resolve, ms));
+const extractTranscript = (err, data, callback) => {
+  if (err) console.log(err, err.stack);
+  else {
+    let res = JSON.parse(JSON.stringify(data["Body"]));
+
+    // Convert job buffer to JSON
+    res = JSON.parse(String.fromCharCode
+      .apply(null, new Uint8Array(res["data"])));
+
+    // console.log(`Object data: ${JSON.stringify(res)}`);
+
+    let transcript = res["results"]["transcripts"][0]["transcript"]
+      .replace(/[.,\/#!$%^&*;:{}=\-_`~()]/g, "")
+      .toLowerCase();
+
+    console.log(`Transcript: ${transcript}`);
+
+    callback(transcript);
+  }
 };
