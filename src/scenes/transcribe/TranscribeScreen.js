@@ -5,46 +5,16 @@ import AudioRecord from "react-native-audio-record";
 import { readFile } from "react-native-fs";
 import Sound from "react-native-sound";
 
-import { TranscribeService } from "aws-sdk";
 import { Buffer } from "buffer";
-import { Credentials, S3 } from "aws-sdk";
+import TranscribeService from "aws-sdk/clients/transcribeservice";
 
 import {
-  AWS_ACCESS_KEY_ID,
-  AWS_SECRET_ACCESS_KEY,
-  AWS_SESSION_TOKEN,
-  S3_BUCKET_INPUT,
-  S3_BUCKET_OUTPUT,
-} from "@env";
-
-// import {
-//   sleep,
-//   access,
-//   s3,
-//   buckets,
-//   chunkArray,
-// } from "../../utils/utils.transcribe";
-import { sleep } from "../../utils/utils.transcribe";
-
-const access = new Credentials({
-  accessKeyId: AWS_ACCESS_KEY_ID,
-  secretAccessKey: AWS_SECRET_ACCESS_KEY,
-  sessionToken: AWS_SESSION_TOKEN,
-});
-
-const s3 = new S3({
-  credentials: access,
-  region: "us-east-1",
-  bucket: S3_BUCKET_INPUT,
-  signatureVersion: "v4",
-});
-
-const buckets = {
-  in: S3_BUCKET_INPUT,
-  out: S3_BUCKET_OUTPUT,
-};
-
-const chunkArray = [];
+  sleep,
+  access,
+  s3,
+  buckets,
+  chunkArray,
+} from "../../utils/utils.transcribe";
 
 const TranscribeScreen = () => {
   const [audio, setAudio] = useState({
@@ -129,6 +99,7 @@ const TranscribeScreen = () => {
     });
 
     const params = {
+      // FIXME: 'audio.fileId' undefined
       TranscriptionJobName: audio.fileId,
       Media: { MediaFileUri: uri },
       MediaFormat: "wav",
@@ -175,7 +146,7 @@ const TranscribeScreen = () => {
         .apply(null, new Uint8Array(res["data"])));
 
       let transcripts = res["results"]["transcripts"][0]["transcript"]
-        .replace(/[.,\/#!$%^&*;:{}=\-_`~()]/g, "")
+        .replace(/[.,\/#!\$%\^&*;:{}=\-_`~()]/g, "")
         .toLowerCase();
 
       setAudio({ transcript: transcripts });

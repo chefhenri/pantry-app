@@ -8,7 +8,7 @@ import {
   S3_BUCKET_OUTPUT,
 } from "@env";
 
-export const access = Credentials({
+export const access = new Credentials({
   accessKeyId: AWS_ACCESS_KEY_ID,
   secretAccessKey: AWS_SECRET_ACCESS_KEY,
   sessionToken: AWS_SESSION_TOKEN,
