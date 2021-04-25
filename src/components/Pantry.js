@@ -31,14 +31,18 @@ export default class Pantry extends Component {
 
   addFoodItem = () => {
     let currPantry = this.state.pantry;
+    const foodName = document.getElementById("foodName");
+    const quantity = document.getElementById("quantity");
+    const expDate = document.getElementById("expDate");
+
     var params = {
       TableName: FOOD_TABLE_NAME,
-      Item: {
+      Key: {
         "foodID": id.toString(),
-        "label": document.getElementById("foodName"),
-        "quantity": document.getElementById("quantity"),
+        "label": foodName,
+        "quantity": quantity,
         "addDate": today,
-        "expDate": document.getElementById("expDate")
+        "expDate": expDate,
       },
     }
 
@@ -56,7 +60,26 @@ export default class Pantry extends Component {
   }
 
   addRecipe = () => {
-    //TODO
+    const recipeName = document.getElementById("recipeName")
+    const url = document.getElementById("url")
+
+    var params = {
+      TableName: RECIPE_TABLE_NAME,
+      Key: {
+        "label": recipeName,
+        "url": url
+      }
+    }
+
+    console.log("Adding a new recipe...")
+    docClient.put(params, function(err, data){
+      if (err){
+        console.log(err);
+      } else {
+        console.log("Food item added to pantry: ");
+        console.log(data);
+      }
+    })
   }
 
   scanPantry = () => {
@@ -78,6 +101,7 @@ export default class Pantry extends Component {
         });
       }
     }
+
     //formats state pantry into a list of food items & qty to return
     const pantryList = currPantry.map((food) => <li key={food.foodName}>{food.foodName} + ": " + {food.quantity}</li>)
     return (
@@ -85,7 +109,10 @@ export default class Pantry extends Component {
         {pantryList}
       </div>
     )
+  }
 
+  searchPantry = () => {
+    //TODO
   }
 
   myChangeHandler = (event) => {
@@ -102,18 +129,25 @@ export default class Pantry extends Component {
           <input type="text" id="foodName">Food Name</input>
           <input type="text" pattern="[0-9]*" id="quantity">Quantity</input>
           <input type="text" id="expDate">Expiration Date</input>
-          <Button onClick={this.addFoodItem()}/>
+          <Button onClick={this.addFoodItem()} title="Add Item"/>
         </form>;
     } else if (this.state.action === "Add Recipe"){
       form =
         <form id="addRecipeForm">
           <input type="text" id="recipeName">Recipe Name</input>
           <input type="text" id="url">Original URL</input>
-          <Button onClick={this.addRecipe()}/>
+          <Button onClick={this.addRecipe()} title="Add Recipe"/>
         </form>;
+    } else if (this.state.action === "Search Pantry"){
+      form =
+        <form id="searchForm">
+          <input type="text" id="filter">Search For: </input>
+          <Button onClick={this.searchPantry} title="Search"/>
+        </form>
     } else {
       form = "";
     }
+
     return (
       <View>
         <h1>Pantry</h1>
@@ -121,7 +155,7 @@ export default class Pantry extends Component {
           <option value="Select Action">Select Option</option>
           <option value="Add Food Item">Add Food Item</option>
           <option value="Add Recipe">Add Recipe</option>
-          {/*<option value="Search Pantry">Search Pantry</option>*/}
+          <option value="Search Pantry">Search Pantry</option>
         </select>
         {form}
         <Button onClick={this.scanPantry()}>View Pantry</Button>
