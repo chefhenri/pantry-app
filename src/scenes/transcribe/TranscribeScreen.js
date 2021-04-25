@@ -5,16 +5,46 @@ import AudioRecord from "react-native-audio-record";
 import { readFile } from "react-native-fs";
 import Sound from "react-native-sound";
 
+import { TranscribeService } from "aws-sdk";
 import { Buffer } from "buffer";
-import TranscribeService from "aws-sdk/clients/transcribeservice";
+import { Credentials, S3 } from "aws-sdk";
 
 import {
-  sleep,
-  access,
-  s3,
-  buckets,
-  chunkArray,
-} from "../../utils/utils.transcribe";
+  AWS_ACCESS_KEY_ID,
+  AWS_SECRET_ACCESS_KEY,
+  AWS_SESSION_TOKEN,
+  S3_BUCKET_INPUT,
+  S3_BUCKET_OUTPUT,
+} from "@env";
+
+// import {
+//   sleep,
+//   access,
+//   s3,
+//   buckets,
+//   chunkArray,
+// } from "../../utils/utils.transcribe";
+import { sleep } from "../../utils/utils.transcribe";
+
+const access = new Credentials({
+  accessKeyId: AWS_ACCESS_KEY_ID,
+  secretAccessKey: AWS_SECRET_ACCESS_KEY,
+  sessionToken: AWS_SESSION_TOKEN,
+});
+
+const s3 = new S3({
+  credentials: access,
+  region: "us-east-1",
+  bucket: S3_BUCKET_INPUT,
+  signatureVersion: "v4",
+});
+
+const buckets = {
+  in: S3_BUCKET_INPUT,
+  out: S3_BUCKET_OUTPUT,
+};
+
+const chunkArray = [];
 
 const TranscribeScreen = () => {
   const [audio, setAudio] = useState({
@@ -24,6 +54,7 @@ const TranscribeScreen = () => {
     sound: null,
     loaded: false,
   });
+
   const [playback, setPlayback] = useState({
     paused: true,
     recording: false,
@@ -44,8 +75,14 @@ const TranscribeScreen = () => {
       chunkArray.push(chunk);
     });
   }, []);
-  useEffect(() => console.log(`Audio data updated: ${JSON.stringify(audio)}`), [audio]);
-  useEffect(() => console.log(`Playback data updated: ${JSON.stringify(playback)}`), [playback]);
+
+  useEffect(() => {
+    console.log(`Audio data updated: ${JSON.stringify(audio)}`);
+  }, [audio]);
+
+  useEffect(() => {
+    console.log(`Playback data updated: ${JSON.stringify(playback)}`);
+  }, [playback]);
 
   const checkPermission = async () => {
     let perm = await check(PERMISSIONS.IOS.MICROPHONE);
@@ -71,23 +108,26 @@ const TranscribeScreen = () => {
 
     const buff = Buffer.from(content, "base64");
 
-    // Uploads file to aws s3 instance
+    // Upload file to AWS S3 instance
     s3.putObject({
         Bucket: buckets.in,
         Key: audio.fileId + ".wav",
         Body: buff,
-      }, err => console.log(err ? `${err}\n${err.stack}` : "Upload to s3 successful"),
+      }, (err) => {
+        console.log(err ? `${err}\n${err.stack}` : "Upload to s3 successful");
+      },
     );
   };
 
   const transcribeFile = async () => {
     let uri = `s3://${buckets.in}/${audio.fileId}.wav`;
-    console.log(uri);
+    console.log(`S3 URI: ${uri}`);
 
     const transcribeService = new TranscribeService({
       credentials: access,
       region: "us-east-1",
     });
+
     const params = {
       TranscriptionJobName: audio.fileId,
       Media: { MediaFileUri: uri },
@@ -96,18 +136,20 @@ const TranscribeScreen = () => {
       LanguageCode: "en-US",
     };
 
-    console.log("created client");
+    console.log("Client created");
 
     await transcribeService.startTranscriptionJob(params,
-      err => console.log(err ? `${err}\n${err.stack}` : "Started transcription"));
+      (err) => {
+        console.log(err ? `${err}\n${err.stack}` : "Started transcription");
+      });
   };
 
   const waitForTranscription = async () => {
-    // waits for the transcription job to finish and the object to exist
+    // Wait for job to finish and object to exist
     s3.waitFor("objectExists", {
       Bucket: buckets.out,
       Key: audio.fileId + ".json",
-    }, () => callbackDownload);
+    }, () => callbackDownload());
   };
 
   const callbackDownload = (err) => {
@@ -126,7 +168,8 @@ const TranscribeScreen = () => {
     if (err) console.log(err, err.stack);
     else {
       let res = data["Body"];
-      //convert array to json
+
+      // Convert array to JSON
       res = JSON.parse(String
         .fromCharCode
         .apply(null, new Uint8Array(res["data"])));
@@ -163,7 +206,7 @@ const TranscribeScreen = () => {
 
       setAudio({ audioFile: soundFile });
 
-      // transcribe tries to start before the file finishes uploading
+      // Transcribe tries to start before .wav finishes uploading
       await uploadFile(soundFile);
       await sleep(7000);
 
@@ -177,16 +220,15 @@ const TranscribeScreen = () => {
   const load = () => {
     return new Promise((resolve, reject) => {
       if (!audio.audioFile) {
-        return reject("file path is empty");
+        return reject("File path is empty");
       }
 
       this.sound = new Sound(audio.audioFile, "", err => {
         if (err) {
-          console.log("failed to load the file", err);
+          console.log("Failed to load the file", err);
           return reject(err);
         }
         setAudio({ loaded: true });
-        // this.setState({ loaded: true });
         return resolve();
       });
     });
@@ -205,7 +247,9 @@ const TranscribeScreen = () => {
     Sound.setCategory("Playback");
 
     audio.sound.play(success => {
-      console.log(success ? "Finished playing successfully" : "Playback failed - due to audio decoding errors");
+      console.log(success ?
+        "Finished playing successfully" :
+        "Playback failed - due to audio decoding errors");
 
       setPlayback({ paused: true });
     });
