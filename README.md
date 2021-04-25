@@ -30,6 +30,8 @@ sudo gem install cocoapods
 
 In Xcode preferences, enable Command Line Tools under "Locations"
 
+In the project root, run `npm install --force` and `yarn`
+
 In the project `ios` directory, run `pod install`
 
 ### AWS/Amplify Setup
