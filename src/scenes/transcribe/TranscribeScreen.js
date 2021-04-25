@@ -5,15 +5,15 @@ import AudioRecord from "react-native-audio-record";
 import { readFile } from "react-native-fs";
 import Sound from "react-native-sound";
 
-import * as AWS from "aws-sdk";
 import { Buffer } from "buffer";
+import TranscribeService from "aws-sdk/clients/transcribeservice";
 
 import {
+  sleep,
   access,
+  s3,
   buckets,
   chunkArray,
-  s3,
-  sleep,
 } from "../../utils/utils.transcribe";
 
 const TranscribeScreen = () => {
@@ -59,13 +59,15 @@ const TranscribeScreen = () => {
     console.log(perm);
   };
 
-  const uploadFile = async () => {
+  const uploadFile = async (filePath) => {
     setAudio({
       fileId: `audioFile${Math.floor(Math.random() * 100000) + 1}`,
     });
 
+    console.log("Audio file: ", audio.audioFile);
+
     // Reads the file into memory and then converts it into binary buffer
-    const content = await readFile(audio.audioFile, "base64");
+    const content = await readFile(filePath, "base64");
 
     const buff = Buffer.from(content, "base64");
 
@@ -82,7 +84,7 @@ const TranscribeScreen = () => {
     let uri = `s3://${buckets.in}/${audio.fileId}.wav`;
     console.log(uri);
 
-    const transcribeService = new AWS.TranscribeService({
+    const transcribeService = new TranscribeService({
       credentials: access,
       region: "us-east-1",
     });
@@ -117,7 +119,7 @@ const TranscribeScreen = () => {
     s3.getObject({
       Bucket: buckets.out,
       Key: audio.fileId + ".json",
-    }, () => callbackGetTranscript);
+    }, () => callbackGetTranscript());
   };
 
   const callbackGetTranscript = (err, data) => {
@@ -132,8 +134,6 @@ const TranscribeScreen = () => {
       let transcripts = res["results"]["transcripts"][0]["transcript"]
         .replace(/[.,\/#!$%^&*;:{}=\-_`~()]/g, "")
         .toLowerCase();
-
-      // let transcript_array = transcripts.split(" ");
 
       setAudio({ transcript: transcripts });
     }
@@ -160,12 +160,11 @@ const TranscribeScreen = () => {
       console.log("stop record");
 
       let soundFile = await AudioRecord.stop();
-      console.log(soundFile);
 
       setAudio({ audioFile: soundFile });
 
       // transcribe tries to start before the file finishes uploading
-      await uploadFile();
+      await uploadFile(soundFile);
       await sleep(7000);
 
       await transcribeFile();
@@ -230,7 +229,10 @@ const TranscribeScreen = () => {
       </View>
       <View style={styles.column}>
         <Text>{audio.transcript}</Text>
-        <Button title="Add To Pantry" />
+        <Button
+          title="Add To Pantry"
+          onPress={() => console.log("Placeholder: add items to pantry")}
+        />
       </View>
     </View>
   );
