@@ -271,11 +271,12 @@ PODS:
     - React-cxxreact (= 0.64.0)
     - React-jsi (= 0.64.0)
     - React-perflogger (= 0.64.0)
-<<<<<<< HEAD
   - RNAudioRecord (0.2.2):
     - React
   - RNAWSCognito (4.6.0):
     - React-Core
+  - RNFS (2.17.0):
+    - React
   - RNPermissions (3.0.1):
     - React-Core
   - RNSound (0.11.0):
@@ -283,8 +284,6 @@ PODS:
     - RNSound/Core (= 0.11.0)
   - RNSound/Core (0.11.0):
     - React
-=======
->>>>>>> f1a51754d3d70a66b16c2218c04fc585b59aa42e
   - Yoga (1.14.0)
 
 DEPENDENCIES:
@@ -321,6 +320,7 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - RNAudioRecord (from `../node_modules/react-native-audio-record`)
   - RNAWSCognito (from `../node_modules/amazon-cognito-identity-js`)
+  - RNFS (from `../node_modules/react-native-fs`)
   - RNPermissions (from `../node_modules/react-native-permissions`)
   - RNSound (from `../node_modules/react-native-sound`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
@@ -362,11 +362,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsiexecutor"
   React-jsinspector:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
-<<<<<<< HEAD
   react-native-netinfo:
     :path: "../node_modules/@react-native-community/netinfo"
-=======
->>>>>>> f1a51754d3d70a66b16c2218c04fc585b59aa42e
   React-perflogger:
     :path: "../node_modules/react-native/ReactCommon/reactperflogger"
   React-RCTActionSheet:
@@ -395,6 +392,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-audio-record"
   RNAWSCognito:
     :path: "../node_modules/amazon-cognito-identity-js"
+  RNFS:
+    :path: "../node_modules/react-native-fs"
   RNPermissions:
     :path: "../node_modules/react-native-permissions"
   RNSound:
@@ -406,9 +405,9 @@ SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   DoubleConversion: cf9b38bf0b2d048436d9a82ad2abe1404f11e7de
   FBLazyVector: 49cbe4b43e445b06bf29199b6ad2057649e4c8f5
-  FBReactNativeSpec: dfdf4e94fbea39194d6e065f5711c054311fde47
+  FBReactNativeSpec: a65c2ecd95b6fc3abc6acfc10dfe7fd29fa161b1
   glog: 73c2498ac6884b13ede40eda8228cb1eee9d9d62
-  Permission-Microphone: 60319bf64f89a035f5bf8d00107fab31b904005c
+  Permission-Microphone: bcdaaa22af6217b86fad0843413a238b9413f2d6
   RCT-Folly: ec7a233ccc97cc556cf7237f0db1ff65b986f27c
   RCTRequired: 2f8cb5b7533219bf4218a045f92768129cf7050a
   RCTTypeSafety: 512728b73549e72ad7330b92f3d42936f2a4de5b
@@ -420,26 +419,26 @@ SPEC CHECKSUMS:
   React-jsi: 74341196d9547cbcbcfa4b3bbbf03af56431d5a1
   React-jsiexecutor: 06a9c77b56902ae7ffcdd7a4905f664adc5d237b
   React-jsinspector: 0ae35a37b20d5e031eb020a69cc5afdbd6406301
-  react-native-netinfo: 34f4d7a42f49157f3b45c14217d256bce7dc9682
+  react-native-netinfo: e849fc21ca2f4128a5726c801a82fc6f4a6db50d
   React-perflogger: 9c547d8f06b9bf00cb447f2b75e8d7f19b7e02af
   React-RCTActionSheet: 3080b6e12e0e1a5b313c8c0050699b5c794a1b11
   React-RCTAnimation: 3f96f21a497ae7dabf4d2f150ee43f906aaf516f
   React-RCTBlob: 283b8e5025e7f954176bc48164f846909002f3ed
   React-RCTImage: 5088a484faac78f2d877e1b79125d3bb1ea94a16
   React-RCTLinking: 5e8fbb3e9a8bc2e4e3eb15b1eb8bda5fcac27b8c
-  React-RCTNetwork: 38ec277217b1e841d5e6a1fa78da65b9212ccb28
+  React-RCTNetwork: 38ec277217b1e841d5e6a1fa78da65b9212ddccb28
   React-RCTSettings: 242d6e692108c3de4f3bb74b7586a8799e9ab070
   React-RCTText: 8746736ac8eb5a4a74719aa695b7a236a93a83d2
   React-RCTVibration: 0fd6b21751a33cb72fce1a4a33ab9678416d307a
   React-runtimeexecutor: cad74a1eaa53ee6e7a3620231939d8fe2c6afcf0
   ReactCommon: cfe2b7fd20e0dbd2d1185cd7d8f99633fbc5ff05
-<<<<<<< HEAD
-  RNAudioRecord: f38c2caac4bbbc34f24563869745110970f1dfe3
+  RNAudioRecord: 162fee3b8fb628773ec704bf0333823125be2ed7
   RNAWSCognito: d0f3260e93c91bcde43c4ff4fc379f20661d123b
-  RNPermissions: eb94f9fdc0a8ecd02fcce0676d56ffb1395d41e1
-  RNSound: c980916b596cc15c8dcd2f6ecd3b13c4881dbe20
+  RNFS: 93d5b5535eb39d98e6b19009faa8fe717f7ea45d
+  RNPermissions: 4c8a37b4dde50f1f152bf8cd08c4a43d2355829e
+  RNSound: da030221e6ac7e8290c6b43f2b5f2133a8e225b0
   Yoga: 8c8436d4171c87504c648ae23b1d81242bdf3bbf
 
-PODFILE CHECKSUM: 6f7b12b7808de41352fcd84880b53c8467043f42
+PODFILE CHECKSUM: fc34e7082c76cf3b99246a63e9ac7260d7ab4c2c
 
 COCOAPODS: 1.10.1
