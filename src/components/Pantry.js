@@ -16,6 +16,7 @@ const id = uuid();
 
 const FOOD_TABLE_NAME = "Food"
 const RECIPE_TABLE_NAME = "Recipe"
+const ING_TABLE_NAME = "Ingredients"
 
 const docClient = new AWS.DynamoDB.DocumentClient();
 
@@ -24,35 +25,42 @@ export default class Pantry extends Component {
     super(props);
     this.state = {
       action: "Select Action",
-      pantry: []
+      pantry: [{"foodName":"", "quantity":0}]
     }
   }
 
-  addFoodItem = (foodName, quantity, expDate) => {
+  addFoodItem = () => {
+    let currPantry = this.state.pantry;
     var params = {
       TableName: FOOD_TABLE_NAME,
       Item: {
         "foodID": id.toString(),
-        "label": foodName.toString(),
-        "quantity": quantity.toInteger(),
+        "label": document.getElementById("foodName"),
+        "quantity": document.getElementById("quantity"),
         "addDate": today,
-        "expDate": expDate.toString()
+        "expDate": document.getElementById("expDate")
       },
     }
 
+    console.log("Adding item to pantry...");
     docClient.put(params, function(err, data) {
-      console.log(data);
       if (err){
-        console.log(err)
+        console.log(err);
       } else {
-        console.log(data)
-        this.state.pantry.push(data)
+        console.log("Food item added to pantry: ");
+        console.log(data);
+        //updates state pantry
+        currPantry.push({ "foodName": foodName, "quantity": quantity });
       }
     })
   }
 
+  addRecipe = () => {
+    //TODO
+  }
+
   scanPantry = () => {
-    var pantry = this.state.pantry;
+    var currPantry = this.state.pantry;
     var params = {
       TableName: FOOD_TABLE_NAME
     };
@@ -64,19 +72,17 @@ export default class Pantry extends Component {
       if (err) {
         console.log(err);
       } else {
-        console.log("Scan successful.");
+        console.log("Scan completed:");
         data.Items.forEach(function(item) {
-          pantry.push(item.label + ":" + item.quantity);
-          console.log(item.label + ":" + item.quantity);
+          console.log(item);
         });
       }
     }
-
+    //formats state pantry into a list of food items & qty to return
+    const pantryList = currPantry.map((food) => <li key={food.foodName}>{food.foodName} + ": " + {food.quantity}</li>)
     return (
       <div>
-        {pantry.map(function (name, qty){
-          return(<li key={name}> {name} + " " + {qty} </li>);
-        })}
+        {pantryList}
       </div>
     )
 
@@ -93,27 +99,29 @@ export default class Pantry extends Component {
     if (this.state.action === "Add Food Item"){
       form =
         <form id="addFoodItemForm">
-          <input type="text" id="foodLabel">Food Name</input>
+          <input type="text" id="foodName">Food Name</input>
           <input type="text" pattern="[0-9]*" id="quantity">Quantity</input>
-          <input></input>
+          <input type="text" id="expDate">Expiration Date</input>
           <Button onClick={this.addFoodItem()}/>
         </form>;
     } else if (this.state.action === "Add Recipe"){
       form =
         <form id="addRecipeForm">
-
+          <input type="text" id="recipeName">Recipe Name</input>
+          <input type="text" id="url">Original URL</input>
+          <Button onClick={this.addRecipe()}/>
         </form>;
     } else {
       form = "";
     }
     return (
       <View>
-        <h1>My Pantry</h1>
+        <h1>Pantry</h1>
         <select value={this.state.action} onChange={this.myChangeHandler}>
           <option value="Select Action">Select Option</option>
-          {/*<option value="View Pantry">View Pantry</option>*/}
           <option value="Add Food Item">Add Food Item</option>
           <option value="Add Recipe">Add Recipe</option>
+          {/*<option value="Search Pantry">Search Pantry</option>*/}
         </select>
         {form}
         <Button onClick={this.scanPantry()}>View Pantry</Button>
