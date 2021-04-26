@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, Button} from 'react-native';
+import {StyleSheet, View, Text, Button} from 'react-native';
 
 var AWS = require('aws-sdk')
 var uuid = require('node-uuid')
@@ -115,10 +115,8 @@ export default class Pantry extends Component {
     //TODO
   }
 
-  myChangeHandler = (event) => {
-    let name = event.target.name;
-    let value = event.target.value;
-    this.setState({[name]: value});
+  myChangeHandler = (formAction) => {
+    this.setState({action : formAction});
   }
 
   render() {
@@ -150,17 +148,17 @@ export default class Pantry extends Component {
 
     return (
       <View>
-        <h1>Pantry</h1>
-        <select value={this.state.action} onChange={this.myChangeHandler}>
-          <option value="Select Action">Select Option</option>
-          <option value="Add Food Item">Add Food Item</option>
-          <option value="Add Recipe">Add Recipe</option>
-          <option value="Search Pantry">Search Pantry</option>
-        </select>
-        {form}
-        <Button onClick={this.scanPantry()}>View Pantry</Button>
+        <Form>
+          <select value={this.state.action}>
+            <option value="Select Option" title="Select Option" />
+            <option value="Add Food Item" title="Add Food Item" />
+            <option value="Add Recipe" title="Add Recipe" />
+            <option value="Search Pantry" title="Search Pantry" />
+          </select>
+          {form}
+        </Form>
+        <Button title="View Pantry" onClick={this.scanPantry()}/>
       </View>
     );
   }
-
 }

@@ -4,7 +4,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import HomeScreen from "../scenes/home/HomeScreen";
 import SearchScreen from "../scenes/search/SearchScreen";
 import TranscribeScreen from "../scenes/transcribe/TranscribeScreen";
-
+import Pantry from "../components/Pantry";
 const Stack = createStackNavigator();
 
 const RootStack = () => (
@@ -23,6 +23,10 @@ const RootStack = () => (
     <Stack.Screen
       name="Transcribe"
       component={TranscribeScreen}
+    />
+    <Stack.Screen
+      name="Pantry"
+      component={Pantry}
     />
   </Stack.Navigator>
 );

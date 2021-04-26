@@ -22,6 +22,10 @@ const HomeScreen = ({ navigation }) => {
         onPress={() => navigation.navigate("Transcribe")}
       />
       <Button
+        title="Go to Pantry"
+        onPress={() => navigation.navigate("Pantry")}
+      />
+      <Button
         title="Sign Out"
         onPress={signOut}
       />
