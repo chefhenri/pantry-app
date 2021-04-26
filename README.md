@@ -14,31 +14,27 @@ gh repo clone swen-514-614-spring2021/term-project--team-5
 Also, make sure you have these requirements:
 
 - Environment setup
-- Amplify setup
+- AWS/Amplify setup
 - Authentication setup
+- Transcription setup
 
 #### Environment Setup
 
-Make sure that Node and Watchman are installed with
+Install Node, Watchman, and CocoaPods
 
 ```bash
 brew install node
 brew install watchman
-```
-
-Make sure that Xcode's Command Line Tools are enabled in "Preferences..." from the Xcode menu. This option is found in
-the "Locations" panel
-
-Make sure CocoaPods is installed with
-
-```bash
 sudo gem install cocoapods
 ```
 
-In the `ios` directory, run `pod install`
+In Xcode preferences, enable Command Line Tools under "Locations"
 
-Next, install and configure the AWS CLI and the AWS Amplify CLI
+In the project root, run `npm install --force` and `yarn`
 
+In the project `ios` directory, run `pod install`
+
+### AWS/Amplify Setup
 Install the AWS CLI,
 
 ```bash
@@ -46,7 +42,7 @@ curl "https://awscli.amazonaws.com/AWSCLIV2.pkg" -o "AWSCLIV2.pkg"
 sudo installer -pkg AWSCLIV2.pkg -target /
 ```
 
-Make sure your credentials in `~/.aws/credentials` match your current account details.
+Update your credentials in `~/.aws/credentials`
 
 Install the Amplify CLI,
 
@@ -54,68 +50,65 @@ Install the Amplify CLI,
 npm install -g @aws-amplify/cli
 ```
 
-In the root directory of the project run,
+In the project root run,
 
 ```bash
 amplify init
 ```
 
-Leave all defaults except change 'src' to '/' to specify where the aws-exports.js file goes and for the AWS profile, use "default".
+Leave all options default except:
+- Specify 'src' to '/' to set the `aws-exports.js` file location
+- Use "default" for the AWS profile
 
-Now run,
+### Authentication Setup
+
+Add Amplify auth with,
 
 ```bash
 amplify add auth
 ```
 
-Choose the default configuration, but specify "Email" for the login method.
-Then run,
+Select the default configuration, but specify "Email" as the login method.
+
+Push the configuration,
 
 ```bash
 amplify push
 ```
 
-You are now configured with authentication through Amplify when you run the project.
+### Transcription Setup
 
-Set Up Transcription
-
-In order to set up transcription services you need to create a .env file at the root of your project with your aws educate account information. It should look like this:
+Add the following lines to an `.env` file in the project root,
 
 ```bash
-AWS_ACCESS_KEY_ID=youraccesskey
-AWS_SECRET_ACCESS_KEY=yoursecretkey
-AWS_SESSION_TOKEN=yoursessiontoken
+AWS_ACCESS_KEY_ID=your_access_key
+AWS_SECRET_ACCESS_KEY=your_secret_key
+AWS_SESSION_TOKEN=your_session_token
 ```
 
-After you do this you then need to go to your aws console and create the stack for the cloudformation template found in `/CloudFormation/s3_cloudformation.yml`. You will have to name your two s3 instances, I recommend one with "input" and one with "output". Once the stack completes and you can verify your s3 buckets exist, add their names to your .env file, which should now look like this:
+Create your input/output S3 buckets using the provided CloudFormation template: `CloudFormation/s3_cloudformation.yml`
+
+Add the following lines to the `.env` file
 
 ```bash
-AWS_ACCESS_KEY_ID=youraccesskey
-AWS_SECRET_ACCESS_KEY=yoursecretkey
-AWS_SESSION_TOKEN=yoursessiontoken
-S3_BUCKET_INPUT=inputbucketname
-S3_BUCKET_OUTPUT=outputbucketname
+S3_BUCKET_INPUT=input_bucket_name
+S3_BUCKET_OUTPUT=output_bucket_name
 ```
-
-Your transcription services should work properly from here!
 
 ### Usage
-
-Running the React Native application
-
 #### Start Metro
 
-Metro "takes in an entry file and various options, and returns a single JavaScript file that includes all your code and
-its dependencies."
-[—Metro Docs](https://facebook.github.io/metro/docs/concepts/)
+In a terminal instance run,
 
 ```bash
 npx react-native start
 ```
 
+*Note: after updating your AWS credentials in the `.env` file, pass the `--reset-cache` flag to Metro*
+
 #### Start the application
 
-Let Metro Bundler run in its own terminal. Open a new terminal inside your React Native project folder.
+In a new terminal instance run,
 
 ```bash
 npx react-native run-ios
