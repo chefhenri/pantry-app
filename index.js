@@ -4,6 +4,7 @@
 import React from "react";
 import { AppRegistry } from "react-native";
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
+import { Provider as PaperProvider } from "react-native-paper";
 
 import App from "./src/App";
 import { GQL_URL } from "@env";
@@ -16,7 +17,9 @@ const apolloClient = new ApolloClient({
 
 const AppRoot = () => (
   <ApolloProvider client={apolloClient}>
-    <App />
+    <PaperProvider>
+      <App />
+    </PaperProvider>
   </ApolloProvider>
 );
 
