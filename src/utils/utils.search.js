@@ -1,4 +1,9 @@
-import { gql} from "@apollo/client";
+import { gql } from "@apollo/client";
+
+import {
+  APP_ID,
+  APP_KEY,
+} from "@env";
 
 export const RECIPE_QUERY = gql`
     query search($appId:String!, $appKey:String!, $q:String!) {
@@ -15,3 +20,5 @@ export const RECIPE_QUERY = gql`
         }
     }
 `;
+
+export const auth = { appId: APP_ID, appKey: APP_KEY };
