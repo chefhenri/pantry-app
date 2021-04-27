@@ -34,6 +34,7 @@ const SearchScreen = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [searching, setSearching] = useState(false);
   const [skipQuery, setSkipQuery] = useState(true);
+
   const { data, loading } = useQuery(RECIPE_QUERY, {
     variables: {
       appId: APP_ID,
@@ -54,7 +55,6 @@ const SearchScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.searchWrapper}>
-      {/*TODO: Move searchbar and button to SearchGroup*/}
       {searching ? (
         <Searchbar
           style={styles.searchbar}
@@ -71,6 +71,13 @@ const SearchScreen = ({ navigation }) => {
           onPress={() => setSearching(true)}
         >search</Button>
       )}
+
+      {/*<SearchGroup*/}
+      {/*  searchQuery={searchQuery}*/}
+      {/*  setSearchQuery={setSearchQuery}*/}
+      {/*  setSkipQuery={setSkipQuery}*/}
+      {/*/>*/}
+
       {data && (
         <>
           {data.search.hits.length > 0 && (
