@@ -2,7 +2,7 @@ import React from "react";
 import { View } from "react-native";
 import { ActivityIndicator, Colors } from "react-native-paper";
 
-import styles from '../../styles/styles.components'
+import styles from '../../styles/root.styles'
 
 const Loading = () => (
   <View style={styles.centerWrapper}>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, StyleSheet, Text, View } from "react-native";
+import { Button, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import AudioRecord from "react-native-audio-record";
 import Sound from "react-native-sound";
 
@@ -8,7 +8,9 @@ import {
   uploadFile,
   transcribeFile,
   downloadTranscription,
-} from "../../utils/utils.transcribe";
+} from "../../utils/transcribe.utils";
+import { Colors, IconButton } from "react-native-paper";
+import styles from "../../styles/root.styles";
 
 const chunkArray = [];
 
@@ -103,36 +105,14 @@ const TranscribeScreen = () => {
   };
 
   return (
-    <View>
-      <View style={styles.row}>
-        <Button onPress={start} title="Record" disabled={playback.recording} />
-        <Button onPress={stop} title="Stop" disabled={!playback.recording} />
-        {playback.paused ? (
-          <Button onPress={play} title="Play" disabled={!audio.loaded} />
-        ) : (
-          <Button onPress={pause} title="Pause" disabled={!audio.loaded} />
-        )}
-      </View>
-      <View style={styles.column}>
-        <Text>{transcript}</Text>
-        <Button
-          title="Add To Pantry"
-          onPress={() => console.log("Placeholder: add items to pantry")}
-        />
-      </View>
-    </View>
+    <SafeAreaView style={styles.centerWrapper}>
+      <IconButton
+        icon="microphone"
+        colors={Colors.red400}
+        size={50}
+      />
+    </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-  },
-  row: {
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-  },
-});
 
 export default TranscribeScreen;

@@ -1,8 +1,8 @@
 import React from "react";
 import { Searchbar } from "react-native-paper";
 
-import styles from "../../styles/styles.search-screen";
-import { auth } from "../../utils/utils.search";
+import styles from "../../styles/search.styles";
+import { auth } from "../../utils/search.utils";
 
 const SearchBar = ({ query, setQuery, loadQuery }) => {
   const handleQuery = () => {
