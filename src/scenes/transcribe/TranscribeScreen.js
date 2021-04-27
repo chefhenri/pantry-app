@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Button, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native";
 import AudioRecord from "react-native-audio-record";
 import Sound from "react-native-sound";
+import { Colors, IconButton} from "react-native-paper";
 
+import styles from "../../styles/root.styles";
 import {
   checkPermission,
   uploadFile,
   transcribeFile,
   downloadTranscription,
 } from "../../utils/transcribe.utils";
-import { Colors, IconButton } from "react-native-paper";
-import styles from "../../styles/root.styles";
 
 const chunkArray = [];
 
@@ -29,6 +29,9 @@ const TranscribeScreen = () => {
     recording: false,
   });
 
+  const [icon, setIcon] = useState("microphone");
+
+  // Initializes AudioRecord
   useEffect(async () => {
     await checkPermission();
 
@@ -40,18 +43,28 @@ const TranscribeScreen = () => {
     });
   }, []);
 
-  useEffect(() => {
-    console.log(`Audio data updated: ${JSON.stringify(audio)}`);
-  }, [audio]);
-
-  useEffect(() => {
-    console.log(`Playback data updated: ${JSON.stringify(playback)}`);
-  }, [playback]);
+  const handlePlayback = async () => {
+    switch (icon) {
+      case "microphone":
+        start();
+        break;
+      case "stop":
+        await stop();
+        break;
+      case "play":
+        await play();
+        break;
+      case "pause":
+        pause();
+        break;
+    }
+  };
 
   const start = () => {
     console.log("Recording...");
 
     setPlayback(prev => ({ ...prev, recording: true }));
+    setIcon("stop");
 
     AudioRecord.start();
   };
@@ -82,6 +95,8 @@ const TranscribeScreen = () => {
         sound: sound,
         loaded: true,
       }));
+
+      setIcon("play");
     }
   };
 
@@ -90,26 +105,32 @@ const TranscribeScreen = () => {
 
     Sound.setCategory("Playback");
 
+    setIcon("pause");
+
     audio.sound.play(success => {
       console.log(success ?
         "Finished playing successfully" :
         "Playback failed: failed decoding audio");
 
       setPlayback(prev => ({ ...prev, paused: true }));
+      setIcon("play");
     });
   };
 
   const pause = () => {
     audio.sound.pause();
     setPlayback(prev => ({ ...prev, paused: true }));
+    setIcon("play");
   };
 
   return (
     <SafeAreaView style={styles.centerWrapper}>
       <IconButton
-        icon="microphone"
+        icon={icon}
         colors={Colors.red400}
         size={50}
+        animated={true}
+        onPress={() => handlePlayback()}
       />
     </SafeAreaView>
   );
