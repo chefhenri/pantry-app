@@ -2,7 +2,7 @@ import React from "react";
 import { View } from "react-native";
 import { Button, Card } from "react-native-paper";
 
-import styles from "../../styles/search-screen.style";
+import styles from "../../styles/styles.search-screen";
 
 const SearchResult = ({ recipe }) => {
   return (

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, Searchbar } from "react-native-paper";
 
-import styles from "../../styles/search-screen.style";
+import styles from "../../styles/styles.search-screen";
 
 const SearchGroup = ({ searchQuery, setSearchQuery, setSkipQuery }) => {
   const [searching, setSearching] = useState(false);
