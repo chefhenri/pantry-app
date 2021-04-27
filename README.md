@@ -76,6 +76,29 @@ Push the configuration,
 amplify push
 ```
 
+### DynamoDB Setup
+```bash
+node src/dynamodb/ddb_createtable.js
+```
+These three DynamoDB tables are now created on your AWS account.
+
+To import the tables into Amplify,
+
+```bash
+amplify import storage
+```
+
+Select `DynamoDB table - NoSQL Database` and select one of the tables 
+(`Food`,`Recipe`,`Transcription`)
+
+Repeat this step for the rest of the tables listed above 
+
+Push the DynamoDB tables to the cloud,
+
+```bash
+amplify push
+```
+
 ### Transcription Setup
 
 Add the following lines to an `.env` file in the project root,
