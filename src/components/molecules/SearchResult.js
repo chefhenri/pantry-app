@@ -1,11 +1,13 @@
 import React from "react";
 import { View } from "react-native";
-import { Button, Card, List } from "react-native-paper";
+import { Button, Card } from "react-native-paper";
+
+import styles from "../../styles/search-screen.style";
 
 const SearchResult = ({ recipe }) => {
   return (
     <View>
-      <Card>
+      <Card style={styles.resultContainer}>
         <Card.Title
           title={recipe.hasOwnProperty("label") && recipe.label}
           subtitle={

@@ -1,6 +1,5 @@
-import React, { useState } from "react";
-import { View, FlatList } from "react-native";
-import { List, Searchbar, Text } from "react-native-paper";
+import React, { useEffect, useState } from "react";
+import { FlatList, SafeAreaView } from "react-native";
 
 import { gql, useQuery } from "@apollo/client";
 
@@ -9,8 +8,11 @@ import {
   APP_KEY,
 } from "@env";
 
-import Loading from "../../components/atoms/Loading";
 import SearchResult from "../../components/molecules/SearchResult";
+import styles from "../../styles/search-screen.style";
+import SearchGroup from "../../components/molecules/SearchGroup";
+import Loading from "../../components/atoms/Loading";
+import { Button, Searchbar } from "react-native-paper";
 
 const RECIPE_QUERY = gql`
     query search($appId:String!, $appKey:String!, $q:String!) {
@@ -30,6 +32,7 @@ const RECIPE_QUERY = gql`
 
 const SearchScreen = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [searching, setSearching] = useState(false);
   const [skipQuery, setSkipQuery] = useState(true);
   const { data, loading } = useQuery(RECIPE_QUERY, {
     variables: {
@@ -40,28 +43,47 @@ const SearchScreen = ({ navigation }) => {
     skip: skipQuery,
   });
 
-  // const { search: { hits } } = data;
+  useEffect(() => {
+    if (searchQuery === "") {
+      setSearching(false);
+      setSkipQuery(true);
+    }
+  }, [searchQuery]);
+
+  if (loading) return (<Loading />);
 
   return (
-    <View>
-      <Searchbar
-        placeholder="Search"
-        value={searchQuery}
-        onChangeText={text => setSearchQuery(text)}
-        onIconPress={() => setSkipQuery(false)}
-      />
+    <SafeAreaView style={styles.searchWrapper}>
+      {/*TODO: Move searchbar and button to SearchGroup*/}
+      {searching ? (
+        <Searchbar
+          style={styles.searchbar}
+          placeholder="Search"
+          value={searchQuery}
+          onChangeText={text => setSearchQuery(text)}
+          onIconPress={() => setSkipQuery(false)}
+        />
+      ) : (
+        <Button
+          style={styles.searchButton}
+          icon="feature-search-outline"
+          mode="outlined"
+          onPress={() => setSearching(true)}
+        >search</Button>
+      )}
       {data && (
         <>
           {data.search.hits.length > 0 && (
             <FlatList
+              style={styles.resultsWrapper}
               data={data.search.hits}
-              renderItem={({ item }) => <SearchResult recipe={item.recipe}/>}
+              renderItem={({ item }) => <SearchResult recipe={item.recipe} />}
               keyExtractor={(item, idx) => idx}
             />
           )}
         </>
       )}
-    </View>
+    </SafeAreaView>
   );
 };
 
