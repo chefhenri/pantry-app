@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FlatList, SafeAreaView } from "react-native";
+import { Button, Searchbar } from "react-native-paper";
 
 import { gql, useQuery } from "@apollo/client";
 
@@ -9,9 +10,8 @@ import {
 } from "@env";
 
 import SearchResult from "../../components/molecules/SearchResult";
-import styles from "../../styles/search-screen.style";
 import Loading from "../../components/atoms/Loading";
-import { Button, Searchbar } from "react-native-paper";
+import styles from "../../styles/search-screen.style";
 
 const RECIPE_QUERY = gql`
     query search($appId:String!, $appKey:String!, $q:String!) {
