@@ -34,7 +34,7 @@ const createFoodTable = () => {
       ReadCapacityUnits: 5,
       WriteCapacityUnits: 5
     },
-    TableName: 'Foods',
+    TableName: 'Food',
     StreamSpecification: {
       StreamEnabled: false
     }

@@ -17,28 +17,25 @@ const id = `food${Math.floor(Math.random() * 100000) + 1}`;
 
 const FOOD_TABLE_NAME = "Food"
 const RECIPE_TABLE_NAME = "Recipe"
-
+const TRANSCRIPTION_TABLE_NAME = "Transcription"
 
 const Pantry = () => {
-
 
   /*
   Food Item Functions
    */
 
-  const addFoodItem = async (foodName = "--", foodQty = 1) => {
+  const addFoodItem = () => {
 
     var params = {
       TableName: FOOD_TABLE_NAME,
       Item: {
-        "foodID": id,
-        "foodLabel": foodName,
-        "quantity": foodQty,
-        "addDate": today
+        "foodID": {S: id},
+        "foodLabel": {S: "demo"},
+        "quantity": {N: "1"},
+        "addDate": {S: today }
       },
     }
-    console.log("Adding item to pantry...");
-
     ddb.putItem(params, function(err, data) {
       if (err) {
         console.log(err);
@@ -47,15 +44,16 @@ const Pantry = () => {
         console.log(data);
       }
     });
+    return (params.Item);
   }
 
 
 // Remove food from pantry, regardless of quantity
-  const removeFood = async (foodName) => {
+  const removeFood = () => {
     var params = {
       TableName: FOOD_TABLE_NAME,
       Key: {
-        "foodLabel": { S: foodName }
+        "foodLabel": { S: "demo" }
       }
     }
 
@@ -69,11 +67,11 @@ const Pantry = () => {
   }
 
 // Retrieve food item from pantry
-  const getFoodItem = (foodName) => {
+  const getFoodItem = () => {
     var params = {
       TableName: FOOD_TABLE_NAME,
       Key: {
-        "foodLabel": { S: foodName }
+        "foodLabel": { S: "demo" }
       },
       ProjectionExpression: "foodLabel, foodQty"
     };
@@ -106,16 +104,15 @@ const Pantry = () => {
   Recipe Functions
    */
 
-  const addRecipe = async (recipeName, recipeURL) => {
+  const addRecipe = async () => {
     var params = {
       TableName: RECIPE_TABLE_NAME,
       Item: {
-        "recipeLabel": recipeName,
-        "recipeURL": recipeURL
+        "recipeLabel": {S: "demo recipe" },
+        "recipeURL": {S: "demo url" }
       }
     }
 
-    console.log("Adding a new recipe...")
     ddb.putItem(params, function(err, data) {
       if (err) {
         console.log(err);
@@ -127,11 +124,11 @@ const Pantry = () => {
   }
 
 // remove recipe from pantry, regardless of quantity
-  const removeRecipe = async (recipeName) => {
+  const removeRecipe = async () => {
     var params = {
       TableName: RECIPE_TABLE_NAME,
       Key: {
-        "recipeLabel": { S: recipeName }
+        "recipeLabel": { S: "demo recipe" }
       }
     }
 
@@ -145,11 +142,11 @@ const Pantry = () => {
   }
 
 
-  const getRecipe = (recipeName) => {
+  const getRecipe = () => {
     var params = {
       TableName: RECIPE_TABLE_NAME,
       Key: {
-        "recipeLabel": { S: recipeName }
+        "recipeLabel": { S: "demo recipe" }
       },
       ProjectionExpression: "recipeLabel, recipeURL"
     };
@@ -174,10 +171,10 @@ const Pantry = () => {
 
   return (
     <View>
-      <Button title="Add Food Item" onClick={addFoodItem("pineapple", 1)}/>
-      <Button title="Add Recipe" onClick={addRecipe("Pina Colada, https://www.foodnetwork.com/recipes/pina-colada-recipe0-1956362")}/>
-      <Button title="Remove Recipe" onClick={removeRecipe("Pina Colada")}/>
-      <Button title="View Pantry" onClick={scanFoodPantry}/>
+      <Button title="Add Food Item" onClick={addFoodItem()}/>
+      <Button title="Add Recipe" onClick={addRecipe()}/>
+      <Button title="Remove Recipe" onClick={removeRecipe()}/>
+      <Button title="View Pantry" onClick={scanFoodPantry()}/>
     </View>
   );
 }
