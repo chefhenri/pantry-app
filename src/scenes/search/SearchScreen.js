@@ -10,7 +10,6 @@ import {
 
 import SearchResult from "../../components/molecules/SearchResult";
 import styles from "../../styles/search-screen.style";
-import SearchGroup from "../../components/molecules/SearchGroup";
 import Loading from "../../components/atoms/Loading";
 import { Button, Searchbar } from "react-native-paper";
 
@@ -71,12 +70,6 @@ const SearchScreen = ({ navigation }) => {
           onPress={() => setSearching(true)}
         >search</Button>
       )}
-
-      {/*<SearchGroup*/}
-      {/*  searchQuery={searchQuery}*/}
-      {/*  setSearchQuery={setSearchQuery}*/}
-      {/*  setSkipQuery={setSkipQuery}*/}
-      {/*/>*/}
 
       {data && (
         <>
