@@ -1,21 +1,25 @@
-import React from "react";
-import { View, Text, Button, FlatList } from "react-native";
+import React, { useState } from "react";
+import { View, FlatList } from "react-native";
+import { List, Searchbar, Text } from "react-native-paper";
+
 import { gql, useQuery } from "@apollo/client";
 
 import {
   APP_ID,
-  APP_KEY
-} from '@env';
+  APP_KEY,
+} from "@env";
 
-import Loading from "../../components/Loading";
+import Loading from "../../components/atoms/Loading";
+import SearchResult from "../../components/molecules/SearchResult";
 
 const RECIPE_QUERY = gql`
-    query search($appId:String!, $appKey:String!) {
-        search(appId:$appId, appKey:$appKey, q:"Chicken", from:0, to:4) {
+    query search($appId:String!, $appKey:String!, $q:String!) {
+        search(appId:$appId, appKey:$appKey, q:$q, from:0, to:9) {
             hits {
                 recipe {
                     uri,
                     label,
+                    image,
                     yield,
                     calories,
                 }
@@ -24,52 +28,39 @@ const RECIPE_QUERY = gql`
     }
 `;
 
-const SearchResult = ({ recipe }) => {
-  return (
-    <View>
-      <Text>
-        Label: {recipe.hasOwnProperty("label") && recipe.label}
-        Calories: {recipe.hasOwnProperty("calories") && recipe.calories}
-        Yield: {recipe.hasOwnProperty("yield") && recipe.yield}
-      </Text>
-    </View>
-  );
-};
-
 const SearchScreen = ({ navigation }) => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [skipQuery, setSkipQuery] = useState(true);
   const { data, loading } = useQuery(RECIPE_QUERY, {
     variables: {
       appId: APP_ID,
       appKey: APP_KEY,
+      q: searchQuery,
     },
+    skip: skipQuery,
   });
 
-  if (loading)
-    return <Loading />;
-
-  const { search: { hits } } = data;
-
-  if (hits.length === 0) {
-    return (
-      <View>
-        <Text>
-          No results
-        </Text>
-      </View>
-    );
-  }
+  // const { search: { hits } } = data;
 
   return (
     <View>
-      <FlatList
-        data={hits}
-        renderItem={({ item }) => <SearchResult recipe={item.recipe} />}
-        keyExtractor={(item, idx) => idx}
+      <Searchbar
+        placeholder="Search"
+        value={searchQuery}
+        onChangeText={text => setSearchQuery(text)}
+        onIconPress={() => setSkipQuery(false)}
       />
-      <Button
-        title="Go Home"
-        onPress={() => navigation.navigate("Home")}
-      />
+      {data && (
+        <>
+          {data.search.hits.length > 0 && (
+            <FlatList
+              data={data.search.hits}
+              renderItem={({ item }) => <SearchResult recipe={item.recipe}/>}
+              keyExtractor={(item, idx) => idx}
+            />
+          )}
+        </>
+      )}
     </View>
   );
 };
