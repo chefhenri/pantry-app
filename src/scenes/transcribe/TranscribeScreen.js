@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native";
 import AudioRecord from "react-native-audio-record";
 import Sound from "react-native-sound";
-import { Colors, IconButton} from "react-native-paper";
+import { Colors, IconButton } from "react-native-paper";
 
 import styles from "../../styles/root.styles";
 import {
@@ -43,6 +43,7 @@ const TranscribeScreen = () => {
     });
   }, []);
 
+  // Determines action based on icon state
   const handlePlayback = async () => {
     switch (icon) {
       case "microphone":
@@ -60,6 +61,7 @@ const TranscribeScreen = () => {
     }
   };
 
+  // Starts recording
   const start = () => {
     console.log("Recording...");
 
@@ -69,6 +71,7 @@ const TranscribeScreen = () => {
     AudioRecord.start();
   };
 
+  // Stops recording
   const stop = async () => {
     if (playback.recording) {
       setPlayback(prev => ({ ...prev, recording: false }));
@@ -100,6 +103,7 @@ const TranscribeScreen = () => {
     }
   };
 
+  // Starts playback
   const play = async () => {
     setPlayback(prev => ({ ...prev, paused: false }));
 
@@ -117,6 +121,7 @@ const TranscribeScreen = () => {
     });
   };
 
+  // Stops playback
   const pause = () => {
     audio.sound.pause();
     setPlayback(prev => ({ ...prev, paused: true }));
