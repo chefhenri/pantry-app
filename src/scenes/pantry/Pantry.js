@@ -26,7 +26,6 @@ const id = `food${Math.floor(Math.random() * 100000) + 1}`;
 
 const FOOD_TABLE_NAME = "Food"
 const RECIPE_TABLE_NAME = "Recipe"
-const TRANSCRIPTION_TABLE_NAME = "Transcription"
 
 const Pantry = () => {
 
@@ -40,7 +39,7 @@ const Pantry = () => {
       Item: {
         "foodID": {S: id},
         "foodLabel": {S: this.foodName},
-        "quantity": {N: this.foodQty},
+        "quantity": {N: this.foodQty || "1"},
         "addDate": {S: today }
       },
     }
@@ -168,6 +167,21 @@ const Pantry = () => {
     });
   }
 
+  const scanRecipes = () => {
+    var params = {
+      TableName: RECIPE_TABLE_NAME
+    };
+
+    ddb.scan(params, (err, data) => {
+      if (err) {
+        console.log("Error", err);
+      } else {
+        console.log("Recipes in Pantry: ", data.Items);
+        return data.Items
+      }
+    })
+  }
+
   return (
     <View>
       <TextInput
@@ -191,6 +205,7 @@ const Pantry = () => {
       <Button title="Add Recipe" onPress={addRecipe}/>
       {/*<Button title="Remove Recipe" onPress={removeRecipe}/>*/}
       <Button title="View Pantry" onPress={scanFoodPantry}/>
+      <Button title="View Recipes" onPress={scanRecipes}/>
     </View>
   );
 }

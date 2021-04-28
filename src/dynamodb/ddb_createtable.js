@@ -40,7 +40,6 @@ const createFoodTable = () => {
     }
   };
 
-// Call DynamoDB to create the table
   ddb.createTable(params, function(err, data) {
     if (err) {
       console.log("Error", err);
@@ -83,7 +82,6 @@ const createRecipeTable = () => {
     }
   };
 
-// Call DynamoDB to create the table
   ddb.createTable(params, function(err, data) {
     if (err) {
       console.log("Error", err);
@@ -126,7 +124,6 @@ const createTranscriptionTable = () => {
     }
   };
 
-// Call DynamoDB to create the table
   ddb.createTable(params, function(err, data) {
     if (err) {
       console.log("Error", err);
