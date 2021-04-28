@@ -35,7 +35,6 @@ const Pantry = () => {
    */
 
   const addFoodItem = () => {
-
     var params = {
       TableName: FOOD_TABLE_NAME,
       Item: {
@@ -160,7 +159,6 @@ const Pantry = () => {
       ProjectionExpression: "recipeLabel, recipeURL"
     };
 
-// Call DynamoDB to read the item from the table
     ddb.getItem(params, function(err, data) {
       if (err) {
         console.log("Error", err);
@@ -197,28 +195,3 @@ const Pantry = () => {
   );
 }
 export default Pantry;
-
-export const addTranscriptFood = (transcript) => {
-  this.transcribeFood = "placeholder";
-  var params = {
-    TableName: FOOD_TABLE_NAME,
-    Item: {
-      "foodID": {S: id},
-      "foodLabel": {S: this.transcribeFood},
-      "quantity": {N: "1"},
-      "addDate": {S: today }
-    },
-  }
-
-  const res = transcript.split(" ");
-  for(let i = 0; i < res.length; i++){
-    this.transcribeFood = res[i];
-    ddb.putItem(params, function(err, data) {
-      if (err) {
-        console.log("Error", err);
-      } else {
-        console.log("Successfully added transcript", transcript);
-      }
-    });
-  }
-}

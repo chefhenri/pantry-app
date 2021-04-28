@@ -11,7 +11,7 @@ import {
   downloadTranscription,
 } from "../../utils/transcribe.utils";
 
-import { addTranscriptFood } from "../pantry/Pantry"
+import { addFoodItem } from "../pantry/Pantry"
 
 import transcribeStyles from "../../styles/transcribe.styles";
 import Loading from "../../components/atoms/Loading";
@@ -159,7 +159,7 @@ const TranscribeScreen = () => {
               mode="outlined"
               onPress={() => {
                 // TODO: Add snackbar
-                addTranscriptFood(transcript);
+                addFoodItem(item); // adds a single item
                 console.log("TODO: Add items to pantry");
               }}
             >add items</Button>
