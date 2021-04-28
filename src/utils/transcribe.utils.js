@@ -12,6 +12,11 @@ import {
   S3_BUCKET_OUTPUT,
 } from "@env";
 
+import {addFoodItem} from "../scenes/pantry/Pantry";
+
+const AWS = require ("aws-sdk");
+const ddb = new AWS.DynamoDB;
+
 const access = new Credentials({
   accessKeyId: AWS_ACCESS_KEY_ID,
   secretAccessKey: AWS_SECRET_ACCESS_KEY,
@@ -119,8 +124,28 @@ const extractTranscript = (err, data, callback) => {
       .replace(/[.,\/#!$%^&*;:{}=\-_`~()]/g, "")
       .toLowerCase();
 
+    addTranscribeFile(res.jobName, transcript);
     console.log(`Transcript: ${transcript}`);
 
     callback(transcript);
   }
 };
+
+const addTranscribeFile = (fileID, transcript) => {
+
+  var params = {
+    TableName: "Transcription",
+    Item: {
+      "fileID": {S: fileID},
+      "transcript": {S:transcript}
+    },
+  }
+
+  ddb.putItem(params, function(err, data) {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log("Transcribe added: ", data);
+    }
+  });
+}

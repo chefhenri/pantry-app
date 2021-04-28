@@ -1,11 +1,11 @@
 import React from "react";
-import { StyleSheet, View, Text, Button } from "react-native";
+import { View, Button } from "react-native";
+import { TextInput } from "react-native-paper";
 import {
   AWS_ACCESS_KEY_ID,
   AWS_SECRET_ACCESS_KEY,
   AWS_SESSION_TOKEN
 } from "@env";
-import { TextInput } from "react-native-paper";
 
 var AWS = require('aws-sdk')
 
@@ -155,7 +155,7 @@ const Pantry = () => {
     var params = {
       TableName: RECIPE_TABLE_NAME,
       Key: {
-        "recipeLabel": { S: "Chicken Parmesan" }
+        "recipeLabel": { S: this.recipeLabel }
       },
       ProjectionExpression: "recipeLabel, recipeURL"
     };
@@ -168,14 +168,6 @@ const Pantry = () => {
         console.log("Successfully retrieved recipe: ", data.Item);
       }
     });
-  }
-
-  /*
-  Transcription Functions
-   */
-
-  const addTranscriptFood = ({ transcript }) => {
-
   }
 
   return (
@@ -195,7 +187,7 @@ const Pantry = () => {
         onChangeText={(value) => this.recipeLabel = value}
       />
       <TextInput
-        placeholder="Recipe Quantity"
+        placeholder="Recipe URL"
         onChangeText={(value) => this.recipeURL = value}
       />
       <Button title="Add Recipe" onPress={addRecipe}/>
@@ -205,3 +197,28 @@ const Pantry = () => {
   );
 }
 export default Pantry;
+
+export const addTranscriptFood = (transcript) => {
+  this.transcribeFood = "placeholder";
+  var params = {
+    TableName: FOOD_TABLE_NAME,
+    Item: {
+      "foodID": {S: id},
+      "foodLabel": {S: this.transcribeFood},
+      "quantity": {N: "1"},
+      "addDate": {S: today }
+    },
+  }
+
+  const res = transcript.split(" ");
+  for(let i = 0; i < res.length; i++){
+    this.transcribeFood = res[i];
+    ddb.putItem(params, function(err, data) {
+      if (err) {
+        console.log("Error", err);
+      } else {
+        console.log("Successfully added transcript", transcript);
+      }
+    });
+  }
+}
