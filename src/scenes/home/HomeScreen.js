@@ -1,7 +1,17 @@
 import React from "react";
-import { View, Button } from "react-native";
+import { View, FlatList, SafeAreaView } from "react-native";
+import { Button, Colors } from "react-native-paper";
 
 import { Auth } from "aws-amplify";
+
+import styles from "../../styles/home.styles";
+import HomeNavCard from "../../components/molecules/HomeNavCard";
+
+const destinations = [
+  { name: "Pantry", color: Colors.amber400, icon: "food" },
+  { name: "Search", color: Colors.blue400, icon: "feature-search" },
+  { name: "Transcribe", color: Colors.red400, icon: "microphone" },
+];
 
 // TODO [@hxl1116]: Refactor home screen design
 const HomeScreen = ({ navigation }) => {
@@ -12,24 +22,27 @@ const HomeScreen = ({ navigation }) => {
   };
 
   return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Button
-        title="Pantry"
-        onPress={() => navigation.navigate("Pantry")}
+    <SafeAreaView style={styles.homeWrapper}>
+      <FlatList
+        contentContainerStyle={styles.navCardsWrapper}
+        data={destinations}
+        renderItem={({item}) => (
+          <HomeNavCard
+            dest={item.name}
+            ico={item.icon}
+            bg={item.color}
+            nav={navigation}
+          />
+        )}
+        keyExtractor={(dest) => `${dest.name.toLowerCase()}-dest`}
       />
       <Button
-        title="Search"
-        onPress={() => navigation.navigate("Search")}
-      />
-      <Button
-        title="Transcribe"
-        onPress={() => navigation.navigate("Transcribe")}
-      />
-      <Button
-        title="Sign Out"
+        style={styles.signOutBtn}
+        icon="logout"
+        mode="outlined"
         onPress={signOut}
-      />
-    </View>
+      >sign out</Button>
+    </SafeAreaView>
   );
 };
 
