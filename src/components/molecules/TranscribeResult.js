@@ -8,8 +8,8 @@ const TranscribeResult = ({ transcript }) => {
   const [checked, setChecked] = useState(true);
 
   return (
-    <View>
-      <Card style={styles.resultContainer}>
+    <View style={styles.resultContainer}>
+      <Card>
         <Card.Title
           title={transcript}
           right={() => (

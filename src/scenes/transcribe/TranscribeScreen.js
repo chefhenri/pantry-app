@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FlatList, SafeAreaView } from "react-native";
+import { FlatList, SafeAreaView, View } from "react-native";
 import AudioRecord from "react-native-audio-record";
 import Sound from "react-native-sound";
 import { Colors, Divider, IconButton } from "react-native-paper";
@@ -138,7 +138,7 @@ const TranscribeScreen = () => {
   };
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={transcribeStyles.transcribeWrapper}>
       {loading && (
         <Loading />
       )}
@@ -154,13 +154,16 @@ const TranscribeScreen = () => {
         />
       )}
       {/*TODO: Convert playback controls to FAB.Group*/}
-      <IconButton
-        icon={iconState.icon}
-        color={iconState.color}
-        size={50}
-        animated={true}
-        onPress={() => handlePlayback()}
-      />
+      <View style={transcribeStyles.playbackWrapper}>
+        <IconButton
+          style={transcribeStyles.playbackIcon}
+          icon={iconState.icon}
+          color={iconState.color}
+          size={50}
+          animated={true}
+          onPress={() => handlePlayback()}
+        />
+      </View>
     </SafeAreaView>
   );
 };

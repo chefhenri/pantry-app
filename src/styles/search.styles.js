@@ -1,14 +1,12 @@
-import { Dimensions, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 
-const HEIGHT = Dimensions.get("screen").height;
-const WIDTH = Dimensions.get("screen").width;
+import { HEIGHT, WIDTH } from "./root.styles";
 
 const styles = StyleSheet.create({
   searchWrapper: {
     position: "relative",
   },
   resultsWrapper: {
-    // marginVertical: 25,
     marginTop: 50,
     padding: 0,
   },
