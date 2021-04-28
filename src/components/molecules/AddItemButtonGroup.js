@@ -4,7 +4,7 @@ import { View } from "react-native";
 
 import styles from "../../styles/pantry.styles";
 
-const AddItemButtonGroup = ({ closeModal }) => {
+const AddItemButtonGroup = ({ closeModal, hasName }) => {
   return (
     <View style={styles.addItemButtonGroup}>
       <Button
@@ -19,8 +19,10 @@ const AddItemButtonGroup = ({ closeModal }) => {
         style={styles.addItemButton}
         mode="default"
         icon="plus"
+        disabled={hasName}
         onPress={() => {
           console.log("Add item pressed");
+          console.log(`Item has name: ${hasName}`);
         }}
       >add item</Button>
     </View>

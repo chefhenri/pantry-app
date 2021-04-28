@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View } from "react-native";
-import { Divider, TextInput} from "react-native-paper";
+import { Divider, TextInput } from "react-native-paper";
 
 import styles from "../../styles/pantry.styles";
 import AddItemFormGroup from "./AddItemFormGroup";
@@ -20,7 +20,7 @@ const AddItemForm = ({ closeModal }) => {
       />
       <AddItemFormGroup />
       <Divider style={styles.separator} />
-      <AddItemButtonGroup closeModal={closeModal} />
+      <AddItemButtonGroup closeModal={closeModal} hasName={itemName === ""} />
     </View>
   );
 };
