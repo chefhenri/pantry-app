@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FAB, Portal, Provider } from "react-native-paper";
 
-const PantryAddGroup = ({ toggleModal }) => {
+const PantryFabGroup = ({ toggleModal }) => {
   const [open, setOpen] = useState(false);
 
   const handleFabChange = ({ open }) => setOpen(open);
@@ -45,4 +45,4 @@ const PantryAddGroup = ({ toggleModal }) => {
   );
 };
 
-export default PantryAddGroup;
+export default PantryFabGroup;

@@ -1,38 +1,29 @@
 import React, { useState } from "react";
-import { SafeAreaView, View } from "react-native";
-import { Button, Caption, FAB, Modal, Portal, Provider, Text } from "react-native-paper";
+import { SafeAreaView } from "react-native";
 
-import rootStyles from "../../styles/root.styles";
 import pantryStyles from "../../styles/pantry.styles";
-import PantryAddGroup from "../../components/molecules/PantryAddGroup";
-
-const EMPTY_PANTRY = "Your pantry is empty";
+import Empty from "../../components/atoms/Empty";
+import PantryFabGroup from "../../components/molecules/PantryFabGroup";
+import AddItemModal from "../../components/organism/AddItemModal";
 
 const PantryScreen = ({ navigation }) => {
   const [pantryItems, setPantryItems] = useState([]);
-  const [visible, setVisible] = useState(false);
+  const [itemModalVis, setItemModalVis] = useState(false);
+  const [catModalVis, setCatModalVis] = useState(false);
+  const [remindModalVis, setRemindModalVis] = useState(false);
 
-  const toggleModal = () => setVisible(!visible);
+  const toggleItemModal = () => setItemModalVis(!itemModalVis);
+  const toggleCatModal = () => setCatModalVis(!catModalVis);
+  const toggleRemindModal = () => setRemindModalVis(!remindModalVis);
 
   return (
     <SafeAreaView style={pantryStyles.pantryWrapper}>
-      {pantryItems.length === 0 && (
-        <View style={rootStyles.centerWrapper}>
-          <Caption style={pantryStyles.emptyPantryCaption}>{EMPTY_PANTRY}</Caption>
-        </View>
-      )}
-      <Provider>
-        <Portal>
-          <Modal
-            visible={visible}
-            contentContainerStyle={pantryStyles.addItemModalContainer}
-            onDismiss={toggleModal}
-          >
-            <Text>Modal Content</Text>
-          </Modal>
-        </Portal>
-      </Provider>
-      <PantryAddGroup toggleModal={toggleModal} />
+      {pantryItems.length === 0 && (<Empty />)}
+      <AddItemModal
+        visible={itemModalVis}
+        toggle={toggleItemModal}
+      />
+      <PantryFabGroup toggleModal={toggleItemModal} />
     </SafeAreaView>
   );
 };
