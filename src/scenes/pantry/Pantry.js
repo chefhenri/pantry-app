@@ -1,10 +1,18 @@
 import React from "react";
 import { StyleSheet, View, Text, Button } from "react-native";
+import {
+  AWS_ACCESS_KEY_ID,
+  AWS_SECRET_ACCESS_KEY,
+  AWS_SESSION_TOKEN
+} from "@env";
 
 var AWS = require('aws-sdk')
 
 AWS.config.update({
-  region: "us-east-1"
+  region: "us-east-1",
+  accessKeyId: AWS_ACCESS_KEY_ID,
+  secretAccessKey:AWS_SECRET_ACCESS_KEY,
+  sessionToken: AWS_SESSION_TOKEN
 });
 
 const ddb = new AWS.DynamoDB;
@@ -31,7 +39,7 @@ const Pantry = () => {
       TableName: FOOD_TABLE_NAME,
       Item: {
         "foodID": {S: id},
-        "foodLabel": {S: "demo"},
+        "foodLabel": {S: "milk"},
         "quantity": {N: "1"},
         "addDate": {S: today }
       },
@@ -53,7 +61,7 @@ const Pantry = () => {
     var params = {
       TableName: FOOD_TABLE_NAME,
       Key: {
-        "foodLabel": { S: "demo" }
+        "foodLabel": { S: "milk" }
       }
     }
 
@@ -71,7 +79,7 @@ const Pantry = () => {
     var params = {
       TableName: FOOD_TABLE_NAME,
       Key: {
-        "foodLabel": { S: "demo" }
+        "foodLabel": { S: "milk" }
       },
       ProjectionExpression: "foodLabel, foodQty"
     };
@@ -87,7 +95,7 @@ const Pantry = () => {
 
   const scanFoodPantry = () => {
     var params = {
-      TableName: "Food"
+      TableName: FOOD_TABLE_NAME
     };
 
     ddb.scan(params, (err, data) => {
@@ -108,7 +116,7 @@ const Pantry = () => {
     var params = {
       TableName: RECIPE_TABLE_NAME,
       Item: {
-        "recipeLabel": {S: "demo recipe" },
+        "recipeLabel": {S: "Chicken Parmesan" },
         "recipeURL": {S: "demo url" }
       }
     }
@@ -128,7 +136,7 @@ const Pantry = () => {
     var params = {
       TableName: RECIPE_TABLE_NAME,
       Key: {
-        "recipeLabel": { S: "demo recipe" }
+        "recipeLabel": { S: "Chicken Parmesan" }
       }
     }
 
@@ -146,7 +154,7 @@ const Pantry = () => {
     var params = {
       TableName: RECIPE_TABLE_NAME,
       Key: {
-        "recipeLabel": { S: "demo recipe" }
+        "recipeLabel": { S: "Chicken Parmesan" }
       },
       ProjectionExpression: "recipeLabel, recipeURL"
     };
@@ -165,16 +173,16 @@ const Pantry = () => {
   Transcription Functions
    */
 
-  const addTranscriptFood = (transcript) => {
+  const addTranscriptFood = ({ transcript }) => {
 
   }
 
   return (
     <View>
-      <Button title="Add Food Item" onClick={addFoodItem()}/>
-      <Button title="Add Recipe" onClick={addRecipe()}/>
-      <Button title="Remove Recipe" onClick={removeRecipe()}/>
-      <Button title="View Pantry" onClick={scanFoodPantry()}/>
+      <Button title="Add Food Item" onPress={addFoodItem}/>
+      <Button title="Add Recipe" onPress={addRecipe}/>
+      <Button title="Remove Recipe" onPress={removeRecipe}/>
+      <Button title="View Pantry" onPress={scanFoodPantry}/>
     </View>
   );
 }
