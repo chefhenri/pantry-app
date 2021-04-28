@@ -13,10 +13,8 @@ const styles = StyleSheet.create({
     marginTop: 10
   },
   pantryItemSurface: {
-    // flexDirection: "row",
     marginHorizontal: 10,
     marginBottom: 5,
-    // alignItems: "center"
   },
   emptyPantryCaption: {
     width: "auto",

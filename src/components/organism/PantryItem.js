@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { Colors, IconButton, List, Surface } from "react-native-paper";
 
-import ItemStatusDialog from "../molecules/ItemStatusDialog";
+import ItemAmtDialog from "../molecules/ItemAmtDialog";
 import styles from "../../styles/pantry.styles";
 
 const PantryItem = ({ item }) => {
   const [starred, setStarred] = useState(false);
 
   return (
-    // TODO: Add style to surface
+    // TODO: Show item amount
     <Surface style={styles.pantryItemSurface}>
       <List.Item
         title={item.label}
@@ -22,7 +22,7 @@ const PantryItem = ({ item }) => {
             setStarred(!starred);
           }}
         />)}
-        right={() => (<ItemStatusDialog />)}
+        right={() => (<ItemAmtDialog />)}
       />
     </Surface>
   );
