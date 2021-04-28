@@ -21,8 +21,8 @@ const AddItemButtonGroup = ({ closeModal, hasName }) => {
         icon="plus"
         disabled={hasName}
         onPress={() => {
+          // TODO: Add item to pantry
           console.log("Add item pressed");
-          console.log(`Item has name: ${hasName}`);
         }}
       >add item</Button>
     </View>

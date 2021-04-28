@@ -1,13 +1,14 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { SafeAreaView } from "react-native";
 
 import pantryStyles from "../../styles/pantry.styles";
+import { PantryContext } from "../../utils/pantry.utils";
 import Empty from "../../components/atoms/Empty";
 import PantryFabGroup from "../../components/molecules/PantryFabGroup";
 import AddItemModal from "../../components/organism/AddItemModal";
 
 const PantryScreen = ({ navigation }) => {
-  const [pantryItems, setPantryItems] = useState([]);
+  const { items, update } = useContext(PantryContext);
   const [itemModalVis, setItemModalVis] = useState(false);
   const [catModalVis, setCatModalVis] = useState(false);
   const [remindModalVis, setRemindModalVis] = useState(false);
@@ -18,7 +19,7 @@ const PantryScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={pantryStyles.pantryWrapper}>
-      {pantryItems.length === 0 && (<Empty />)}
+      {items.length === 0 && (<Empty />)}
       <AddItemModal
         visible={itemModalVis}
         toggle={toggleItemModal}
