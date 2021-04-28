@@ -159,7 +159,7 @@ const TranscribeScreen = () => {
               mode="outlined"
               onPress={() => {
                 // TODO: Add snackbar
-                addFoodItem(item); // adds a single item
+                // addFoodItem(item); << adds a single item
                 console.log("TODO: Add items to pantry");
               }}
             >add items</Button>
