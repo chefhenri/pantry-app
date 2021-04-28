@@ -9,5 +9,6 @@ module.exports = {
       "safe": false,
       "allowUndefined": true,
     }],
+    ["react-native-paper/babel"],
   ],
 };

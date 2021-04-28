@@ -1,23 +1,28 @@
 import React, { useEffect, useState } from "react";
-import { Button, StyleSheet, Text, View } from "react-native";
+import { FlatList, SafeAreaView, View } from "react-native";
 import AudioRecord from "react-native-audio-record";
 import Sound from "react-native-sound";
+import { Button, Colors, IconButton } from "react-native-paper";
 
 import {
   checkPermission,
   uploadFile,
   transcribeFile,
   downloadTranscription,
-} from "../../utils/utils.transcribe";
+} from "../../utils/transcribe.utils";
+
+import transcribeStyles from "../../styles/transcribe.styles";
+import Loading from "../../components/atoms/Loading";
+import TranscribeResult from "../../components/molecules/TranscribeResult";
 
 const chunkArray = [];
 
 const TranscribeScreen = () => {
   const [transcript, setTranscript] = useState("");
+  const [loading, setLoading] = useState(false);
   const [audio, setAudio] = useState({
     fileId: "",
     audioFile: "",
-    transcript: "",
     sound: null,
     loaded: false,
   });
@@ -27,6 +32,12 @@ const TranscribeScreen = () => {
     recording: false,
   });
 
+  const [iconState, setIconState] = useState({
+    icon: "microphone",
+    color: Colors.black,
+  });
+
+  // Initializes AudioRecord
   useEffect(async () => {
     await checkPermission();
 
@@ -39,24 +50,42 @@ const TranscribeScreen = () => {
   }, []);
 
   useEffect(() => {
-    console.log(`Audio data updated: ${JSON.stringify(audio)}`);
-  }, [audio]);
+    if (transcript) setLoading(false);
+  }, [transcript]);
 
-  useEffect(() => {
-    console.log(`Playback data updated: ${JSON.stringify(playback)}`);
-  }, [playback]);
+  // Determines action based on icon state
+  const handlePlayback = async () => {
+    switch (iconState.icon) {
+      case "microphone":
+        start();
+        break;
+      case "stop":
+        await stop();
+        break;
+      case "play":
+        await play();
+        break;
+      case "pause":
+        pause();
+        break;
+    }
+  };
 
+  // Starts recording
   const start = () => {
     console.log("Recording...");
 
     setPlayback(prev => ({ ...prev, recording: true }));
+    setIconState(prev => ({ ...prev, icon: "stop", color: Colors.red400 }));
 
     AudioRecord.start();
   };
 
+  // Stops recording
   const stop = async () => {
     if (playback.recording) {
       setPlayback(prev => ({ ...prev, recording: false }));
+      setLoading(true);
 
       // Stop recording
       let audioFile = await AudioRecord.stop();
@@ -71,8 +100,6 @@ const TranscribeScreen = () => {
 
       let sound = new Sound(audioFile);
 
-      console.log(sound);
-
       setAudio(prev => ({
         ...prev,
         audioFile: audioFile,
@@ -80,13 +107,18 @@ const TranscribeScreen = () => {
         sound: sound,
         loaded: true,
       }));
+
+      setIconState(prev => ({ ...prev, icon: "play", color: Colors.green400 }));
     }
   };
 
+  // Starts playback
   const play = async () => {
     setPlayback(prev => ({ ...prev, paused: false }));
 
     Sound.setCategory("Playback");
+
+    setIconState(prev => ({ ...prev, icon: "pause", color: Colors.amber400 }));
 
     audio.sound.play(success => {
       console.log(success ?
@@ -94,45 +126,56 @@ const TranscribeScreen = () => {
         "Playback failed: failed decoding audio");
 
       setPlayback(prev => ({ ...prev, paused: true }));
+      setIconState(prev => ({ ...prev, icon: "play", color: Colors.green400 }));
     });
   };
 
+  // Stops playback
   const pause = () => {
     audio.sound.pause();
     setPlayback(prev => ({ ...prev, paused: true }));
+    setIconState(prev => ({ ...prev, icon: "play", color: Colors.green400 }));
   };
 
   return (
-    <View>
-      <View style={styles.row}>
-        <Button onPress={start} title="Record" disabled={playback.recording} />
-        <Button onPress={stop} title="Stop" disabled={!playback.recording} />
-        {playback.paused ? (
-          <Button onPress={play} title="Play" disabled={!audio.loaded} />
-        ) : (
-          <Button onPress={pause} title="Pause" disabled={!audio.loaded} />
-        )}
-      </View>
-      <View style={styles.column}>
-        <Text>{transcript}</Text>
-        <Button
-          title="Add To Pantry"
-          onPress={() => console.log("Placeholder: add items to pantry")}
+    <SafeAreaView style={transcribeStyles.transcribeWrapper}>
+      {loading && (
+        <Loading />
+      )}
+      {/*TODO: Progress indicator with status text*/}
+      {transcript !== "" && (
+        <FlatList
+          style={transcribeStyles.resultsWrapper}
+          data={transcript.split(" ")}
+          renderItem={({ item }) => (
+            <TranscribeResult transcript={item} />
+          )}
+          keyExtractor={(item, index) => `transcript-item-${index}`}
+          ListFooterComponent={(
+            <Button
+              style={transcribeStyles.addItemsButton}
+              mode="outlined"
+              onPress={() => {
+                // TODO: Add snackbar
+                console.log("TODO: Add items to pantry");
+              }}
+            >add items</Button>
+          )}
+        />
+      )}
+      {/*TODO: Convert playback controls to FAB.Group*/}
+      <View style={transcribeStyles.playbackWrapper}>
+        <IconButton
+          style={transcribeStyles.playbackIcon}
+          icon={iconState.icon}
+          color={iconState.color}
+          size={50}
+          animated={true}
+          onPress={() => handlePlayback()}
         />
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-  },
-  row: {
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-  },
-});
 
 export default TranscribeScreen;
