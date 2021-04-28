@@ -51,6 +51,9 @@ const styles = StyleSheet.create({
   itemAmtCaption: {
     fontSize: 18,
   },
+  itemAmtBtn: {
+    alignSelf: "flex-end"
+  },
   separator: {
     marginTop: 15,
     marginBottom: 5,

@@ -37,14 +37,25 @@ export const getAmtIcon = (amt) => {
   }
 };
 
+export const getAmtText = (amt) => {
+  switch (amt) {
+    case AMOUNT.NONE:
+      return "None";
+    case AMOUNT.OKAY:
+      return "Okay";
+    case AMOUNT.GOOD:
+      return "Good";
+  }
+};
+
 export const updateItemAmt = (id, amt, items, update) => {
-  let item = items[id]
+  let item = items[id];
 
   update(({
     ...items,
     [item.id]: {
       label: item.label,
-      amount: amt
-    }
-  }))
+      amount: amt,
+    },
+  }));
 };
