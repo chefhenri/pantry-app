@@ -14,7 +14,7 @@ const RootStack = () => (
       name="Home"
       component={HomeScreen}
       options={{
-        title: "Pantry Manager",
+        title: "Home",
       }}
     />
     <Stack.Screen
