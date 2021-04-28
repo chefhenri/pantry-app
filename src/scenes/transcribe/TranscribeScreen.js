@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FlatList, SafeAreaView, View } from "react-native";
 import AudioRecord from "react-native-audio-record";
 import Sound from "react-native-sound";
-import { Colors, Divider, IconButton } from "react-native-paper";
+import { Button, Colors, IconButton } from "react-native-paper";
 
 import {
   checkPermission,
@@ -151,6 +151,16 @@ const TranscribeScreen = () => {
             <TranscribeResult transcript={item} />
           )}
           keyExtractor={(item, index) => `transcript-item-${index}`}
+          ListFooterComponent={(
+            <Button
+              style={transcribeStyles.addItemsButton}
+              mode="outlined"
+              onPress={() => {
+                // TODO: Add snackbar
+                console.log("TODO: Add items to pantry");
+              }}
+            >add items</Button>
+          )}
         />
       )}
       {/*TODO: Convert playback controls to FAB.Group*/}

@@ -26,6 +26,9 @@ const styles = StyleSheet.create({
   playbackIcon: {
     alignSelf: "flex-end",
   },
+  addItemsButton: {
+    marginHorizontal: 10,
+  }
 });
 
 export default styles;
