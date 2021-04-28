@@ -4,6 +4,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import HomeScreen from "../scenes/home/HomeScreen";
 import SearchScreen from "../scenes/search/SearchScreen";
 import TranscribeScreen from "../scenes/transcribe/TranscribeScreen";
+import PantryScreen from "../scenes/pantry/PantryScreen";
 
 const Stack = createStackNavigator();
 
@@ -13,8 +14,12 @@ const RootStack = () => (
       name="Home"
       component={HomeScreen}
       options={{
-        title: "PantryApp",
+        title: "Pantry Manager",
       }}
+    />
+    <Stack.Screen
+      name="Pantry"
+      component={PantryScreen}
     />
     <Stack.Screen
       name="Search"
