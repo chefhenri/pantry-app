@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { SafeAreaView } from "react-native";
+import { FlatList, SafeAreaView } from "react-native";
 import AudioRecord from "react-native-audio-record";
 import Sound from "react-native-sound";
-import { Colors, IconButton } from "react-native-paper";
+import { Colors, Divider, IconButton } from "react-native-paper";
 
-import styles from "../../styles/root.styles";
 import {
   checkPermission,
   uploadFile,
@@ -12,14 +11,18 @@ import {
   downloadTranscription,
 } from "../../utils/transcribe.utils";
 
+import transcribeStyles from "../../styles/transcribe.styles";
+import Loading from "../../components/atoms/Loading";
+import TranscribeResult from "../../components/molecules/TranscribeResult";
+
 const chunkArray = [];
 
 const TranscribeScreen = () => {
   const [transcript, setTranscript] = useState("");
+  const [loading, setLoading] = useState(false);
   const [audio, setAudio] = useState({
     fileId: "",
     audioFile: "",
-    transcript: "",
     sound: null,
     loaded: false,
   });
@@ -29,7 +32,10 @@ const TranscribeScreen = () => {
     recording: false,
   });
 
-  const [icon, setIcon] = useState("microphone");
+  const [iconState, setIconState] = useState({
+    icon: "microphone",
+    color: Colors.black,
+  });
 
   // Initializes AudioRecord
   useEffect(async () => {
@@ -43,9 +49,13 @@ const TranscribeScreen = () => {
     });
   }, []);
 
+  useEffect(() => {
+    if (transcript) setLoading(false);
+  }, [transcript]);
+
   // Determines action based on icon state
   const handlePlayback = async () => {
-    switch (icon) {
+    switch (iconState.icon) {
       case "microphone":
         start();
         break;
@@ -66,7 +76,7 @@ const TranscribeScreen = () => {
     console.log("Recording...");
 
     setPlayback(prev => ({ ...prev, recording: true }));
-    setIcon("stop");
+    setIconState(prev => ({ ...prev, icon: "stop", color: Colors.red400 }));
 
     AudioRecord.start();
   };
@@ -75,6 +85,7 @@ const TranscribeScreen = () => {
   const stop = async () => {
     if (playback.recording) {
       setPlayback(prev => ({ ...prev, recording: false }));
+      setLoading(true);
 
       // Stop recording
       let audioFile = await AudioRecord.stop();
@@ -89,8 +100,6 @@ const TranscribeScreen = () => {
 
       let sound = new Sound(audioFile);
 
-      console.log(sound);
-
       setAudio(prev => ({
         ...prev,
         audioFile: audioFile,
@@ -99,7 +108,7 @@ const TranscribeScreen = () => {
         loaded: true,
       }));
 
-      setIcon("play");
+      setIconState(prev => ({ ...prev, icon: "play", color: Colors.green400 }));
     }
   };
 
@@ -109,7 +118,7 @@ const TranscribeScreen = () => {
 
     Sound.setCategory("Playback");
 
-    setIcon("pause");
+    setIconState(prev => ({ ...prev, icon: "pause", color: Colors.amber400 }));
 
     audio.sound.play(success => {
       console.log(success ?
@@ -117,7 +126,7 @@ const TranscribeScreen = () => {
         "Playback failed: failed decoding audio");
 
       setPlayback(prev => ({ ...prev, paused: true }));
-      setIcon("play");
+      setIconState(prev => ({ ...prev, icon: "play", color: Colors.green400 }));
     });
   };
 
@@ -125,14 +134,29 @@ const TranscribeScreen = () => {
   const pause = () => {
     audio.sound.pause();
     setPlayback(prev => ({ ...prev, paused: true }));
-    setIcon("play");
+    setIconState(prev => ({ ...prev, icon: "play", color: Colors.green400 }));
   };
 
   return (
-    <SafeAreaView style={styles.centerWrapper}>
+    <SafeAreaView>
+      {loading && (
+        <Loading />
+      )}
+      {/*TODO: Progress indicator with status text*/}
+      {transcript !== "" && (
+        <FlatList
+          style={transcribeStyles.resultsWrapper}
+          data={transcript.split(" ")}
+          renderItem={({ item }) => (
+            <TranscribeResult transcript={item} />
+          )}
+          keyExtractor={(item, index) => `transcript-item-${index}`}
+        />
+      )}
+      {/*TODO: Convert playback controls to FAB.Group*/}
       <IconButton
-        icon={icon}
-        colors={Colors.red400}
+        icon={iconState.icon}
+        color={iconState.color}
         size={50}
         animated={true}
         onPress={() => handlePlayback()}
