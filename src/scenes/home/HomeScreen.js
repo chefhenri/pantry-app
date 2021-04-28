@@ -3,6 +3,7 @@ import { View, Text, Button } from "react-native";
 
 import { Auth } from "aws-amplify";
 
+// TODO [@hxl1116]: Refactor home screen design
 const HomeScreen = ({ navigation }) => {
   const signOut = async () => {
     Auth.signOut({global: true})
