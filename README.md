@@ -77,12 +77,15 @@ amplify push
 ```
 
 ### DynamoDB Setup
+
+To create the tables for this project, run the following command in the command line:
+
 ```bash
 node src/dynamodb/ddb_createtable.js
 ```
-These three DynamoDB tables are now created on your AWS account.
+The necessary DynamoDB tables are now created on your AWS account.
 
-To import the tables into Amplify,
+To import the tables into Amplify:
 
 ```bash
 amplify import storage
@@ -93,7 +96,7 @@ Select `DynamoDB table - NoSQL Database` and select one of the tables
 
 Repeat this step for the rest of the tables listed above 
 
-Push the DynamoDB tables to the cloud,
+Push the DynamoDB tables to the cloud:
 
 ```bash
 amplify push
