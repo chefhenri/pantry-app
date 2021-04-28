@@ -2,8 +2,11 @@ import React, { useState } from "react";
 import { View } from "react-native";
 import { Button, Dialog, Portal, Text } from "react-native-paper";
 
-const ItemAmtDialog = () => {
+import { getAmtIcon } from "../../utils/pantry.utils";
+
+const ItemAmtDialog = ({ amt }) => {
   const [visible, setVisible] = useState(false);
+  const [amtIcon, setAmtIcon] = useState(getAmtIcon(amt));
 
   const toggleDialog = () => setVisible(!visible);
 
@@ -25,7 +28,7 @@ const ItemAmtDialog = () => {
         </Dialog>
       </Portal>
       <Button
-        icon="chart-bar"
+        icon={amtIcon}
         mode="default"
         onPress={toggleDialog}
       >amount</Button>

@@ -6,7 +6,7 @@ import styles from "../../styles/pantry.styles";
 
 const ItemFormBtnGroup = ({ closeModal, hasName, addItem }) => {
   return (
-    <View style={styles.addItemButtonGroup}>
+    <View style={styles.itemFormBtnGroup}>
       <Button
         mode="default"
         icon="undo-variant"
@@ -16,7 +16,7 @@ const ItemFormBtnGroup = ({ closeModal, hasName, addItem }) => {
         }}
       >never mind</Button>
       <Button
-        style={styles.addItemButton}
+        style={styles.addItemBtn}
         mode="default"
         icon="plus"
         disabled={hasName}

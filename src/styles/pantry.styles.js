@@ -1,7 +1,6 @@
 import { StyleSheet } from "react-native";
 import { HEIGHT, WIDTH } from "./root.styles";
 
-// TODO: Refactor names and order
 const styles = StyleSheet.create({
   pantryWrapper: {
     flex: 1,
@@ -21,14 +20,14 @@ const styles = StyleSheet.create({
     height: "auto",
     fontSize: 20,
   },
-  addItemModalContainer: {
+  itemFormContainer: {
+    justifyContent: "space-around",
+  },
+  itemFormModalContainer: {
     width: "90%",
     padding: 20,
     alignSelf: "center",
     backgroundColor: "white",
-  },
-  addItemFormContainer: {
-    justifyContent: "space-around",
   },
   addItemFormInput: {
     marginBottom: 10,
@@ -39,14 +38,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
   },
-  addItemButtonGroup: {
+  itemFormBtnGroup: {
     flexDirection: "row",
     alignItems: "center",
   },
-  cancelItemButton: {
+  cancelItemBtn: {
     flex: 1,
   },
-  addItemButton: {
+  addItemBtn: {
     flex: 1,
   },
   itemAmtCaption: {

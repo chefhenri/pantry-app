@@ -10,7 +10,7 @@ const ItemFormModal = ({ visible, toggle }) => {
       <Portal>
         <Modal
           visible={visible}
-          contentContainerStyle={pantryStyles.addItemModalContainer}
+          contentContainerStyle={pantryStyles.itemFormModalContainer}
           onDismiss={toggle}
         >
           <ItemForm closeModal={toggle} />

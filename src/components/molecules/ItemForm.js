@@ -3,16 +3,29 @@ import { View } from "react-native";
 import { Divider, TextInput } from "react-native-paper";
 
 import styles from "../../styles/pantry.styles";
-import { getItemId, PantryContext } from "../../utils/pantry.utils";
+import {
+  AMOUNT,
+  PantryContext,
+  getItemId,
+  updateItemAmt,
+} from "../../utils/pantry.utils";
+
 import ItemFormAmtGroup from "./ItemFormAmtGroup";
 import ItemFormBtnGroup from "./ItemFormBtnGroup";
 
 const ItemForm = ({ closeModal }) => {
   const [pantryItems, setPantryItems] = useContext(PantryContext);
   const [itemName, setItemName] = useState("");
-  const [itemAmt, setItemAmt] = useState("none");
+  const [itemAmt, setItemAmt] = useState(AMOUNT.NONE);
 
   const handleAddItem = () => {
+    // setPantryItems(prev => ({
+    //   ...prev,
+    //   [getItemId(itemName)]: {
+    //     label: itemName,
+    //     amount: itemAmt
+    //   }
+    // }))
     setPantryItems(prev => ([
       ...prev,
       {
@@ -24,7 +37,7 @@ const ItemForm = ({ closeModal }) => {
   };
 
   return (
-    <View style={styles.addItemFormContainer}>
+    <View style={styles.itemFormContainer}>
       <TextInput
         style={styles.addItemFormInput}
         label="Name"
