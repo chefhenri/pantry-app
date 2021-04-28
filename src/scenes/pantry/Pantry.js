@@ -5,6 +5,7 @@ import {
   AWS_SECRET_ACCESS_KEY,
   AWS_SESSION_TOKEN
 } from "@env";
+import { TextInput } from "react-native-paper";
 
 var AWS = require('aws-sdk')
 
@@ -15,7 +16,7 @@ AWS.config.update({
   sessionToken: AWS_SESSION_TOKEN
 });
 
-const ddb = new AWS.DynamoDB;
+const ddb = new AWS.DynamoDB();
 
 // gets today's date YYYY-MM-DD
 let today = new Date().toISOString().slice(0, 10)
@@ -39,8 +40,8 @@ const Pantry = () => {
       TableName: FOOD_TABLE_NAME,
       Item: {
         "foodID": {S: id},
-        "foodLabel": {S: "milk"},
-        "quantity": {N: "1"},
+        "foodLabel": {S: this.foodName},
+        "quantity": {N: this.foodQty},
         "addDate": {S: today }
       },
     }
@@ -48,11 +49,9 @@ const Pantry = () => {
       if (err) {
         console.log(err);
       } else {
-        console.log("Food item added to pantry: ");
-        console.log(data);
+        console.log("Food item added to pantry: ", data);
       }
     });
-    return (params.Item);
   }
 
 
@@ -61,7 +60,8 @@ const Pantry = () => {
     var params = {
       TableName: FOOD_TABLE_NAME,
       Key: {
-        "foodLabel": { S: "milk" }
+        "foodID": {S: id},
+        "foodLabel": { S: this.foodName }
       }
     }
 
@@ -79,7 +79,7 @@ const Pantry = () => {
     var params = {
       TableName: FOOD_TABLE_NAME,
       Key: {
-        "foodLabel": { S: "milk" }
+        "foodLabel": { S: this.foodName }
       },
       ProjectionExpression: "foodLabel, foodQty"
     };
@@ -102,8 +102,8 @@ const Pantry = () => {
       if (err) {
         console.log("Error", err);
       } else {
-        console.log("Food in Pantry: ", data);
-        return data.Items;
+        console.log("Food in Pantry: ", data.Items);
+        return data.Items
       }
     })
   }
@@ -112,12 +112,12 @@ const Pantry = () => {
   Recipe Functions
    */
 
-  const addRecipe = async () => {
+  const addRecipe = () => {
     var params = {
       TableName: RECIPE_TABLE_NAME,
       Item: {
-        "recipeLabel": {S: "Chicken Parmesan" },
-        "recipeURL": {S: "demo url" }
+        "recipeLabel": {S: this.recipeLabel},
+        "recipeURL": {S: this.recipeURL }
       }
     }
 
@@ -132,11 +132,12 @@ const Pantry = () => {
   }
 
 // remove recipe from pantry, regardless of quantity
-  const removeRecipe = async () => {
+  const removeRecipe = () => {
     var params = {
       TableName: RECIPE_TABLE_NAME,
       Key: {
-        "recipeLabel": { S: "Chicken Parmesan" }
+        "recipeLabel": { S: this.recipeLabel },
+        "url": {S: this.recipeURL}
       }
     }
 
@@ -179,9 +180,26 @@ const Pantry = () => {
 
   return (
     <View>
+      <TextInput
+        placeholder="Food Name"
+        onChangeText={(value) => this.foodName = value}
+      />
+      <TextInput
+        placeholder="Food Quantity"
+        onChangeText={(value) => this.foodQty = value}
+      />
       <Button title="Add Food Item" onPress={addFoodItem}/>
+      {/*<Button title="Delete Food Item" onPress={removeFood}/>*/}
+      <TextInput
+        placeholder="Recipe Name"
+        onChangeText={(value) => this.recipeLabel = value}
+      />
+      <TextInput
+        placeholder="Recipe Quantity"
+        onChangeText={(value) => this.recipeURL = value}
+      />
       <Button title="Add Recipe" onPress={addRecipe}/>
-      <Button title="Remove Recipe" onPress={removeRecipe}/>
+      {/*<Button title="Remove Recipe" onPress={removeRecipe}/>*/}
       <Button title="View Pantry" onPress={scanFoodPantry}/>
     </View>
   );
