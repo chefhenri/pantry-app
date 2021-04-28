@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Button } from "react-native-paper";
 import { View } from "react-native";
 
 import styles from "../../styles/pantry.styles";
 
-const AddItemButtonGroup = ({ closeModal, hasName }) => {
+const ItemFormBtnGroup = ({ closeModal, hasName, addItem }) => {
   return (
     <View style={styles.addItemButtonGroup}>
       <Button
@@ -23,10 +23,12 @@ const AddItemButtonGroup = ({ closeModal, hasName }) => {
         onPress={() => {
           // TODO: Add item to pantry
           console.log("Add item pressed");
+          addItem();
+          closeModal();
         }}
       >add item</Button>
     </View>
   );
 };
 
-export default AddItemButtonGroup;
+export default ItemFormBtnGroup;

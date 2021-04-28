@@ -1,10 +1,22 @@
 import { StyleSheet } from "react-native";
+import { HEIGHT, WIDTH } from "./root.styles";
 
+// TODO: Refactor names and order
 const styles = StyleSheet.create({
   pantryWrapper: {
     flex: 1,
-    alignItems: "center",
+    width: WIDTH,
+    height: HEIGHT * 0.75,
     justifyContent: "space-between",
+  },
+  pantryItemsWrapper: {
+    marginTop: 10
+  },
+  pantryItemSurface: {
+    // flexDirection: "row",
+    marginHorizontal: 10,
+    marginBottom: 5,
+    // alignItems: "center"
   },
   emptyPantryCaption: {
     width: "auto",
@@ -44,8 +56,8 @@ const styles = StyleSheet.create({
   },
   separator: {
     marginTop: 15,
-    marginBottom: 5
-  }
+    marginBottom: 5,
+  },
 });
 
 export default styles;

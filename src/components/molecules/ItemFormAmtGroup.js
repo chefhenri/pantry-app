@@ -1,18 +1,16 @@
-import React, { useState } from "react";
+import React from "react";
 import { View } from "react-native";
 import { Caption, ToggleButton } from "react-native-paper";
 
 import styles from "../../styles/pantry.styles";
 
-const AddItemFormGroup = () => {
-  const [itemAmt, setItemAmt] = useState("none");
-
+const ItemFormAmtGroup = ({ amt, setAmt }) => {
   return (
     <View style={styles.addItemFormAmtGroup}>
       <Caption style={styles.itemAmtCaption}>Item Amount: </Caption>
       <ToggleButton.Row
-        value={itemAmt}
-        onValueChange={(value) => setItemAmt(value)}
+        value={amt}
+        onValueChange={(value) => setAmt(value)}
       >
         <ToggleButton
           icon="arrow-collapse-up"
@@ -31,4 +29,4 @@ const AddItemFormGroup = () => {
   );
 };
 
-export default AddItemFormGroup;
+export default ItemFormAmtGroup;

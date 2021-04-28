@@ -1,0 +1,49 @@
+import React, { useContext, useState } from "react";
+import { View } from "react-native";
+import { Divider, TextInput } from "react-native-paper";
+
+import styles from "../../styles/pantry.styles";
+import { getItemId, PantryContext } from "../../utils/pantry.utils";
+import ItemFormAmtGroup from "./ItemFormAmtGroup";
+import ItemFormBtnGroup from "./ItemFormBtnGroup";
+
+const ItemForm = ({ closeModal }) => {
+  const [pantryItems, setPantryItems] = useContext(PantryContext);
+  const [itemName, setItemName] = useState("");
+  const [itemAmt, setItemAmt] = useState("none");
+
+  const handleAddItem = () => {
+    setPantryItems(prev => ([
+      ...prev,
+      {
+        id: getItemId(itemName),
+        label: itemName,
+        amount: itemAmt,
+      },
+    ]));
+  };
+
+  return (
+    <View style={styles.addItemFormContainer}>
+      <TextInput
+        style={styles.addItemFormInput}
+        label="Name"
+        value={itemName}
+        mode="outlined"
+        onChangeText={(text) => setItemName(text)}
+      />
+      <ItemFormAmtGroup
+        amt={itemAmt}
+        setAmt={setItemAmt}
+      />
+      <Divider style={styles.separator} />
+      <ItemFormBtnGroup
+        closeModal={closeModal}
+        hasName={itemName === ""}
+        addItem={handleAddItem}
+      />
+    </View>
+  );
+};
+
+export default ItemForm;

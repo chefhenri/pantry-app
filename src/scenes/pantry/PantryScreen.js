@@ -1,14 +1,15 @@
 import React, { useContext, useState } from "react";
-import { SafeAreaView } from "react-native";
+import { FlatList, SafeAreaView } from "react-native";
 
 import pantryStyles from "../../styles/pantry.styles";
 import { PantryContext } from "../../utils/pantry.utils";
 import Empty from "../../components/atoms/Empty";
 import PantryFabGroup from "../../components/molecules/PantryFabGroup";
-import AddItemModal from "../../components/organism/AddItemModal";
+import ItemFormModal from "../../components/organism/ItemFormModal";
+import PantryItem from "../../components/organism/PantryItem";
 
 const PantryScreen = ({ navigation }) => {
-  const { items, update } = useContext(PantryContext);
+  const [pantryItems, setPantryItems] = useContext(PantryContext);
   const [itemModalVis, setItemModalVis] = useState(false);
   const [catModalVis, setCatModalVis] = useState(false);
   const [remindModalVis, setRemindModalVis] = useState(false);
@@ -19,8 +20,14 @@ const PantryScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={pantryStyles.pantryWrapper}>
-      {items.length === 0 && (<Empty />)}
-      <AddItemModal
+      <FlatList
+        style={pantryStyles.pantryItemsWrapper}
+        data={pantryItems}
+        renderItem={({ item }) => (<PantryItem item={item} />)}
+        keyExtractor={(item) => item.label}
+        ListEmptyComponent={Empty}
+      />
+      <ItemFormModal
         visible={itemModalVis}
         toggle={toggleItemModal}
       />

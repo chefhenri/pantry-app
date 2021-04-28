@@ -19,13 +19,11 @@ Amplify.configure({
 });
 
 const App = () => {
-  const [pantryItems, setPantryItems] = useState([]);
+  // TODO: Refactor to include categories
+  const pantryHook = useState([]);
 
   return (
-    <PantryContext.Provider value={{
-      items: pantryItems,
-      update: setPantryItems,
-    }}>
+    <PantryContext.Provider value={pantryHook}>
       <NavigationContainer>
         <RootNavigator />
       </NavigationContainer>

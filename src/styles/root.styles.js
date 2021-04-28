@@ -6,6 +6,8 @@ export const WIDTH = Dimensions.get("window").width;
 const styles = StyleSheet.create({
   centerWrapper: {
     flex: 1,
+    width: WIDTH,
+    height: HEIGHT * 0.75,
     alignItems: "center",
     justifyContent: "center",
   },
