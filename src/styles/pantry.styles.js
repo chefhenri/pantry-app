@@ -6,14 +6,15 @@ const styles = StyleSheet.create({
     flex: 1,
     width: WIDTH,
     height: HEIGHT * 0.75,
-    justifyContent: "space-between",
   },
   pantryItemsWrapper: {
-    marginTop: 10
+    flex: 1,
+    marginTop: 10,
   },
   pantryItemSurface: {
     marginHorizontal: 10,
     marginBottom: 5,
+    borderRadius: 5,
   },
   emptyPantryCaption: {
     width: "auto",
@@ -24,10 +25,12 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
   },
   itemFormModalContainer: {
+    top: -HEIGHT * 0.25,
     width: "90%",
     padding: 20,
     alignSelf: "center",
     backgroundColor: "white",
+    borderRadius: 10,
   },
   addItemFormInput: {
     marginBottom: 10,
@@ -52,7 +55,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   itemAmtBtn: {
-    alignSelf: "flex-end"
+    alignSelf: "flex-end",
   },
   separator: {
     marginTop: 15,
