@@ -11,10 +11,11 @@ const PantryItem = ({ item, updateAmt }) => {
   const [amtIcon, setAmtIcon] = useState(getAmtIcon(item.amount));
 
   const toggleDialog = () => setVisible(!visible);
-  const handleChangeAmt = (amt) => {
-    // TODO: Change item amount attribute
-    setAmtIcon(getAmtIcon(amt));
-  };
+
+  // const handleChangeAmt = (amt) => {
+  //   // TODO: Change item amount attribute
+  //   setAmtIcon(getAmtIcon(amt));
+  // };
 
   return (
     <Surface style={styles.pantryItemSurface}>

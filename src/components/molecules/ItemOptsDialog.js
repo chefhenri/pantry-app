@@ -5,6 +5,8 @@ import { Dialog, Menu, Portal, Provider } from "react-native-paper";
 import { AMOUNT, getAmtIcon, getAmtText } from "../../utils/pantry.utils";
 
 const ItemOptsDialog = ({ id, visible, toggle, setIcon }) => {
+
+  // TODO: Trigger amount change snackbar
   const handlePress = (amt) => {
     setIcon(getAmtIcon(amt));
     toggle();
