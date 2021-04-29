@@ -18,6 +18,7 @@ import TranscribeResult from "../../components/molecules/TranscribeResult";
 const chunkArray = [];
 
 const TranscribeScreen = () => {
+  // TODO: Add job progress state
   const [transcript, setTranscript] = useState("");
   const [loading, setLoading] = useState(false);
   const [audio, setAudio] = useState({
@@ -156,7 +157,7 @@ const TranscribeScreen = () => {
               style={transcribeStyles.addItemsButton}
               mode="outlined"
               onPress={() => {
-                // TODO: Add snackbar
+                // TODO: Trigger snackbar on add items
                 console.log("TODO: Add items to pantry");
               }}
             >add items</Button>

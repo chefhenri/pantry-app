@@ -17,6 +17,7 @@ const SearchResult = ({ recipe }) => {
         <Card.Cover source={{ uri: recipe.image }} />
         <Card.Actions>
           <Button>View Recipe</Button>
+          {/* TODO: Trigger snackbar on save */}
           <Button>Save</Button>
         </Card.Actions>
       </Card>

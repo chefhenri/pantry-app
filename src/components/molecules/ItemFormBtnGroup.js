@@ -21,7 +21,7 @@ const ItemFormBtnGroup = ({ closeModal, hasName, addItem }) => {
         icon="plus"
         disabled={hasName}
         onPress={() => {
-          // TODO: Add item to pantry
+          // TODO: Trigger snackbar
           console.log("Add item pressed");
           addItem();
           closeModal();
