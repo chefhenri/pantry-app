@@ -161,6 +161,25 @@ export const getAllFoodItems = () => {
   })
 }
 
+//remove item from pantry [not tested]
+export const removeItem = (item) => {
+  var params = {
+    TableName: "Food",
+    Key: {
+      "foodID": { S: item.id},
+      "foodLabel": {S: item.foodLabel}
+    }
+  }
+
+  ddb.deleteItem(params, function(err, data) {
+    if (err) {
+      console.log("Error", err);
+    } else {
+      console.log("Item Deleted Successfully", data);
+    }
+  });
+}
+
 // add recipe to recipes table
 export const addRecipe = (recipeLabel, recipeURL) => {
   var params = {
@@ -182,12 +201,12 @@ export const addRecipe = (recipeLabel, recipeURL) => {
 }
 
 // remove recipes from recipe table [not tested]
-export const removeRecipe = (item) => {
+export const removeRecipe = (recipe) => {
   var params = {
     TableName: "Recipe",
     Key: {
-      "recipeLabel": { S: item.label},
-      "url": {S: this.item.url}
+      "recipeLabel": { S: recipe.label},
+      "url": {S: recipe.url}
     }
   }
 
