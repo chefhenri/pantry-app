@@ -7,7 +7,6 @@ import {
   AMOUNT,
   PantryContext,
   getItemId,
-  updateItemAmt,
 } from "../../utils/pantry.utils";
 
 import ItemFormAmtGroup from "./ItemFormAmtGroup";

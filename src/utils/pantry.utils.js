@@ -1,4 +1,4 @@
-import React from "react";
+import React, { createContext } from "react";
 
 export const AMOUNT = {
   NONE: "none",
@@ -11,11 +11,13 @@ export const AMOUNT_ICON = {
   GOOD: "arrow-collapse-up",
 };
 
-export const PantryContext = React.createContext({
+export const PantryContext = createContext({
   items: {},
   update: () => {
   },
 });
+
+export const SnackContext = createContext();
 
 export const getItemId = (label) => {
   return `item-${

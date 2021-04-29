@@ -1,10 +1,13 @@
-import React, { useContext } from "react";
-import { Button } from "react-native-paper";
+import React, { useContext} from "react";
+import { Button} from "react-native-paper";
 import { View } from "react-native";
 
 import styles from "../../styles/pantry.styles";
+import { SnackContext } from "../../utils/pantry.utils";
 
 const ItemFormBtnGroup = ({ closeModal, hasName, addItem }) => {
+  const toggleSnack = useContext(SnackContext);
+
   return (
     <View style={styles.itemFormBtnGroup}>
       <Button
@@ -25,6 +28,7 @@ const ItemFormBtnGroup = ({ closeModal, hasName, addItem }) => {
           console.log("Add item pressed");
           addItem();
           closeModal();
+          toggleSnack();
         }}
       >add item</Button>
     </View>

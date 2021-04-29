@@ -6,10 +6,16 @@ const styles = StyleSheet.create({
     flex: 1,
     width: WIDTH,
     height: HEIGHT * 0.75,
+
+    // borderWidth: 3,
+    // borderColor: "black"
   },
   pantryItemsWrapper: {
     flex: 1,
-    marginTop: 10,
+    paddingVertical: 10,
+
+    // borderWidth: 3,
+    // borderColor: "black"
   },
   pantryItemSurface: {
     marginHorizontal: 10,
@@ -61,6 +67,10 @@ const styles = StyleSheet.create({
     marginTop: 15,
     marginBottom: 5,
   },
+  snackbar: {
+    position: "absolute",
+    bottom: HEIGHT * 0.1
+  }
 });
 
 export default styles;
