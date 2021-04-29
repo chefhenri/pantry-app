@@ -1,36 +1,34 @@
 import React from "react";
-import { View, Text, Button } from "react-native";
+import { FlatList, SafeAreaView } from "react-native";
+import { Button } from "react-native-paper";
 
-import { Auth } from "aws-amplify";
+import styles from "../../styles/home.styles";
+import { DESTINATIONS, signOut } from "../../utils/home.utils";
+import HomeNavCard from "../../components/molecules/HomeNavCard";
 
-// TODO [@hxl1116]: Refactor home screen design
 const HomeScreen = ({ navigation }) => {
-  const signOut = async () => {
-    Auth.signOut({global: true})
-      .then(() => console.log('Signed out'))
-      .catch((err) => console.log('Error signing out', err))
-  };
-
   return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Text>Hello Home!</Text>
-      <Button
-        title="Go to Search"
-        onPress={() => navigation.navigate("Search")}
+    <SafeAreaView style={styles.homeWrapper}>
+      <FlatList
+        contentContainerStyle={styles.navCardsWrapper}
+        data={DESTINATIONS}
+        renderItem={({ item }) => (
+          <HomeNavCard
+            dest={item.name}
+            ico={item.icon}
+            bg={item.color}
+            nav={navigation}
+          />
+        )}
+        keyExtractor={(dest) => `${dest.name.toLowerCase()}-dest`}
       />
       <Button
-        title="Go to Transcribe"
-        onPress={() => navigation.navigate("Transcribe")}
-      />
-      <Button
-        title="Go to Pantry"
-        onPress={() => navigation.navigate("Pantry")}
-      />
-      <Button
-        title="Sign Out"
+        style={styles.signOutBtn}
+        icon="logout"
+        mode="outlined"
         onPress={signOut}
-      />
-    </View>
+      >sign out</Button>
+    </SafeAreaView>
   );
 };
 
