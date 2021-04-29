@@ -130,10 +130,10 @@ export const updateFoodItem = (id, amt) => {
     },
     UpdateExpression: "set quantity = :a",
     ExpressionAttributeValues:{
-      ":a":amt
+      ":a" : amt
     }
   };
-  console.log(params.Key)
+
   ddb.updateItem(params, function(err, data) {
     if (err) {
       console.log("Error", err);
@@ -171,7 +171,7 @@ export const addRecipe = (recipeLabel, recipeURL) => {
     if (err) {
       console.log(err);
     } else {
-      console.log("Recipe added to pantry: ");
+      console.log("Recipe added to pantry");
       console.log(data);
     }
   })
