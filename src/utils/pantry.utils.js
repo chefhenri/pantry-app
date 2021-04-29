@@ -53,6 +53,7 @@ export const getAmtIcon = (amt) => {
   }
 };
 
+// adds a single item to pantry
 export const addFoodItem = (id, foodName, amount) => {
   var params = {
     TableName: "Food",
@@ -72,6 +73,7 @@ export const addFoodItem = (id, foodName, amount) => {
   });
 }
 
+// adds list of items from transcribe to pantry
 export const addTranscribedItem = (itemsList) => {
   const id = `item${Math.floor(Math.random() * 100000) + 1}`;
   const today = new Date().toISOString().slice(0, 10);
@@ -138,11 +140,12 @@ export const updateFoodItem = (id, amt) => {
     if (err) {
       console.log("Error", err);
     } else {
-      console.log("Successfully retrieved item: ", data.Item);
+      console.log("Successfully retrieved item: ", data);
     }
   });
 }
 
+// get all food items in pantry
 export const getAllFoodItems = () => {
   var params = {
     TableName: "Food"
@@ -158,6 +161,7 @@ export const getAllFoodItems = () => {
   })
 }
 
+// add recipe to recipes table
 export const addRecipe = (recipeLabel, recipeURL) => {
   var params = {
     TableName: "Recipe",
@@ -177,6 +181,7 @@ export const addRecipe = (recipeLabel, recipeURL) => {
   })
 }
 
+// remove recipes from recipe table [not tested]
 export const removeRecipe = (item) => {
   var params = {
     TableName: "Recipe",
