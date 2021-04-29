@@ -11,8 +11,7 @@ const SearchResult = ({ recipe }) => {
         <Card.Title
           title={recipe.hasOwnProperty("label") && recipe.label}
           subtitle={
-            `Serves ${recipe.yield}, 
-              Calories: ${recipe.calories}`
+            `Serves ${parseInt(recipe.yield)}, Calories: ${parseFloat(recipe.calories).toFixed()}`
           }
         />
         <Card.Cover source={{ uri: recipe.image }} />

@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
     position: "relative",
   },
   resultsWrapper: {
-    marginTop: 50,
+    marginTop: 60,
     padding: 0,
   },
   resultContainer: {
