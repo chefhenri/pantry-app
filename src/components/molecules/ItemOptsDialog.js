@@ -3,6 +3,7 @@ import { View } from "react-native";
 import { Dialog, Menu, Portal, Provider } from "react-native-paper";
 
 import { AMOUNT, getAmtIcon, getAmtText } from "../../utils/pantry.utils";
+import {updateFoodItem} from "../../utils/pantry.utils";
 
 const ItemOptsDialog = ({ id, visible, toggle, setIcon }) => {
 

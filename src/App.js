@@ -8,6 +8,7 @@ import config from "../aws-exports";
 
 import RootNavigator from "./navigations/RootNavigator";
 import { PantryContext } from "./utils/pantry.utils";
+import {getAllFoodItems} from "./utils/pantry.utils";
 
 global.Buffer = global.Buffer || require("buffer").Buffer;
 

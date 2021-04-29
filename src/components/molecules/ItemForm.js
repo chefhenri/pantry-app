@@ -8,6 +8,7 @@ import {
   PantryContext,
   getItemId,
   updateItemAmt,
+  addFoodItem
 } from "../../utils/pantry.utils";
 
 import ItemFormAmtGroup from "./ItemFormAmtGroup";
@@ -19,13 +20,6 @@ const ItemForm = ({ closeModal }) => {
   const [itemAmt, setItemAmt] = useState(AMOUNT.NONE);
 
   const handleAddItem = () => {
-    // setPantryItems(prev => ({
-    //   ...prev,
-    //   [getItemId(itemName)]: {
-    //     label: itemName,
-    //     amount: itemAmt
-    //   }
-    // }))
     setPantryItems(prev => ([
       ...prev,
       {
@@ -34,6 +28,7 @@ const ItemForm = ({ closeModal }) => {
         amount: itemAmt,
       },
     ]));
+    addFoodItem(getItemId(itemName), itemName, itemAmt)
   };
 
   return (
