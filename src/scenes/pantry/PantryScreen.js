@@ -31,7 +31,6 @@ const PantryScreen = ({ navigation }) => {
     <SafeAreaView style={pantryStyles.pantryWrapper}>
       <FlatList
         style={pantryStyles.pantryItemsWrapper}
-        // contentContainerStyle={pantryItems.pantryItemsWrapper}
         data={pantryItems}
         renderItem={({ item }) => (
           <PantryItem

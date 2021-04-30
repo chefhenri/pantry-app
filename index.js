@@ -3,12 +3,27 @@
  */
 import React from "react";
 import { AppRegistry } from "react-native";
-import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import { Provider as PaperProvider } from "react-native-paper";
 
-import App from "./src/App";
+/**
+ * @see https://github.com/facebook/react-native/issues/14796
+ */
+import { Buffer } from "buffer";
+global.Buffer = Buffer;
+
+/**
+ * @see https://github.com/facebook/react-native/issues/16434
+ */
+import { setupURLPolyfill } from "react-native-url-polyfill";
+setupURLPolyfill();
+
+import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
+import Amplify from "aws-amplify";
 import { GQL_URL } from "@env";
+
 import { name as appName } from "./app.json";
+import config from "./aws-exports";
+import App from "./src/App";
 
 const apolloClient = new ApolloClient({
   uri: GQL_URL,
@@ -23,17 +38,11 @@ const AppRoot = () => (
   </ApolloProvider>
 );
 
+Amplify.configure({
+  ...config,
+  Analytics: {
+    disabled: true,
+  },
+});
+
 AppRegistry.registerComponent(appName, () => AppRoot);
-
-const { DynamoDBClient, ListTablesCommand } = require("@aws-sdk/client-dynamodb");
-
-(async () => {
-  const client = new DynamoDBClient({ region: "us-east-1" });
-  const command = new ListTablesCommand({});
-  try {
-    const results = await client.send(command);
-    console.log(results.TableNames.join("\n"));
-  } catch (err) {
-    console.error(err);
-  }
-})();

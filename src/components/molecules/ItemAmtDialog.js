@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View } from "react-native";
-import { Button, Dialog, Portal, Text } from "react-native-paper";
+import { Button, Dialog, Portal} from "react-native-paper";
 
 import { getAmtIcon } from "../../utils/pantry.utils";
 

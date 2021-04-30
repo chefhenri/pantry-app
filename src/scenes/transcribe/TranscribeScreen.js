@@ -1,23 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { FlatList, SafeAreaView, View } from "react-native";
-import AudioRecord from "react-native-audio-record";
 import Sound from "react-native-sound";
+import AudioRecord from "react-native-audio-record";
 import { Button, Colors, IconButton } from "react-native-paper";
 
 import {
+  chunkArray,
   checkPermission,
   uploadFile,
   transcribeFile,
   downloadTranscription,
 } from "../../utils/transcribe.utils";
 
-import { addFoodItem, addTranscribedItem } from "../../utils/pantry.utils";
-
 import transcribeStyles from "../../styles/transcribe.styles";
 import Loading from "../../components/atoms/Loading";
 import TranscribeResult from "../../components/molecules/TranscribeResult";
-
-const chunkArray = [];
+import { addTranscribedItem } from "../../utils/db.utils";
 
 const TranscribeScreen = () => {
   const [transcript, setTranscript] = useState("");
@@ -158,10 +156,13 @@ const TranscribeScreen = () => {
               style={transcribeStyles.addItemsButton}
               mode="outlined"
               onPress={() => {
-                addTranscribedItem(transcript.split(" "))
-                console.log("TODO: Add items to pantry");
+                addTranscribedItem(transcript.split(" "));
+                // TODO: Add items to pantry
+                console.log("Items added to Pantry", transcript.split((" ")));
               }}
-            >add items</Button>
+            >
+              add items
+            </Button>
           )}
         />
       )}

@@ -3,14 +3,12 @@ import { View } from "react-native";
 import { Divider, TextInput } from "react-native-paper";
 
 import styles from "../../styles/pantry.styles";
+import { addFoodItem } from "../../utils/db.utils";
 import {
   AMOUNT,
   PantryContext,
   getItemId,
-  updateItemAmt,
-  addFoodItem
 } from "../../utils/pantry.utils";
-
 import ItemFormAmtGroup from "./ItemFormAmtGroup";
 import ItemFormBtnGroup from "./ItemFormBtnGroup";
 

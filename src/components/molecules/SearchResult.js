@@ -3,7 +3,7 @@ import { View } from "react-native";
 import { Button, Card } from "react-native-paper";
 
 import styles from "../../styles/search.styles";
-import {addRecipe} from "../../utils/pantry.utils";
+import { addRecipe } from "../../utils/db.utils";
 
 const SearchResult = ({ recipe }) => {
   return (
@@ -19,7 +19,9 @@ const SearchResult = ({ recipe }) => {
         <Card.Cover source={{ uri: recipe.image }} />
         <Card.Actions>
           <Button>View Recipe</Button>
-          <Button onClick={addRecipe(recipe.label, recipe.url)}>Save</Button>
+          <Button onPress={() => addRecipe(recipe.label, recipe.url)}>
+            Save
+          </Button>
         </Card.Actions>
       </Card>
     </View>
