@@ -12,9 +12,9 @@ import {
   S3_BUCKET_OUTPUT,
 } from "@env";
 
-import {addFoodItem} from "../scenes/pantry/Pantry";
+import { addFoodItem } from "../scenes/pantry/Pantry";
 
-const AWS = require ("aws-sdk");
+const AWS = require("aws-sdk");
 const ddb = new AWS.DynamoDB;
 
 const access = new Credentials({
@@ -136,10 +136,10 @@ const addTranscribeFile = (fileID, transcript) => {
   var params = {
     TableName: "Transcription",
     Item: {
-      "fileID": {S: fileID},
-      "transcript": {S:transcript}
+      "fileID": { S: fileID },
+      "transcript": { S: transcript },
     },
-  }
+  };
 
   ddb.putItem(params, function(err, data) {
     if (err) {
@@ -148,4 +148,4 @@ const addTranscribeFile = (fileID, transcript) => {
       console.log("Transcribe added: ", data);
     }
   });
-}
+};

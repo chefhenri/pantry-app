@@ -462,9 +462,9 @@ SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   DoubleConversion: cf9b38bf0b2d048436d9a82ad2abe1404f11e7de
   FBLazyVector: 49cbe4b43e445b06bf29199b6ad2057649e4c8f5
-  FBReactNativeSpec: a65c2ecd95b6fc3abc6acfc10dfe7fd29fa161b1
+  FBReactNativeSpec: dfdf4e94fbea39194d6e065f5711c054311fde47
   glog: 73c2498ac6884b13ede40eda8228cb1eee9d9d62
-  Permission-Microphone: c86f7464a9a62379cf5668da950302eb2e5115e2
+  Permission-Microphone: a7aec5ef2acbcd8fb850d9cf2136b56824a03966
   RCT-Folly: ec7a233ccc97cc556cf7237f0db1ff65b986f27c
   RCTRequired: 2f8cb5b7533219bf4218a045f92768129cf7050a
   RCTTypeSafety: 512728b73549e72ad7330b92f3d42936f2a4de5b
@@ -476,8 +476,8 @@ SPEC CHECKSUMS:
   React-jsi: 74341196d9547cbcbcfa4b3bbbf03af56431d5a1
   React-jsiexecutor: 06a9c77b56902ae7ffcdd7a4905f664adc5d237b
   React-jsinspector: 0ae35a37b20d5e031eb020a69cc5afdbd6406301
-  react-native-netinfo: 34f4d7a42f49157f3b45c14217d256bce7dc9682
-  react-native-safe-area-context: e471852c5ed67eea4b10c5d9d43c1cebae3b231d
+  react-native-netinfo: e849fc21ca2f4128a5726c801a82fc6f4a6db50d
+  react-native-safe-area-context: f0906bf8bc9835ac9a9d3f97e8bde2a997d8da79
   React-perflogger: 9c547d8f06b9bf00cb447f2b75e8d7f19b7e02af
   React-RCTActionSheet: 3080b6e12e0e1a5b313c8c0050699b5c794a1b11
   React-RCTAnimation: 3f96f21a497ae7dabf4d2f150ee43f906aaf516f
@@ -490,15 +490,15 @@ SPEC CHECKSUMS:
   React-RCTVibration: 0fd6b21751a33cb72fce1a4a33ab9678416d307a
   React-runtimeexecutor: cad74a1eaa53ee6e7a3620231939d8fe2c6afcf0
   ReactCommon: cfe2b7fd20e0dbd2d1185cd7d8f99633fbc5ff05
-  RNAudioRecord: f38c2caac4bbbc34f24563869745110970f1dfe3
+  RNAudioRecord: 162fee3b8fb628773ec704bf0333823125be2ed7
   RNAWSCognito: d0f3260e93c91bcde43c4ff4fc379f20661d123b
-  RNCMaskedView: f5c7d14d6847b7b44853f7acb6284c1da30a3459
+  RNCMaskedView: 5a8ec07677aa885546a0d98da336457e2bea557f
   RNFS: 93d5b5535eb39d98e6b19009faa8fe717f7ea45d
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
-  RNPermissions: 84ffe5ee7d608e037d9ed1db846ffb1d5d4e1dba
+  RNPermissions: 58c1eb5638504e3afda963a8b0f43b6752132b05
   RNReanimated: b8c8004b43446e3c2709fe64b2b41072f87428ad
   RNScreens: bd1523c3bde7069b8e958e5a16e1fc7722ad0bdd
-  RNSound: c980916b596cc15c8dcd2f6ecd3b13c4881dbe20
+  RNSound: da030221e6ac7e8290c6b43f2b5f2133a8e225b0
   RNVectorIcons: 31cebfcf94e8cf8686eb5303ae0357da64d7a5a4
   Yoga: 8c8436d4171c87504c648ae23b1d81242bdf3bbf
 
