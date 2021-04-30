@@ -13,7 +13,9 @@ AWS.config.update({
   secretAccessKey:AWS_SECRET_ACCESS_KEY,
   sessionToken: AWS_SESSION_TOKEN
 });
-
+/**
+ * @type {DynamoDB} creates connection to DynamoDB tables
+ */
 const ddb = new AWS.DynamoDB();
 
 export const AMOUNT = {
@@ -33,6 +35,11 @@ export const PantryContext = React.createContext({
   },
 });
 
+/**
+ * Get id of an item based on food label/name
+ * @param label name of an item
+ * @returns {string} food id
+ */
 export const getItemId = (label) => {
   return `item-${
     label
@@ -42,6 +49,11 @@ export const getItemId = (label) => {
   }`;
 };
 
+/**
+ * Get matching icon to amount inputted
+ * @param amt amount
+ * @returns {string} amount type
+ */
 export const getAmtIcon = (amt) => {
   switch (amt) {
     case "none":
@@ -53,7 +65,12 @@ export const getAmtIcon = (amt) => {
   }
 };
 
-// adds a single item to pantry
+/**
+ * Adds a single food item into the Food table
+ * @param id
+ * @param foodName
+ * @param amount
+ */
 export const addFoodItem = (id, foodName, amount) => {
   var params = {
     TableName: "Food",
@@ -73,7 +90,10 @@ export const addFoodItem = (id, foodName, amount) => {
   });
 }
 
-// adds list of items from transcribe to pantry
+/**
+ * Adds all the items received from Transcribe function to the food table
+ * @param itemsList list of items received from Transcribe
+ */
 export const addTranscribedItem = (itemsList) => {
   const id = `item${Math.floor(Math.random() * 100000) + 1}`;
   const today = new Date().toISOString().slice(0, 10);
@@ -100,6 +120,11 @@ export const addTranscribedItem = (itemsList) => {
   }
 }
 
+/**
+ * Returns amount in String form based on amount inputted
+ * @param amt amount of an item
+ * @returns {string} value of the amount inputted
+ */
 export const getAmtText = (amt) => {
   switch (amt) {
     case AMOUNT.NONE:
@@ -111,6 +136,13 @@ export const getAmtText = (amt) => {
   }
 };
 
+/**
+ * Updates the amount of an item in the pantry on the application
+ * @param id  id of food item being updated
+ * @param amt new amount of the food item
+ * @param items
+ * @param update
+ */
 export const updateItemAmt = (id, amt, items, update) => {
   let item = items[id];
 
@@ -123,7 +155,11 @@ export const updateItemAmt = (id, amt, items, update) => {
   }));
 };
 
-// update food item in database when amt is changed
+/**
+ * Updates an item in the pantry if the amount is changed
+ * @param id  id of a food item being updated
+ * @param amt new amount/quantity of the food item
+ */
 export const updateFoodItem = (id, amt) => {
   var params = {
     TableName: "Food",
@@ -145,7 +181,9 @@ export const updateFoodItem = (id, amt) => {
   });
 }
 
-// get all food items in pantry
+/**
+ * Gets all the food items in the pantry & returns a list of all items
+ */
 export const getAllFoodItems = () => {
   var params = {
     TableName: "Food"
@@ -161,7 +199,10 @@ export const getAllFoodItems = () => {
   })
 }
 
-//remove item from pantry [not tested]
+/**
+ * Removes an item from the Food table
+ * @param item food item
+ */
 export const removeItem = (item) => {
   var params = {
     TableName: "Food",
@@ -180,7 +221,11 @@ export const removeItem = (item) => {
   });
 }
 
-// add recipe to recipes table
+/**
+ * Adds a recipe to the Recipe table
+ * @param recipeLabel name of recipe
+ * @param recipeURL url of recipe
+ */
 export const addRecipe = (recipeLabel, recipeURL) => {
   var params = {
     TableName: "Recipe",
@@ -200,7 +245,10 @@ export const addRecipe = (recipeLabel, recipeURL) => {
   })
 }
 
-// remove recipes from recipe table [not tested]
+/**
+ * Removes a recipe from the Recipe table
+ * @param recipe entire recipe item
+ */
 export const removeRecipe = (recipe) => {
   var params = {
     TableName: "Recipe",
