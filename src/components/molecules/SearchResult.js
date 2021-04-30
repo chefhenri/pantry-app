@@ -18,7 +18,10 @@ const SearchResult = ({ recipe }) => {
         />
         <Card.Cover source={{ uri: recipe.image }} />
         <Card.Actions>
-          <Button>View Recipe</Button>
+          <Button onPress={() => {
+            // TODO: Show recipe in browser
+            console.log("TODO: Show recipe in browser");
+          }}>View Recipe</Button>
           <Button onPress={() => addRecipe(recipe.label, recipe.url)}>
             Save
           </Button>

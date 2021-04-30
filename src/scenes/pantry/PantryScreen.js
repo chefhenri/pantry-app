@@ -27,6 +27,7 @@ const PantryScreen = ({ navigation }) => {
     updateItemAmt(id, amt, pantryItems, setPantryItems);
   };
 
+  // TODO: Display items from Storage, sync with Context
   return (
     <SafeAreaView style={pantryStyles.pantryWrapper}>
       <FlatList
