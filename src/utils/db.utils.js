@@ -1,5 +1,6 @@
 import AWS from "aws-sdk";
 import { access } from "./aws.utils";
+import { AMOUNT, getItemId } from "./pantry.utils";
 
 AWS.config.update({
   region: "us-east-1",
@@ -90,49 +91,40 @@ export const removeItem = (id, label) => {
 };
 
 /**
- * Adds all the items received from Transcribe function to the food table
- * @param itemsList list of items received from Transcribe
+ * Adds all the items received from Transcribe function to the Food table
+ * @param items - list of transcribed items
  */
-export const addTranscribedItem = (itemsList) => {
-  let foodName;
-  const id = `item${Math.floor(Math.random() * 100000) + 1}`;
+export const addTranscribedItems = (items) => {
   const today = new Date().toISOString().slice(0, 10);
 
-  const params = {
-    TableName: "Food",
-    Item: {
-      "foodID": { S: id },
-      "foodLabel": { S: foodName },
-      "quantity": { S: "good" },
-      "addDate": { S: today },
-    },
-  };
+  for (let item of items) {
+    let params = {
+      TableName: "Food",
+      Item: {
+        "foodID": { S: getItemId(item) },
+        "foodLabel": { S: item.charAt(0).toUpperCase() + item.slice(1) },
+        "quantity": { S: AMOUNT.NONE },
+        "addDate": { S: today },
+      },
+    };
 
-  for (let i = 0; i < itemsList.length; i++) {
-    foodName = itemsList[i];
-    params.Item.foodLabel = { S: foodName };
-    DDB.putItem(params, function(err, data) {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log("Food items added to pantry");
-      }
-    });
+    DDB.putItem(params, (err, data) =>
+      console.log(err ? `Error: ${err}` : "Transcribed items added to the Pantry", data));
   }
 };
 
 /**
  * Adds a recipe to the Recipe table
- * @param recipeLabel name of recipe
- * @param recipeURL url of recipe
+ * @param label - name of recipe
+ * @param url - url of recipe
  */
-// FIXME: AttributeValue empty, must contain supported datatypes
-export const addRecipe = (recipeLabel, recipeURL) => {
+// FIXME: AttributeValue empty, must contain supported data types
+export const addRecipe = (label, url) => {
   const params = {
     TableName: "Recipe",
     Item: {
-      "recipeLabel": { S: recipeLabel },
-      "recipeURL": { S: recipeURL },
+      "recipeLabel": { S: label },
+      "recipeURL": { S: url },
     },
   };
 
@@ -157,6 +149,11 @@ export const removeRecipe = (recipe) => {
     console.log(err ? `Error: ${err}` : "Recipe deleted successfully", data));
 };
 
+/**
+ * Adds the transcript to the Transcription table
+ * @param fileID - transcript file id
+ * @param transcript - transcribed text
+ */
 export const addTranscript = (fileID, transcript) => {
   const params = {
     TableName: "Transcription",
@@ -166,6 +163,6 @@ export const addTranscript = (fileID, transcript) => {
     },
   };
 
-  DDB.putItem(params, (err, data) =>
-    console.log(err ? `Error: ${err}` : "Transcript added: ", data));
+  DDB.putItem(params, (err) =>
+    console.log(err ? `Error: ${err}` : "Transcript added"));
 };

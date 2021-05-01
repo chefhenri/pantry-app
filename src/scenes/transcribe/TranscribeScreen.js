@@ -15,7 +15,7 @@ import {
 import transcribeStyles from "../../styles/transcribe.styles";
 import Loading from "../../components/atoms/Loading";
 import TranscribeResult from "../../components/molecules/TranscribeResult";
-import { addTranscribedItem } from "../../utils/db.utils";
+import { addTranscribedItems } from "../../utils/db.utils";
 
 const TranscribeScreen = () => {
   const [transcript, setTranscript] = useState("");
@@ -166,8 +166,7 @@ const TranscribeScreen = () => {
               style={transcribeStyles.addItemsButton}
               mode="outlined"
               onPress={() => {
-                addTranscribedItem(transcript.split(" "));
-                console.log("Items added to Pantry", transcript.split((" ")));
+                addTranscribedItems(transcript.split(" "));
               }}
             >
               add items

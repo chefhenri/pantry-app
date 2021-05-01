@@ -3,7 +3,6 @@ import { View } from "react-native";
 import { Button, Card } from "react-native-paper";
 
 import styles from "../../styles/search.styles";
-import { addRecipe } from "../../utils/db.utils";
 
 const SearchResult = ({ recipe }) => {
   return (
@@ -22,7 +21,10 @@ const SearchResult = ({ recipe }) => {
             // TODO: Show recipe in browser
             console.log("TODO: Show recipe in browser");
           }}>View Recipe</Button>
-          <Button onPress={() => addRecipe(recipe.label, recipe.url)}>
+          <Button onPress={() => {
+            // TODO: Save recipe to Pantry
+            // addRecipe(recipe.label, recipe.url);
+          }}>
             Save
           </Button>
         </Card.Actions>
