@@ -3,7 +3,7 @@ import { View } from "react-native";
 import { Divider, TextInput } from "react-native-paper";
 
 import styles from "../../styles/pantry.styles";
-import { addFoodItem } from "../../utils/db.utils";
+import { addFoodItem, getAllFoodItems } from "../../utils/db.utils";
 import {
   AMOUNT,
   PantryContext,
@@ -18,15 +18,8 @@ const ItemForm = ({ closeModal }) => {
   const [itemAmt, setItemAmt] = useState(AMOUNT.NONE);
 
   const handleAddItem = () => {
-    setPantryItems(prev => ([
-      ...prev,
-      {
-        id: getItemId(itemName),
-        label: itemName,
-        amount: itemAmt,
-      },
-    ]));
     addFoodItem(getItemId(itemName), itemName, itemAmt)
+    getAllFoodItems(setPantryItems)
   };
 
   return (

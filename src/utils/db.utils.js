@@ -15,23 +15,78 @@ const DDB = new AWS.DynamoDB();
 
 /**
  * Adds a single food item into the Food table
- * @param id
- * @param foodName
- * @param amount
+ * @param id - the pantry item id
+ * @param label - the pantry item name
+ * @param amt - the pantry item quantity
  */
-export const addFoodItem = (id, foodName, amount) => {
+export const addFoodItem = (id, label, amt) => {
   const params = {
     TableName: "Food",
     Item: {
       "foodID": { S: id },
-      "foodLabel": { S: foodName },
-      "quantity": { S: amount },
+      "foodLabel": { S: label },
+      "quantity": { S: amt },
       "addDate": { S: new Date().toISOString().slice(0, 10) },
     },
   };
 
   DDB.putItem(params, (err, data) =>
     console.log(err ? `Error: ${err}` : "Food item added to pantry"));
+};
+
+/**
+ * Gets all the food items in the pantry & returns a list of all items
+ */
+export const getAllFoodItems = (callback) => {
+  const params = {
+    TableName: "Food",
+  };
+
+  DDB.scan(params, (err, data) => {
+    console.log(err ? `Error: ${err}` : `Food in Pantry: ${JSON.stringify(data.Items)}`);
+    callback(data.Items);
+  });
+};
+
+/**
+ * Updates an item in the pantry if the amount is changed
+ * @param id  id of a food item being updated
+ * @param amt new amount/quantity of the food item
+ */
+// FIXME: Produces the following error when executed:
+//  ValidationException: The provided key element does not match the schema null
+export const updateFoodAmt = (id, amt) => {
+  const params = {
+    TableName: "Food",
+    Key: {
+      foodID: { S: id },
+    },
+    UpdateExpression: "set quantity = :a",
+    ExpressionAttributeValues: {
+      ":a": { S: amt },
+    },
+  };
+
+  DDB.updateItem(params, (err, data) =>
+    console.log(err ? `Error: ${err}` : "Successfully retrieved item", data));
+};
+
+/**
+ * Removes an item from the Food table
+ * @param id - the pantry item id
+ * @param label - the pantry item name
+ */
+export const removeItem = (id, label) => {
+  const params = {
+    TableName: "Food",
+    Key: {
+      "foodID": { S: id },
+      "foodLabel": { S: label },
+    },
+  };
+
+  DDB.deleteItem(params, (err) =>
+    console.log(err ? `Error: ${err}` : "Item deleted successfully"));
 };
 
 /**
@@ -64,58 +119,6 @@ export const addTranscribedItem = (itemsList) => {
       }
     });
   }
-};
-
-/**
- * Updates an item in the pantry if the amount is changed
- * @param id  id of a food item being updated
- * @param amt new amount/quantity of the food item
- */
-export const updateFoodItem = (id, amt) => {
-  const params = {
-    TableName: "Food",
-    Key: {
-      "foodID": { S: id },
-    },
-    UpdateExpression: "set quantity = :a",
-    ExpressionAttributeValues: {
-      ":a": amt,
-    },
-  };
-
-  DDB.updateItem(params, (err, data) =>
-    console.log(err ? `Error: ${err}` : "Successfully retrieved item", data));
-};
-
-/**
- * Gets all the food items in the pantry & returns a list of all items
- */
-export const getAllFoodItems = (callback) => {
-  const params = {
-    TableName: "Food",
-  };
-
-  DDB.scan(params, (err, data) => {
-    console.log(err ? `Error: ${err}` : `Food in Pantry: ${JSON.stringify(data.Items)}`);
-    callback(data.Items);
-  });
-};
-
-/**
- * Removes an item from the Food table
- * @param item food item
- */
-export const removeItem = (item) => {
-  const params = {
-    TableName: "Food",
-    Key: {
-      "foodID": { S: item.id },
-      "foodLabel": { S: item.foodLabel },
-    },
-  };
-
-  DDB.deleteItem(params, (err, data) =>
-    console.log(err ? `Error: ${err}` : "Item deleted successfully", data));
 };
 
 /**

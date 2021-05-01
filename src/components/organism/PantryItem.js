@@ -4,8 +4,9 @@ import { Colors, IconButton, List, Surface } from "react-native-paper";
 import styles from "../../styles/pantry.styles";
 import { getAmtIcon } from "../../utils/pantry.utils";
 import ItemOptsDialog from "../molecules/ItemOptsDialog";
+import { View } from "react-native";
 
-const PantryItem = ({ item }) => {
+const PantryItem = ({ item, removeSelf }) => {
   const [starred, setStarred] = useState(false);
   const [visible, setVisible] = useState(false);
   const [amtIcon, setAmtIcon] = useState(getAmtIcon(item.quantity.S));
@@ -28,12 +29,17 @@ const PantryItem = ({ item }) => {
           />
         )}
         right={() => (
-          // TODO: Add delete icon
-          <IconButton
-            icon={amtIcon}
-            animated={true}
-            onPress={toggleDialog}
-          />
+          <View style={{ flexDirection: "row" }}>
+            <IconButton
+              icon={amtIcon}
+              animated={true}
+              onPress={toggleDialog}
+            />
+            <IconButton
+              icon="delete"
+              onPress={() => removeSelf(item.foodID.S, item.foodLabel.S)}
+            />
+          </View>
         )}
       />
       <ItemOptsDialog

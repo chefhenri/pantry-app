@@ -7,11 +7,13 @@ import {
   getAmtIcon,
   getAmtText,
 } from "../../utils/pantry.utils";
+import { updateFoodAmt } from "../../utils/db.utils";
 
 const ItemOptsDialog = ({ id, visible, toggle, setIcon }) => {
 
   // TODO: Trigger amount change snackbar
   const handlePress = (amt) => {
+    // updateFoodAmt(id, amt)
     setIcon(getAmtIcon(amt));
     toggle();
   };
