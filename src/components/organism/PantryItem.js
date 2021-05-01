@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Colors, IconButton, List, Surface } from "react-native-paper";
 
 import styles from "../../styles/pantry.styles";
-import { getAmtIcon } from "../../utils/pantry.utils";
+import { getAmtIcon, SnackContext } from "../../utils/pantry.utils";
 import ItemOptsDialog from "../molecules/ItemOptsDialog";
 import { View } from "react-native";
 
 const PantryItem = ({ item, removeSelf }) => {
+  const toggleSnack = useContext(SnackContext);
   const [starred, setStarred] = useState(false);
   const [visible, setVisible] = useState(false);
   const [amtIcon, setAmtIcon] = useState(getAmtIcon(item.quantity.S));
@@ -37,7 +38,10 @@ const PantryItem = ({ item, removeSelf }) => {
             />
             <IconButton
               icon="delete"
-              onPress={() => removeSelf(item.foodID.S, item.foodLabel.S)}
+              onPress={() => {
+                removeSelf(item.foodID.S, item.foodLabel.S);
+                toggleSnack["del"]();
+              }}
             />
           </View>
         )}

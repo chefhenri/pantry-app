@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 import {
   HEIGHT,
-  WIDTH
+  WIDTH,
 } from "./root.styles";
 
 const styles = StyleSheet.create({
@@ -9,16 +9,10 @@ const styles = StyleSheet.create({
     flex: 1,
     width: WIDTH,
     height: HEIGHT * 0.75,
-
-    // borderWidth: 3,
-    // borderColor: "black"
   },
   pantryItemsWrapper: {
     flex: 1,
     paddingVertical: 10,
-
-    // borderWidth: 3,
-    // borderColor: "black"
   },
   pantryItemSurface: {
     marginHorizontal: 10,

@@ -5,11 +5,11 @@ import { Snackbar } from "react-native-paper";
 import pantryStyles from "../../styles/pantry.styles";
 import {
   getAllFoodItems,
-  removeItem
+  removeItem,
 } from "../../utils/db.utils";
 import {
   PantryContext,
-  SnackContext
+  SnackContext,
 } from "../../utils/pantry.utils";
 import Empty from "../../components/atoms/Empty";
 import PantryFabGroup from "../../components/molecules/PantryFabGroup";
@@ -20,11 +20,16 @@ const PantryScreen = ({ navigation }) => {
   const [pantryItems, setPantryItems] = useContext(PantryContext);
   const [itemModalVis, setItemModalVis] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
-  const [snackVis, setSnackVis] = useState(false);
+
+  const [addSnackVis, setAddSnackVis] = useState(false);
+  const [delSnackVis, setDelSnackVis] = useState(false);
 
   const toggleItemModal = () => setItemModalVis(!itemModalVis);
-  const toggleSnackbar = () => setSnackVis(!snackVis);
-  const dismissSnackbar = () => setSnackVis(false);
+
+  const toggleAddSnackbar = () => setAddSnackVis(!addSnackVis);
+  const dismissAddSnackbar = () => setAddSnackVis(false);
+  const toggleDelSnackbar = () => setDelSnackVis(!delSnackVis);
+  const dismissDelSnackbar = () => setDelSnackVis(!delSnackVis);
 
   const refreshPantry = () => {
     setRefreshing(true);
@@ -42,7 +47,7 @@ const PantryScreen = ({ navigation }) => {
 
   // TODO: Display items from Storage, sync with Context
   return (
-    <SnackContext.Provider value={toggleSnackbar}>
+    <SnackContext.Provider value={{ add: toggleAddSnackbar, del: toggleDelSnackbar }}>
       <SafeAreaView style={pantryStyles.pantryWrapper}>
         <FlatList
           style={pantryStyles.pantryItemsWrapper}
@@ -62,14 +67,25 @@ const PantryScreen = ({ navigation }) => {
         <PantryFabGroup toggleModal={toggleItemModal} />
         <Snackbar
           style={pantryStyles.snackbar}
-          visible={snackVis}
+          visible={addSnackVis}
           action={{
             label: "Undo",
-            onPress: () => console.log("Undo add item pressed"),
+            onPress: () => console.log("TODO: Undo add item pressed"),
           }}
-          onDismiss={dismissSnackbar}
+          onDismiss={dismissAddSnackbar}
         >
-          Item added to pantry
+          Item added to Pantry
+        </Snackbar>
+        <Snackbar
+          style={pantryStyles.snackbar}
+          visible={delSnackVis}
+          action={{
+            label: "Undo",
+            onPress: () => console.log("TODO: Undo delete item pressed"),
+          }}
+          onDismiss={dismissDelSnackbar}
+        >
+          Item removed from Pantry
         </Snackbar>
       </SafeAreaView>
     </SnackContext.Provider>
