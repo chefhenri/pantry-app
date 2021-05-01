@@ -31,7 +31,7 @@ sudo gem install cocoapods
 
 In Xcode preferences, enable Command Line Tools under "Locations"
 
-In the project root, run `npm install --force` and `yarn`
+In the project root, run `yarn`
 
 In the project `ios` directory, run `pod install`
 
@@ -131,7 +131,7 @@ In a terminal instance run,
 npx react-native start
 ```
 
-*Note: after updating your AWS credentials in the `.env` file, pass the `--reset-cache` flag to Metro*
+*Note: after updating your AWS credentials in the `.env` file, run `npm run start:reset` to reset Metro's cache*
 
 #### Start the application
 
