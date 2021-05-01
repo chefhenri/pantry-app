@@ -11,14 +11,19 @@ export const AMOUNT_ICON = {
   GOOD: "arrow-collapse-up",
 };
 
-export const PantryContext = createContext({
-  items: {},
-  update: () => {
+export const PantryContext = React.createContext([
+  [],
+  () => {
   },
-});
+]);
 
 export const SnackContext = createContext();
 
+/**
+ * Get id of an item based on food label/name
+ * @param label name of an item
+ * @returns {string} food id
+ */
 export const getItemId = (label) => {
   return `item-${
     label
@@ -28,6 +33,11 @@ export const getItemId = (label) => {
   }`;
 };
 
+/**
+ * Get matching icon to amount inputted
+ * @param amt amount
+ * @returns {string} amount type
+ */
 export const getAmtIcon = (amt) => {
   switch (amt) {
     case "none":
@@ -50,6 +60,13 @@ export const getAmtText = (amt) => {
   }
 };
 
+/**
+ * Updates the amount of an item in the pantry on the application
+ * @param id  id of food item being updated
+ * @param amt new amount of the food item
+ * @param items
+ * @param update
+ */
 export const updateItemAmt = (id, amt, items, update) => {
   let item = items[id];
 

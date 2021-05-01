@@ -3,7 +3,6 @@ import { StyleSheet } from "react-native";
 const styles = StyleSheet.create({
   homeWrapper: {
     flex: 1,
-    // justifyContent: "flex-start"
   },
   navCardsWrapper: {
     flex: 1,

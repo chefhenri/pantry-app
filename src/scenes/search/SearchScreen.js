@@ -14,6 +14,7 @@ const SearchScreen = ({ navigation }) => {
 
   if (called && loading) return (<Loading />);
 
+  // TODO: Add snackbar status for saving recipe
   return (
     <SafeAreaView style={styles.searchWrapper}>
       <SearchBar

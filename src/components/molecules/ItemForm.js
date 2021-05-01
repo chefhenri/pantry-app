@@ -3,12 +3,12 @@ import { View } from "react-native";
 import { Divider, TextInput } from "react-native-paper";
 
 import styles from "../../styles/pantry.styles";
+import { addFoodItem, getAllFoodItems } from "../../utils/db.utils";
 import {
   AMOUNT,
   PantryContext,
   getItemId,
 } from "../../utils/pantry.utils";
-
 import ItemFormAmtGroup from "./ItemFormAmtGroup";
 import ItemFormBtnGroup from "./ItemFormBtnGroup";
 
@@ -18,21 +18,8 @@ const ItemForm = ({ closeModal }) => {
   const [itemAmt, setItemAmt] = useState(AMOUNT.NONE);
 
   const handleAddItem = () => {
-    // setPantryItems(prev => ({
-    //   ...prev,
-    //   [getItemId(itemName)]: {
-    //     label: itemName,
-    //     amount: itemAmt
-    //   }
-    // }))
-    setPantryItems(prev => ([
-      ...prev,
-      {
-        id: getItemId(itemName),
-        label: itemName,
-        amount: itemAmt,
-      },
-    ]));
+    addFoodItem(getItemId(itemName), itemName, itemAmt)
+    getAllFoodItems(setPantryItems)
   };
 
   return (

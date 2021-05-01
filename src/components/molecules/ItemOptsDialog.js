@@ -2,12 +2,18 @@ import React from "react";
 import { View } from "react-native";
 import { Dialog, Menu, Portal } from "react-native-paper";
 
-import { AMOUNT, getAmtIcon, getAmtText } from "../../utils/pantry.utils";
+import {
+  AMOUNT,
+  getAmtIcon,
+  getAmtText,
+} from "../../utils/pantry.utils";
 
 const ItemOptsDialog = ({ id, visible, toggle, setIcon }) => {
 
   // TODO: Trigger amount change snackbar
   const handlePress = (amt) => {
+    // TODO: Update food amount in db
+    // updateFoodAmt(id, amt)
     setIcon(getAmtIcon(amt));
     toggle();
   };

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { FlatList, SafeAreaView, View } from "react-native";
-import AudioRecord from "react-native-audio-record";
 import Sound from "react-native-sound";
+import AudioRecord from "react-native-audio-record";
 import { Button, Colors, IconButton } from "react-native-paper";
 
 import {
+  chunkArray,
   checkPermission,
   uploadFile,
   transcribeFile,
@@ -14,8 +15,7 @@ import {
 import transcribeStyles from "../../styles/transcribe.styles";
 import Loading from "../../components/atoms/Loading";
 import TranscribeResult from "../../components/molecules/TranscribeResult";
-
-const chunkArray = [];
+import { addTranscribedItems } from "../../utils/db.utils";
 
 const TranscribeScreen = () => {
   // TODO: Add job progress state
@@ -39,6 +39,7 @@ const TranscribeScreen = () => {
   });
 
   // Initializes AudioRecord
+  // TODO: Migrate to transcribe.utils.js
   useEffect(async () => {
     await checkPermission();
 
@@ -55,6 +56,7 @@ const TranscribeScreen = () => {
   }, [transcript]);
 
   // Determines action based on icon state
+  // TODO: Migrate to transcribe.utils.js
   const handlePlayback = async () => {
     switch (iconState.icon) {
       case "microphone":
@@ -73,6 +75,7 @@ const TranscribeScreen = () => {
   };
 
   // Starts recording
+  // TODO: Migrate to transcribe.utils.js
   const start = () => {
     console.log("Recording...");
 
@@ -83,6 +86,7 @@ const TranscribeScreen = () => {
   };
 
   // Stops recording
+  // TODO: Migrate to transcribe.utils.js
   const stop = async () => {
     if (playback.recording) {
       setPlayback(prev => ({ ...prev, recording: false }));
@@ -114,6 +118,7 @@ const TranscribeScreen = () => {
   };
 
   // Starts playback
+  // TODO: Migrate to transcribe.utils.js
   const play = async () => {
     setPlayback(prev => ({ ...prev, paused: false }));
 
@@ -132,18 +137,23 @@ const TranscribeScreen = () => {
   };
 
   // Stops playback
+  // TODO: Migrate to transcribe.utils.js
   const pause = () => {
     audio.sound.pause();
     setPlayback(prev => ({ ...prev, paused: true }));
     setIconState(prev => ({ ...prev, icon: "play", color: Colors.green400 }));
   };
 
+  /**
+   * TODO: Add snackbar status for adding transcribed items,
+   *  add progress bar with status text,
+   *  convert playback controls to FAB Group
+   */
   return (
     <SafeAreaView style={transcribeStyles.transcribeWrapper}>
       {loading && (
         <Loading />
       )}
-      {/*TODO: Progress indicator with status text*/}
       {transcript !== "" && (
         <FlatList
           style={transcribeStyles.resultsWrapper}
@@ -158,13 +168,14 @@ const TranscribeScreen = () => {
               mode="outlined"
               onPress={() => {
                 // TODO: Trigger snackbar on add items
-                console.log("TODO: Add items to pantry");
+                addTranscribedItems(transcript.split(" "));
               }}
-            >add items</Button>
+            >
+              add items
+            </Button>
           )}
         />
       )}
-      {/*TODO: Convert playback controls to FAB.Group*/}
       <View style={transcribeStyles.playbackWrapper}>
         <IconButton
           style={transcribeStyles.playbackIcon}

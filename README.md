@@ -11,14 +11,15 @@ with the GitHub CLI:
 gh repo clone swen-514-614-spring2021/term-project--team-5
 ```
 
-Also, make sure you have these requirements:
+Next, follow the steps to complete the following:
 
 - Environment setup
 - AWS/Amplify setup
 - Authentication setup
 - Transcription setup
+- DynamoDB setup  
 
-#### Environment Setup
+### Environment Setup
 
 Install Node, Watchman, and CocoaPods
 
@@ -71,6 +72,32 @@ amplify add auth
 Select the default configuration, but specify "Email" as the login method.
 
 Push the configuration,
+
+```bash
+amplify push
+```
+
+### DynamoDB Setup
+
+Run,
+
+```bash
+npm run setup:db
+```
+The necessary DynamoDB tables are now created on your AWS account.
+
+Import the tables into Amplify,
+
+```bash
+amplify import storage
+```
+
+Select `DynamoDB table - NoSQL Database` and select one of the tables 
+(`Food`,`Recipe`,`Transcription`)
+
+Repeat for the remaining tables. 
+
+Push the Amplify Storage configuration,
 
 ```bash
 amplify push
