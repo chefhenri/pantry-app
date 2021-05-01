@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
   },
   addItemsButton: {
     marginHorizontal: 10,
-  }
+  },
 });
 
 export default styles;

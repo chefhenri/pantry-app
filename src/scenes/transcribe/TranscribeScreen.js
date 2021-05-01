@@ -5,13 +5,12 @@ import AudioRecord from "react-native-audio-record";
 import { Button, Colors, IconButton } from "react-native-paper";
 
 import {
-  chunkArray,
   checkPermission,
-  uploadFile,
-  transcribeFile,
+  chunkArray,
   downloadTranscription,
+  transcribeFile,
+  uploadFile,
 } from "../../utils/transcribe.utils";
-
 import transcribeStyles from "../../styles/transcribe.styles";
 import Loading from "../../components/atoms/Loading";
 import TranscribeResult from "../../components/molecules/TranscribeResult";

@@ -14,8 +14,8 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   signOutBtn: {
-    margin: 10
-  }
+    margin: 10,
+  },
 });
 
 export default styles;

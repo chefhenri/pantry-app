@@ -1,6 +1,9 @@
 import { StyleSheet } from "react-native";
 
-import { HEIGHT, WIDTH } from "./root.styles";
+import {
+  HEIGHT,
+  WIDTH
+} from "./root.styles";
 
 const styles = StyleSheet.create({
   searchWrapper: {

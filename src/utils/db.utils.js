@@ -1,6 +1,9 @@
 import AWS from "aws-sdk";
 import { access } from "./aws.utils";
-import { AMOUNT, getItemId } from "./pantry.utils";
+import {
+  AMOUNT,
+  getItemId
+} from "./pantry.utils";
 
 AWS.config.update({
   region: "us-east-1",

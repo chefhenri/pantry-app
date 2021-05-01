@@ -3,17 +3,18 @@ import { FlatList, SafeAreaView } from "react-native";
 import { Snackbar } from "react-native-paper";
 
 import pantryStyles from "../../styles/pantry.styles";
-// import { PantryContext } from "../../utils/pantry.utils";
+import {
+  getAllFoodItems,
+  removeItem
+} from "../../utils/db.utils";
 import {
   PantryContext,
-  SnackContext,
-  updateItemAmt,
+  SnackContext
 } from "../../utils/pantry.utils";
 import Empty from "../../components/atoms/Empty";
 import PantryFabGroup from "../../components/molecules/PantryFabGroup";
 import ItemFormModal from "../../components/organism/ItemFormModal";
 import PantryItem from "../../components/organism/PantryItem";
-import { getAllFoodItems, removeItem } from "../../utils/db.utils";
 
 const PantryScreen = ({ navigation }) => {
   const [pantryItems, setPantryItems] = useContext(PantryContext);

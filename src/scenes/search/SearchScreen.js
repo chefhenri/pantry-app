@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { FlatList, SafeAreaView } from "react-native";
 import { useLazyQuery } from "@apollo/client";
 
-import { RECIPE_QUERY } from "../../utils/search.utils";
 import styles from "../../styles/search.styles";
+import { RECIPE_QUERY } from "../../utils/search.utils";
 import SearchResult from "../../components/molecules/SearchResult";
 import Loading from "../../components/atoms/Loading";
 import SearchBar from "../../components/atoms/SearchBar";

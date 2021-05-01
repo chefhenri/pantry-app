@@ -5,7 +5,7 @@ import { Dialog, Menu, Portal } from "react-native-paper";
 import {
   AMOUNT,
   getAmtIcon,
-  getAmtText,
+  getAmtText
 } from "../../utils/pantry.utils";
 
 const ItemOptsDialog = ({ id, visible, toggle, setIcon }) => {

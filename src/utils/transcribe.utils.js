@@ -1,19 +1,10 @@
 import { Buffer } from "buffer";
 
 import { readFile } from "react-native-fs";
-import {
-  check,
-  request,
-  RESULTS,
-  PERMISSIONS,
-} from "react-native-permissions";
+import { check, PERMISSIONS, request, RESULTS } from "react-native-permissions";
 
 import { addTranscript } from "./db.utils";
-import {
-  s3,
-  buckets,
-  transcribeService,
-} from "./aws.utils";
+import { buckets, s3, transcribeService } from "./aws.utils";
 
 export const chunkArray = [];
 

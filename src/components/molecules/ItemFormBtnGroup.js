@@ -1,5 +1,5 @@
-import React from "react";
-import { Button} from "react-native-paper";
+import React, { useContext } from "react";
+import { Button } from "react-native-paper";
 import { View } from "react-native";
 
 import styles from "../../styles/pantry.styles";

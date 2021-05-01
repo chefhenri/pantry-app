@@ -1,5 +1,8 @@
 import { StyleSheet } from "react-native";
-import { HEIGHT, WIDTH } from "./root.styles";
+import {
+  HEIGHT,
+  WIDTH
+} from "./root.styles";
 
 const styles = StyleSheet.create({
   pantryWrapper: {
@@ -69,8 +72,8 @@ const styles = StyleSheet.create({
   },
   snackbar: {
     position: "absolute",
-    bottom: HEIGHT * 0.1
-  }
+    bottom: HEIGHT * 0.1,
+  },
 });
 
 export default styles;

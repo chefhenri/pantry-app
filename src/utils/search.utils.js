@@ -1,9 +1,6 @@
 import { gql } from "@apollo/client";
 
-import {
-  APP_ID,
-  APP_KEY,
-} from "@env";
+import { APP_ID, APP_KEY } from "@env";
 
 export const RECIPE_QUERY = gql`
     query search($appId:String!, $appKey:String!, $q:String!) {
