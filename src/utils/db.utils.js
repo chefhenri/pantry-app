@@ -54,7 +54,7 @@ export const getAllFoodItems = (callback) => {
  * @param id  id of a food item being updated
  * @param amt new amount/quantity of the food item
  */
-// FIXME: Produces the following error when executed:
+// FIXME: Throws the following error:
 //  ValidationException: The provided key element does not match the schema null
 export const updateFoodAmt = (id, amt) => {
   const params = {
@@ -118,7 +118,9 @@ export const addTranscribedItems = (items) => {
  * @param label - name of recipe
  * @param url - url of recipe
  */
-// FIXME: AttributeValue empty, must contain supported data types
+// FIXME: Throws the following error:
+//  ValidationException: Supplied AttributeValue is empty,
+//  must contain exactly one of the supported datatypes null
 export const addRecipe = (label, url) => {
   const params = {
     TableName: "Recipe",
