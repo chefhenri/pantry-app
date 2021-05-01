@@ -90,14 +90,14 @@ export const updateFoodItem = (id, amt) => {
 /**
  * Gets all the food items in the pantry & returns a list of all items
  */
-export const getAllFoodItems = () => {
+export const getAllFoodItems = (callback) => {
   const params = {
     TableName: "Food",
   };
 
   DDB.scan(params, (err, data) => {
-    console.log(err ? `Error: ${err}` : `Food in Pantry: ${data.Items}`);
-    return data.Items;
+    console.log(err ? `Error: ${err}` : `Food in Pantry: ${JSON.stringify(data.Items)}`);
+    callback(data.Items);
   });
 };
 

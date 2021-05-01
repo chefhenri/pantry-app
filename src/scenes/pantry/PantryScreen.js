@@ -1,11 +1,8 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { FlatList, SafeAreaView } from "react-native";
 
 import pantryStyles from "../../styles/pantry.styles";
-import {
-  PantryContext,
-  updateItemAmt,
-} from "../../utils/pantry.utils";
+import { PantryContext } from "../../utils/pantry.utils";
 import Empty from "../../components/atoms/Empty";
 import PantryFabGroup from "../../components/molecules/PantryFabGroup";
 import ItemFormModal from "../../components/organism/ItemFormModal";
@@ -15,17 +12,9 @@ const PantryScreen = ({ navigation }) => {
   const [pantryItems, setPantryItems] = useContext(PantryContext);
   const [itemModalVis, setItemModalVis] = useState(false);
 
-  // const [catModalVis, setCatModalVis] = useState(false);
-  // const [remindModalVis, setRemindModalVis] = useState(false);
-
   const toggleItemModal = () => setItemModalVis(!itemModalVis);
 
-  // const toggleCatModal = () => setCatModalVis(!catModalVis);
-  // const toggleRemindModal = () => setRemindModalVis(!remindModalVis);
-
-  const handleChangeAmt = (id, amt) => {
-    updateItemAmt(id, amt, pantryItems, setPantryItems);
-  };
+  useEffect(() => console.log(JSON.stringify(pantryItems)), []);
 
   // TODO: Display items from Storage, sync with Context
   return (
@@ -34,11 +23,9 @@ const PantryScreen = ({ navigation }) => {
         style={pantryStyles.pantryItemsWrapper}
         data={pantryItems}
         renderItem={({ item }) => (
-          <PantryItem
-            item={item}
-            updateAmt={handleChangeAmt}
-          />)}
-        keyExtractor={(item) => item.label}
+          <PantryItem item={item} />
+        )}
+        keyExtractor={(item) => item.foodID.S}
         ListEmptyComponent={Empty}
       />
       <ItemFormModal

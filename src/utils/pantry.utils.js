@@ -11,11 +11,11 @@ export const AMOUNT_ICON = {
   GOOD: "arrow-collapse-up",
 };
 
-export const PantryContext = React.createContext({
-  items: {},
-  update: () => {
+export const PantryContext = React.createContext([
+  [],
+  () => {
   },
-});
+]);
 
 /**
  * Get id of an item based on food label/name
