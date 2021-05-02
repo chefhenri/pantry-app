@@ -31,9 +31,15 @@ sudo gem install cocoapods
 
 In Xcode preferences, enable Command Line Tools under "Locations"
 
-In the project root, run `yarn`
+In the project root run,
+```bash
+yarn install
+```
 
-In the project `ios` directory, run `pod install`
+In the project `ios` directory run,
+```bash
+pod install && pod update
+```
 
 ### AWS/Amplify Setup
 Install the AWS CLI,
@@ -57,9 +63,7 @@ In the project root run,
 amplify init
 ```
 
-Leave all options default except:
-- Specify 'src' to '/' to set the `aws-exports.js` file location
-- Use "default" for the AWS profile
+Set "Source Directory Path" to "/" to set the `aws-exports.js` location, leave all other defaults
 
 ### Authentication Setup
 
@@ -105,19 +109,15 @@ amplify push
 
 ### Transcription Setup
 
+Create your input/output S3 buckets using the provided CloudFormation template: `CloudFormation/s3_cloudformation.yml`
+
 Add the following lines to an `.env` file in the project root,
 
 ```bash
 AWS_ACCESS_KEY_ID=your_access_key
 AWS_SECRET_ACCESS_KEY=your_secret_key
 AWS_SESSION_TOKEN=your_session_token
-```
 
-Create your input/output S3 buckets using the provided CloudFormation template: `CloudFormation/s3_cloudformation.yml`
-
-Add the following lines to the `.env` file
-
-```bash
 S3_BUCKET_INPUT=input_bucket_name
 S3_BUCKET_OUTPUT=output_bucket_name
 ```
@@ -128,18 +128,19 @@ S3_BUCKET_OUTPUT=output_bucket_name
 In a terminal instance run,
 
 ```bash
-npx react-native start
+npm run start
 ```
 
-*Note: after updating your AWS credentials in the `.env` file, run `npm run start:reset` to reset Metro's cache*
 
 #### Start the application
 
 In a new terminal instance run,
 
 ```bash
-npx react-native run-ios
+npm run ios
 ```
+
+*Note: after updating your AWS credentials in the `.env` file, run `npm run start:reset` to reset Metro's cache*
 
 ### Contributing
 
